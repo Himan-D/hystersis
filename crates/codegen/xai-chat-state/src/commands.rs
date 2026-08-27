@@ -3,7 +3,7 @@
 use std::collections::BTreeSet;
 
 use tokio::sync::oneshot;
-use xai_grok_sampling_types::{
+use xai_hystersis_sampling_types::{
     ConversationItem, ConversationRequest, DanglingToolCallReason, SamplingConfig, TokenUsage,
     ToolSpec, TraceContext,
 };
@@ -142,7 +142,7 @@ pub enum ChatStateCommand {
         is_compaction: bool,
     },
 
-    /// Out-of-band history repair (`x.ai/session/repair`): run
+    /// Out-of-band history repair (`hystersis.com/session/repair`): run
     /// [`crate::compaction_utils::repair_history`] and persist when changed;
     /// `dry_run` only reports.
     ///

@@ -1,0 +1,15 @@
+{
+  "name": "@hystersis/cli",
+  "version": "1.0.10",
+  "description": "Hystersis: The autonomous AI coding assistant",
+  "bin": {
+    "hystersis": "bin/hystersis"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "os": ["darwin", "linux"],
+  "cpu": ["x64", "arm64"],
+  "author": "Hystersis AI",
+  "license": "MIT"
+}

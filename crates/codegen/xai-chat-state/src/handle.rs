@@ -3,7 +3,7 @@
 use std::collections::BTreeSet;
 
 use tokio::sync::{mpsc, oneshot};
-use xai_grok_sampling_types::{
+use xai_hystersis_sampling_types::{
     ConversationItem, ConversationRequest, DanglingToolCallReason, SamplingConfig, TokenUsage,
     ToolSpec, TraceContext,
 };
@@ -236,7 +236,7 @@ impl ChatStateHandle {
         .unwrap_or(crate::StripOutcome::ActorUnavailable)
     }
 
-    /// Out-of-band history repair (`x.ai/session/repair`); see
+    /// Out-of-band history repair (`hystersis.com/session/repair`); see
     /// [`ChatStateCommand::RepairHistory`]. Returns `None` if the actor is
     /// dead, `Some(Err(_))` if a turn was in flight at processing time.
     pub async fn repair_history(

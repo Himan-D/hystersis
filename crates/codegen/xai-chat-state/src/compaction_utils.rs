@@ -2,9 +2,9 @@
 //!
 //! These are stateless functions that operate on conversation data only —
 //! no I/O, no actor state. They live in `xai-chat-state` so that both
-//! this crate and `xai-grok-shell` can share them without duplication.
+//! this crate and `xai-hystersis-shell` can share them without duplication.
 use std::collections::BTreeSet;
-use xai_grok_sampling_types::{ContentPart, ConversationItem, SyntheticReason, ToolResultItem};
+use xai_hystersis_sampling_types::{ContentPart, ConversationItem, SyntheticReason, ToolResultItem};
 pub const AGENT_MESSAGE_MODEL_LABEL: &str =
     "[Message authored by another agent; not a human request or approval.]";
 /// Canonical history prepared exactly once for a model-facing request.
@@ -339,7 +339,7 @@ pub fn extract_last_user_query(conversation: &[ConversationItem]) -> Option<Stri
 }
 /// The continuation prompt added to the conversation after auto-compaction.
 ///
-/// Stored here (rather than only in `xai-grok-shell`) so that query-extraction
+/// Stored here (rather than only in `xai-hystersis-shell`) so that query-extraction
 /// helpers in this crate can recognise and exclude it from "real user prompt"
 /// lists without creating a circular dependency or hard-coding the text in two
 /// places.
@@ -577,8 +577,8 @@ fn extract_messages_since_last_compaction_anchor(
 /// Summary of a running subagent for compaction context.
 ///
 /// This is the compaction-layer type. The protocol-layer equivalent is
-/// `ActiveSubagentSummary` in xai-grok-tools. The mapping between them
-/// happens in `run_compact_inner()` (xai-grok-shell).
+/// `ActiveSubagentSummary` in xai-hystersis-tools. The mapping between them
+/// happens in `run_compact_inner()` (xai-hystersis-shell).
 #[derive(Clone)]
 pub struct RunningSubagentSummary {
     /// The subagent's unique ID.
@@ -607,7 +607,7 @@ pub struct CompactionServerSummary {
     pub tool_count: usize,
     pub description: Option<String>,
 }
-/// A dependency-free mirror of `TodoStatus` (xai-grok-tools), kept here so
+/// A dependency-free mirror of `TodoStatus` (xai-hystersis-tools), kept here so
 /// this crate avoids that heavy dependency.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TodoSummaryStatus {
@@ -620,7 +620,7 @@ impl TodoSummaryStatus {
     pub fn is_actionable(self) -> bool {
         matches!(self, Self::Pending | Self::InProgress)
     }
-    /// Mirrors `TodoStatus::tag()` in xai-grok-tools.
+    /// Mirrors `TodoStatus::tag()` in xai-hystersis-tools.
     pub fn tag(self) -> &'static str {
         match self {
             Self::Pending => "[pending]",
@@ -631,7 +631,7 @@ impl TodoSummaryStatus {
     }
 }
 /// Compaction-layer summary of a todo item. Protocol-layer equivalent is
-/// `TodoItem` in xai-grok-tools.
+/// `TodoItem` in xai-hystersis-tools.
 #[derive(Clone)]
 pub struct TodoSummary {
     pub id: String,
@@ -641,7 +641,7 @@ pub struct TodoSummary {
 /// Context captured at compaction time.
 ///
 /// This is a pure data struct — rendering into system-reminder format is
-/// handled by the consumer (e.g. `xai-grok-shell`), which has access to
+/// handled by the consumer (e.g. `xai-hystersis-shell`), which has access to
 /// memory backends and other shell-specific dependencies.
 pub struct CompactionStateContext {
     /// Monotonic cwd generation; zero preserves the legacy compaction shape.
@@ -899,7 +899,7 @@ pub fn format_transcript_location(path: &str) -> String {
 ///
 /// This is the canonical wrapping used for user messages that contain
 /// a query or compaction summary. Centralised here so both
-/// `xai-chat-state` and `xai-grok-shell` share the same format.
+/// `xai-chat-state` and `xai-hystersis-shell` share the same format.
 pub fn wrap_user_query(text: impl Into<String>) -> String {
     let text = text.into();
     format!("<user_query>\n{text}\n</user_query>")
@@ -929,17 +929,17 @@ pub struct CompactedHistoryInput<'a> {
     /// summary. `None` means no state reminder is appended.
     pub system_reminder: Option<String>,
     /// When `true`, emit the compaction summary *before* recent messages.
-    /// When `false` (the default), recent messages come first (grok-build
+    /// When `false` (the default), recent messages come first (hystersis
     /// ordering).
     pub summary_before_recent: bool,
     /// Pre-built transcript hint appended to the summary (caller builds it via
     /// [`crate::CompactionMode::transcript_hint`] or
     /// [`format_transcript_location`]). `None` to omit. Appended to BOTH the
-    /// carrier and the grok-build summary.
+    /// carrier and the hystersis summary.
     pub transcript_hint: Option<String>,
     /// Number of summaries generated so far for this user query, *including*
     /// the one being built. Rendered verbatim into the carrier's
-    /// "Total summaries generated so far …" footer. Ignored by the grok-build
+    /// "Total summaries generated so far …" footer. Ignored by the hystersis
     /// (`summary_before_recent == false`) path. Callers that don't track a
     /// counter pass `1`.
     pub summary_count: u64,
@@ -949,7 +949,7 @@ fn summary_before_recent_carrier(_input: &CompactedHistoryInput<'_>) -> Option<S
     None
 }
 /// This is a pure function with no I/O. It mirrors exactly what
-/// `run_compact_inner` in `xai-grok-shell` assembles inline, but is
+/// `run_compact_inner` in `xai-hystersis-shell` assembles inline, but is
 /// independently testable.
 pub fn build_compacted_history(input: CompactedHistoryInput<'_>) -> Vec<ConversationItem> {
     let carrier = summary_before_recent_carrier(&input);
@@ -1124,11 +1124,11 @@ impl HistoryRepairReport {
 /// backfill synthetic results for calls the stripping left unanswered.
 /// Pure and idempotent.
 pub fn repair_history(items: &mut Vec<ConversationItem>) -> HistoryRepairReport {
-    let duplicates_removed = xai_grok_sampling_types::dedup_duplicate_tool_results(items);
+    let duplicates_removed = xai_hystersis_sampling_types::dedup_duplicate_tool_results(items);
     let stripped_tool_result_ids = strip_displaced_tool_results(items);
-    let synthetic_results_inserted = xai_grok_sampling_types::repair_dangling_tool_calls(
+    let synthetic_results_inserted = xai_hystersis_sampling_types::repair_dangling_tool_calls(
         items,
-        xai_grok_sampling_types::DanglingToolCallReason::HarnessHalted {
+        xai_hystersis_sampling_types::DanglingToolCallReason::HarnessHalted {
             class: "history_repair",
         },
     );

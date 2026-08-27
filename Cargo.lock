@@ -13114,8 +13114,8 @@ dependencies = [
  "tokio-util",
  "tracing",
  "xai-compaction-transcript",
- "xai-grok-compaction",
- "xai-grok-sampling-types",
+ "xai-hystersis-compaction",
+ "xai-hystersis-sampling-types",
  "xai-token-estimation",
 ]
 
@@ -13159,7 +13159,7 @@ dependencies = [
  "tree-sitter-python",
  "tree-sitter-rust",
  "tree-sitter-typescript",
- "xai-grok-paths",
+ "xai-hystersis-paths",
 ]
 
 [[package]]
@@ -13169,7 +13169,7 @@ dependencies = [
  "regex",
  "serde_json",
  "strum 0.27.2",
- "xai-grok-sampling-types",
+ "xai-hystersis-sampling-types",
 ]
 
 [[package]]
@@ -13286,7 +13286,7 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "xai-gix-status",
- "xai-grok-home",
+ "xai-hystersis-home",
  "xai-sqlite-journal",
  "xai-test-utils",
  "xai-tty-utils",
@@ -13328,9 +13328,9 @@ dependencies = [
  "tracing-subscriber",
  "url",
  "xai-circuit-breaker",
- "xai-grok-auth",
- "xai-grok-extra-ca",
- "xai-grok-version",
+ "xai-hystersis-auth",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-version",
  "xai-test-utils",
  "zstd",
 ]
@@ -13380,7 +13380,36 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-active-sessions"
+name = "xai-hooks-plugins-types"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "xai-hunk-tracker"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "dunce",
+ "gix",
+ "rustc-hash 2.1.1",
+ "serde",
+ "serde_json",
+ "similar",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "uuid",
+ "xai-gix-status",
+ "xai-test-utils",
+]
+
+[[package]]
+name = "xai-hystersis-active-sessions"
 version = "0.1.0"
 dependencies = [
  "agent-client-protocol",
@@ -13392,11 +13421,11 @@ dependencies = [
  "tempfile",
  "tracing",
  "windows 0.61.3",
- "xai-grok-config",
+ "xai-hystersis-config",
 ]
 
 [[package]]
-name = "xai-grok-agent"
+name = "xai-hystersis-agent"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -13416,10 +13445,10 @@ dependencies = [
  "thiserror 2.0.18",
  "tokio",
  "tracing",
- "xai-grok-config",
- "xai-grok-hooks",
- "xai-grok-sampling-types",
- "xai-grok-tools",
+ "xai-hystersis-config",
+ "xai-hystersis-hooks",
+ "xai-hystersis-sampling-types",
+ "xai-hystersis-tools",
  "xai-token-estimation",
  "xai-tool-types",
  "xai-tty-utils",
@@ -13427,7 +13456,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-announcements"
+name = "xai-hystersis-announcements"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -13436,11 +13465,11 @@ dependencies = [
  "tokio",
  "tracing",
  "ts-rs",
- "xai-grok-tools",
+ "xai-hystersis-tools",
 ]
 
 [[package]]
-name = "xai-grok-auth"
+name = "xai-hystersis-auth"
 version = "0.1.0"
 dependencies = [
  "async-trait",
@@ -13453,7 +13482,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-bundle"
+name = "xai-hystersis-bundle"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -13464,11 +13493,11 @@ dependencies = [
  "sha2 0.10.9",
  "tar",
  "tempfile",
- "xai-grok-config",
+ "xai-hystersis-config",
 ]
 
 [[package]]
-name = "xai-grok-compaction"
+name = "xai-hystersis-compaction"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -13481,7 +13510,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-config"
+name = "xai-hystersis-config"
 version = "0.1.0"
 dependencies = [
  "base64",
@@ -13500,13 +13529,13 @@ dependencies = [
  "tracing",
  "urlencoding",
  "which",
- "xai-grok-home",
- "xai-grok-version",
+ "xai-hystersis-home",
+ "xai-hystersis-version",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-config-types"
+name = "xai-hystersis-config-types"
 version = "0.1.0"
 dependencies = [
  "agent-client-protocol",
@@ -13516,13 +13545,13 @@ dependencies = [
  "strum 0.27.2",
  "toml",
  "tracing",
- "xai-grok-announcements",
- "xai-grok-config",
- "xai-grok-mcp",
+ "xai-hystersis-announcements",
+ "xai-hystersis-config",
+ "xai-hystersis-mcp",
 ]
 
 [[package]]
-name = "xai-grok-diag-server"
+name = "xai-hystersis-diag-server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -13533,11 +13562,11 @@ dependencies = [
  "tempfile",
  "tokio",
  "tracing",
- "xai-grok-version",
+ "xai-hystersis-version",
 ]
 
 [[package]]
-name = "xai-grok-env"
+name = "xai-hystersis-env"
 version = "0.1.0"
 dependencies = [
  "tracing",
@@ -13545,7 +13574,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-extra-ca"
+name = "xai-hystersis-extra-ca"
 version = "0.1.0"
 dependencies = [
  "base64",
@@ -13559,7 +13588,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-foreign-sessions"
+name = "xai-hystersis-foreign-sessions"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -13578,7 +13607,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-home"
+name = "xai-hystersis-home"
 version = "0.1.0"
 dependencies = [
  "dirs 5.0.1",
@@ -13589,7 +13618,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-hooks"
+name = "xai-hystersis-hooks"
 version = "0.1.0"
 dependencies = [
  "fastrand",
@@ -13605,13 +13634,13 @@ dependencies = [
  "toml",
  "tracing",
  "url",
- "xai-grok-config",
- "xai-grok-extra-ca",
- "xai-grok-tools",
+ "xai-hystersis-config",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-tools",
 ]
 
 [[package]]
-name = "xai-grok-http"
+name = "xai-hystersis-http"
 version = "0.1.0"
 dependencies = [
  "rcgen",
@@ -13620,16 +13649,16 @@ dependencies = [
  "rustls",
  "serde_json",
  "tracing",
- "xai-grok-auth",
- "xai-grok-extra-ca",
- "xai-grok-sampler",
- "xai-grok-telemetry",
- "xai-grok-version",
- "xai-grok-workspace",
+ "xai-hystersis-auth",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-sampler",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-version",
+ "xai-hystersis-workspace",
 ]
 
 [[package]]
-name = "xai-grok-markdown"
+name = "xai-hystersis-markdown"
 version = "0.1.0"
 dependencies = [
  "anstyle",
@@ -13649,19 +13678,19 @@ dependencies = [
  "unicode-segmentation",
  "unicode-width 0.2.0",
  "url",
- "xai-grok-markdown-core",
+ "xai-hystersis-markdown-core",
  "xai-ratatui-textarea",
 ]
 
 [[package]]
-name = "xai-grok-markdown-core"
+name = "xai-hystersis-markdown-core"
 version = "0.1.0"
 dependencies = [
  "pulldown-cmark",
 ]
 
 [[package]]
-name = "xai-grok-mcp"
+name = "xai-hystersis-mcp"
 version = "0.1.0"
 dependencies = [
  "agent-client-protocol",
@@ -13687,20 +13716,20 @@ dependencies = [
  "webbrowser",
  "which",
  "xai-computer-hub-sdk",
- "xai-grok-config",
- "xai-grok-extra-ca",
- "xai-grok-session-events",
- "xai-grok-telemetry",
- "xai-grok-tools",
- "xai-grok-version",
- "xai-grok-workspace-types",
+ "xai-hystersis-config",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-session-events",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-tools",
+ "xai-hystersis-version",
+ "xai-hystersis-workspace-types",
  "xai-tool-protocol",
  "xai-tool-runtime",
  "xai-tool-types",
 ]
 
 [[package]]
-name = "xai-grok-memory"
+name = "xai-hystersis-memory"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -13724,17 +13753,17 @@ dependencies = [
  "tokio",
  "tracing",
  "windows 0.61.3",
- "xai-grok-auth",
- "xai-grok-config-types",
- "xai-grok-http",
- "xai-grok-tools",
- "xai-grok-version",
+ "xai-hystersis-auth",
+ "xai-hystersis-config-types",
+ "xai-hystersis-http",
+ "xai-hystersis-tools",
+ "xai-hystersis-version",
  "xai-sqlite-journal",
  "xai-token-estimation",
 ]
 
 [[package]]
-name = "xai-grok-mermaid"
+name = "xai-hystersis-mermaid"
 version = "0.1.0"
 dependencies = [
  "fontdb",
@@ -13752,7 +13781,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-models"
+name = "xai-hystersis-models"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -13760,7 +13789,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-pager"
+name = "xai-hystersis-pager"
 version = "1.0.10"
 dependencies = [
  "agent-client-protocol",
@@ -13823,29 +13852,29 @@ dependencies = [
  "xai-crash-handler",
  "xai-fast-worktree",
  "xai-file-utils",
- "xai-grok-active-sessions",
- "xai-grok-agent",
- "xai-grok-announcements",
- "xai-grok-config",
- "xai-grok-extra-ca",
- "xai-grok-foreign-sessions",
- "xai-grok-markdown",
- "xai-grok-mermaid",
- "xai-grok-pager-diff",
- "xai-grok-pager-pty-harness",
- "xai-grok-pager-render",
- "xai-grok-plugin-marketplace",
- "xai-grok-sandbox",
- "xai-grok-shell",
- "xai-grok-status-line",
- "xai-grok-telemetry",
- "xai-grok-test-support",
- "xai-grok-tools",
- "xai-grok-update",
- "xai-grok-version",
- "xai-grok-voice",
- "xai-grok-workspace",
  "xai-hooks-plugins-types",
+ "xai-hystersis-active-sessions",
+ "xai-hystersis-agent",
+ "xai-hystersis-announcements",
+ "xai-hystersis-config",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-foreign-sessions",
+ "xai-hystersis-markdown",
+ "xai-hystersis-mermaid",
+ "xai-hystersis-pager-diff",
+ "xai-hystersis-pager-pty-harness",
+ "xai-hystersis-pager-render",
+ "xai-hystersis-plugin-marketplace",
+ "xai-hystersis-sandbox",
+ "xai-hystersis-shell",
+ "xai-hystersis-status-line",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-test-support",
+ "xai-hystersis-tools",
+ "xai-hystersis-update",
+ "xai-hystersis-version",
+ "xai-hystersis-voice",
+ "xai-hystersis-workspace",
  "xai-prompt-queue",
  "xai-ratatui-inline",
  "xai-ratatui-textarea",
@@ -13854,7 +13883,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-pager-bin"
+name = "xai-hystersis-pager-bin"
 version = "1.0.10"
 dependencies = [
  "anyhow",
@@ -13876,33 +13905,33 @@ dependencies = [
  "tracing-subscriber",
  "xai-acp-lib",
  "xai-crash-handler",
- "xai-grok-active-sessions",
- "xai-grok-config",
- "xai-grok-extra-ca",
- "xai-grok-pager",
- "xai-grok-pager-minimal",
- "xai-grok-sandbox",
- "xai-grok-shell",
- "xai-grok-telemetry",
- "xai-grok-update",
- "xai-grok-version",
- "xai-grok-workspace",
+ "xai-hystersis-active-sessions",
+ "xai-hystersis-config",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-pager",
+ "xai-hystersis-pager-minimal",
+ "xai-hystersis-sandbox",
+ "xai-hystersis-shell",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-update",
+ "xai-hystersis-version",
+ "xai-hystersis-workspace",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-pager-diff"
+name = "xai-hystersis-pager-diff"
 version = "0.1.0"
 dependencies = [
  "agent-client-protocol",
  "serde_json",
  "similar",
  "tracing",
- "xai-grok-tools",
+ "xai-hystersis-tools",
 ]
 
 [[package]]
-name = "xai-grok-pager-minimal"
+name = "xai-hystersis-pager-minimal"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -13911,16 +13940,16 @@ dependencies = [
  "similar",
  "tracing",
  "uuid",
- "xai-grok-pager",
- "xai-grok-pager-diff",
- "xai-grok-shell",
- "xai-grok-version",
+ "xai-hystersis-pager",
+ "xai-hystersis-pager-diff",
+ "xai-hystersis-shell",
+ "xai-hystersis-version",
  "xai-ratatui-inline",
  "xai-token-estimation",
 ]
 
 [[package]]
-name = "xai-grok-pager-pty-harness"
+name = "xai-hystersis-pager-pty-harness"
 version = "0.1.0"
 dependencies = [
  "alacritty_terminal",
@@ -13940,12 +13969,12 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
- "xai-grok-test-support",
+ "xai-hystersis-test-support",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-pager-render"
+name = "xai-hystersis-pager-render"
 version = "0.1.0"
 dependencies = [
  "agent-client-protocol",
@@ -13986,20 +14015,20 @@ dependencies = [
  "uuid",
  "vte 0.15.0",
  "windows-sys 0.59.0",
- "xai-grok-config",
- "xai-grok-markdown",
- "xai-grok-paths",
- "xai-grok-shared",
- "xai-grok-telemetry",
- "xai-grok-tools",
- "xai-grok-workspace",
+ "xai-hystersis-config",
+ "xai-hystersis-markdown",
+ "xai-hystersis-paths",
+ "xai-hystersis-shared",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-tools",
+ "xai-hystersis-workspace",
  "xai-ratatui-inline",
  "xai-ratatui-textarea",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-paths"
+name = "xai-hystersis-paths"
 version = "0.1.0"
 dependencies = [
  "camino",
@@ -14009,7 +14038,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-plugin-marketplace"
+name = "xai-hystersis-plugin-marketplace"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -14022,14 +14051,14 @@ dependencies = [
  "thiserror 2.0.18",
  "toml",
  "tracing",
- "xai-grok-agent",
- "xai-grok-config",
  "xai-hooks-plugins-types",
+ "xai-hystersis-agent",
+ "xai-hystersis-config",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-sampler"
+name = "xai-hystersis-sampler"
 version = "0.1.0"
 dependencies = [
  "async-openai",
@@ -14046,15 +14075,15 @@ dependencies = [
  "tokio-util",
  "tracing",
  "uuid",
- "xai-grok-auth",
- "xai-grok-extra-ca",
- "xai-grok-sampling-types",
- "xai-grok-test-support",
- "xai-grok-version",
+ "xai-hystersis-auth",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-sampling-types",
+ "xai-hystersis-test-support",
+ "xai-hystersis-version",
 ]
 
 [[package]]
-name = "xai-grok-sampling-types"
+name = "xai-hystersis-sampling-types"
 version = "0.1.0"
 dependencies = [
  "assert_matches",
@@ -14068,12 +14097,12 @@ dependencies = [
  "thiserror 2.0.18",
  "tracing",
  "xai-circuit-breaker",
- "xai-grok-compaction",
- "xai-grok-tools",
+ "xai-hystersis-compaction",
+ "xai-hystersis-tools",
 ]
 
 [[package]]
-name = "xai-grok-sandbox"
+name = "xai-hystersis-sandbox"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -14093,11 +14122,11 @@ dependencies = [
  "toml",
  "tracing",
  "url",
- "xai-grok-config",
+ "xai-hystersis-config",
 ]
 
 [[package]]
-name = "xai-grok-secrets"
+name = "xai-hystersis-secrets"
 version = "0.1.0"
 dependencies = [
  "regex",
@@ -14106,7 +14135,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-session-events"
+name = "xai-hystersis-session-events"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -14118,7 +14147,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-session-search"
+name = "xai-hystersis-session-search"
 version = "0.1.0"
 dependencies = [
  "async-trait",
@@ -14133,13 +14162,13 @@ dependencies = [
  "tokio",
  "tracing",
  "uuid",
- "xai-grok-config",
- "xai-grok-telemetry",
+ "xai-hystersis-config",
+ "xai-hystersis-telemetry",
  "xai-sqlite-journal",
 ]
 
 [[package]]
-name = "xai-grok-shared"
+name = "xai-hystersis-shared"
 version = "0.0.0"
 dependencies = [
  "agent-client-protocol",
@@ -14162,15 +14191,15 @@ dependencies = [
  "urlencoding",
  "uuid",
  "wl-clipboard-rs",
- "xai-grok-config-types",
- "xai-grok-models",
- "xai-grok-status-line",
- "xai-grok-tools",
+ "xai-hystersis-config-types",
+ "xai-hystersis-models",
+ "xai-hystersis-status-line",
+ "xai-hystersis-tools",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-shell"
+name = "xai-hystersis-shell"
 version = "1.0.10"
 dependencies = [
  "agent-client-protocol",
@@ -14269,40 +14298,40 @@ dependencies = [
  "xai-fast-worktree",
  "xai-file-utils",
  "xai-fsnotify",
- "xai-grok-agent",
- "xai-grok-announcements",
- "xai-grok-auth",
- "xai-grok-bundle",
- "xai-grok-compaction",
- "xai-grok-config",
- "xai-grok-config-types",
- "xai-grok-extra-ca",
- "xai-grok-foreign-sessions",
- "xai-grok-hooks",
- "xai-grok-http",
- "xai-grok-mcp",
- "xai-grok-memory",
- "xai-grok-models",
- "xai-grok-paths",
- "xai-grok-plugin-marketplace",
- "xai-grok-sampler",
- "xai-grok-sampling-types",
- "xai-grok-sandbox",
- "xai-grok-session-events",
- "xai-grok-session-search",
- "xai-grok-shared",
- "xai-grok-shell-base",
- "xai-grok-shell-session-support",
- "xai-grok-shell-terminal",
- "xai-grok-status-line",
- "xai-grok-subagent-resolution",
- "xai-grok-telemetry",
- "xai-grok-test-support",
- "xai-grok-tools",
- "xai-grok-version",
- "xai-grok-workspace",
  "xai-hooks-plugins-types",
  "xai-hunk-tracker",
+ "xai-hystersis-agent",
+ "xai-hystersis-announcements",
+ "xai-hystersis-auth",
+ "xai-hystersis-bundle",
+ "xai-hystersis-compaction",
+ "xai-hystersis-config",
+ "xai-hystersis-config-types",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-foreign-sessions",
+ "xai-hystersis-hooks",
+ "xai-hystersis-http",
+ "xai-hystersis-mcp",
+ "xai-hystersis-memory",
+ "xai-hystersis-models",
+ "xai-hystersis-paths",
+ "xai-hystersis-plugin-marketplace",
+ "xai-hystersis-sampler",
+ "xai-hystersis-sampling-types",
+ "xai-hystersis-sandbox",
+ "xai-hystersis-session-events",
+ "xai-hystersis-session-search",
+ "xai-hystersis-shared",
+ "xai-hystersis-shell-base",
+ "xai-hystersis-shell-session-support",
+ "xai-hystersis-shell-terminal",
+ "xai-hystersis-status-line",
+ "xai-hystersis-subagent-resolution",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-test-support",
+ "xai-hystersis-tools",
+ "xai-hystersis-version",
+ "xai-hystersis-workspace",
  "xai-interjection-core",
  "xai-prompt-queue",
  "xai-system-power",
@@ -14318,7 +14347,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-shell-base"
+name = "xai-hystersis-shell-base"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -14335,16 +14364,16 @@ dependencies = [
  "tracing",
  "url",
  "windows 0.61.3",
- "xai-grok-config",
- "xai-grok-env",
- "xai-grok-extra-ca",
- "xai-grok-shared",
- "xai-grok-version",
+ "xai-hystersis-config",
+ "xai-hystersis-env",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-shared",
+ "xai-hystersis-version",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-shell-session-support"
+name = "xai-hystersis-shell-session-support"
 version = "0.1.0"
 dependencies = [
  "axum",
@@ -14355,12 +14384,12 @@ dependencies = [
  "tokio",
  "tracing",
  "xai-file-utils",
- "xai-grok-http",
- "xai-grok-version",
+ "xai-hystersis-http",
+ "xai-hystersis-version",
 ]
 
 [[package]]
-name = "xai-grok-shell-terminal"
+name = "xai-hystersis-shell-terminal"
 version = "0.1.0"
 dependencies = [
  "agent-client-protocol",
@@ -14381,16 +14410,16 @@ dependencies = [
  "uuid",
  "windows 0.61.3",
  "xai-acp-lib",
- "xai-grok-config",
- "xai-grok-paths",
- "xai-grok-sandbox",
- "xai-grok-tools",
- "xai-grok-workspace",
+ "xai-hystersis-config",
+ "xai-hystersis-paths",
+ "xai-hystersis-sandbox",
+ "xai-hystersis-tools",
+ "xai-hystersis-workspace",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-status-line"
+name = "xai-hystersis-status-line"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -14400,7 +14429,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-subagent-resolution"
+name = "xai-hystersis-subagent-resolution"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -14411,14 +14440,14 @@ dependencies = [
  "tokio",
  "toml",
  "tracing",
- "xai-grok-agent",
- "xai-grok-sampling-types",
- "xai-grok-tools",
+ "xai-hystersis-agent",
+ "xai-hystersis-sampling-types",
+ "xai-hystersis-tools",
  "xai-tool-types",
 ]
 
 [[package]]
-name = "xai-grok-telemetry"
+name = "xai-hystersis-telemetry"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -14464,21 +14493,21 @@ dependencies = [
  "webpki-roots 0.26.11",
  "whoami",
  "xai-file-utils",
- "xai-grok-auth",
- "xai-grok-config",
- "xai-grok-env",
- "xai-grok-extra-ca",
- "xai-grok-sampler",
- "xai-grok-secrets",
- "xai-grok-session-events",
- "xai-grok-version",
+ "xai-hystersis-auth",
+ "xai-hystersis-config",
+ "xai-hystersis-env",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-sampler",
+ "xai-hystersis-secrets",
+ "xai-hystersis-session-events",
+ "xai-hystersis-version",
  "xai-mixpanel",
  "xai-token-estimation",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-test-support"
+name = "xai-hystersis-test-support"
 version = "0.1.0"
 dependencies = [
  "agent-client-protocol",
@@ -14504,7 +14533,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-tools"
+name = "xai-hystersis-tools"
 version = "0.1.220-alpha.4"
 dependencies = [
  "anyhow",
@@ -14573,15 +14602,15 @@ dependencies = [
  "xai-computer-hub-core",
  "xai-computer-hub-sdk",
  "xai-file-utils",
- "xai-grok-auth",
- "xai-grok-config",
- "xai-grok-env",
- "xai-grok-extra-ca",
- "xai-grok-sandbox",
- "xai-grok-test-support",
- "xai-grok-tools-api",
- "xai-grok-version",
- "xai-grok-workspace-types",
+ "xai-hystersis-auth",
+ "xai-hystersis-config",
+ "xai-hystersis-env",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-sandbox",
+ "xai-hystersis-test-support",
+ "xai-hystersis-tools-api",
+ "xai-hystersis-version",
+ "xai-hystersis-workspace-types",
  "xai-interjection-core",
  "xai-test-utils",
  "xai-token-estimation",
@@ -14593,7 +14622,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-tools-api"
+name = "xai-hystersis-tools-api"
 version = "0.1.220-alpha.4"
 dependencies = [
  "prost",
@@ -14606,7 +14635,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-update"
+name = "xai-hystersis-update"
 version = "0.1.220-alpha.4"
 dependencies = [
  "anyhow",
@@ -14626,22 +14655,22 @@ dependencies = [
  "tracing",
  "url",
  "wiremock",
- "xai-grok-extra-ca",
- "xai-grok-shell",
- "xai-grok-telemetry",
- "xai-grok-tools",
- "xai-grok-version",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-shell",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-tools",
+ "xai-hystersis-version",
 ]
 
 [[package]]
-name = "xai-grok-version"
+name = "xai-hystersis-version"
 version = "1.0.10"
 dependencies = [
  "semver",
 ]
 
 [[package]]
-name = "xai-grok-voice"
+name = "xai-hystersis-voice"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -14656,12 +14685,12 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "url",
- "xai-grok-extra-ca",
+ "xai-hystersis-extra-ca",
  "xai-tty-utils",
 ]
 
 [[package]]
-name = "xai-grok-workspace"
+name = "xai-hystersis-workspace"
 version = "0.1.220-alpha.4"
 dependencies = [
  "agent-client-protocol",
@@ -14726,26 +14755,26 @@ dependencies = [
  "xai-file-utils",
  "xai-fsnotify",
  "xai-fuzzy-file-search",
- "xai-grok-agent",
- "xai-grok-auth",
- "xai-grok-config",
- "xai-grok-config-types",
- "xai-grok-diag-server",
- "xai-grok-env",
- "xai-grok-extra-ca",
- "xai-grok-hooks",
- "xai-grok-mcp",
- "xai-grok-paths",
- "xai-grok-sandbox",
- "xai-grok-session-events",
- "xai-grok-telemetry",
- "xai-grok-tools",
- "xai-grok-tools-api",
- "xai-grok-version",
- "xai-grok-workspace-client",
- "xai-grok-workspace-daemon",
- "xai-grok-workspace-types",
  "xai-hunk-tracker",
+ "xai-hystersis-agent",
+ "xai-hystersis-auth",
+ "xai-hystersis-config",
+ "xai-hystersis-config-types",
+ "xai-hystersis-diag-server",
+ "xai-hystersis-env",
+ "xai-hystersis-extra-ca",
+ "xai-hystersis-hooks",
+ "xai-hystersis-mcp",
+ "xai-hystersis-paths",
+ "xai-hystersis-sandbox",
+ "xai-hystersis-session-events",
+ "xai-hystersis-telemetry",
+ "xai-hystersis-tools",
+ "xai-hystersis-tools-api",
+ "xai-hystersis-version",
+ "xai-hystersis-workspace-client",
+ "xai-hystersis-workspace-daemon",
+ "xai-hystersis-workspace-types",
  "xai-test-utils",
  "xai-tool-protocol",
  "xai-tool-runtime",
@@ -14757,7 +14786,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-workspace-client"
+name = "xai-hystersis-workspace-client"
 version = "0.1.0"
 dependencies = [
  "schemars 1.0.4",
@@ -14768,14 +14797,14 @@ dependencies = [
  "tokio",
  "tracing",
  "xai-computer-hub-sdk",
- "xai-grok-workspace-types",
+ "xai-hystersis-workspace-types",
  "xai-tool-protocol",
  "xai-tool-runtime",
  "xai-tool-types",
 ]
 
 [[package]]
-name = "xai-grok-workspace-daemon"
+name = "xai-hystersis-workspace-daemon"
 version = "0.1.0"
 dependencies = [
  "clap",
@@ -14794,7 +14823,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "xai-grok-workspace-types"
+name = "xai-hystersis-workspace-types"
 version = "0.1.0"
 dependencies = [
  "base64",
@@ -14802,35 +14831,6 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 2.0.18",
-]
-
-[[package]]
-name = "xai-hooks-plugins-types"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "xai-hunk-tracker"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dunce",
- "gix",
- "rustc-hash 2.1.1",
- "serde",
- "serde_json",
- "similar",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-util",
- "tracing",
- "uuid",
- "xai-gix-status",
- "xai-test-utils",
 ]
 
 [[package]]
@@ -14848,7 +14848,7 @@ dependencies = [
  "reqwest 0.12.24",
  "serde_json",
  "thiserror 2.0.18",
- "xai-grok-secrets",
+ "xai-hystersis-secrets",
 ]
 
 [[package]]
@@ -14964,7 +14964,7 @@ dependencies = [
  "serde_json",
  "tokio",
  "tokio-util",
- "xai-grok-tools-api",
+ "xai-hystersis-tools-api",
  "xai-tool-protocol",
  "xai-tool-types",
 ]

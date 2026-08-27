@@ -210,9 +210,9 @@ mod links {
     #[test]
     fn emits_osc8_around_linked_cells() {
         let mut t = term(20, 3);
-        let out = frame(&mut t, "AB", &[span(0, 2, "https://x.ai", None)]);
+        let out = frame(&mut t, "AB", &[span(0, 2, "https://hystersis.com", None)]);
         assert!(
-            out.contains("\x1b]8;;https://x.ai\x07"),
+            out.contains("\x1b]8;;https://hystersis.com\x07"),
             "missing open: {out:?}"
         );
         assert!(out.contains("AB"));
@@ -306,7 +306,7 @@ mod links {
     #[test]
     fn link_removed_next_frame_rewrites_cells_without_osc8() {
         let mut t = term(20, 3);
-        let _ = frame(&mut t, "AB", &[span(0, 2, "https://x.ai", None)]);
+        let _ = frame(&mut t, "AB", &[span(0, 2, "https://hystersis.com", None)]);
         // Same glyphs, but the link is gone: the cells must be rewritten (so the
         // terminal's hyperlink clears) and carry no OSC 8. This is the `/new`
         // regression — clearing is driven purely by the diff.
@@ -318,9 +318,9 @@ mod links {
     #[test]
     fn unchanged_link_and_content_emits_nothing() {
         let mut t = term(20, 3);
-        let _ = frame(&mut t, "AB", &[span(0, 2, "https://x.ai", None)]);
+        let _ = frame(&mut t, "AB", &[span(0, 2, "https://hystersis.com", None)]);
         // Identical glyphs AND identical link → empty diff → no output at all.
-        let out = frame(&mut t, "AB", &[span(0, 2, "https://x.ai", None)]);
+        let out = frame(&mut t, "AB", &[span(0, 2, "https://hystersis.com", None)]);
         assert!(out.is_empty(), "expected empty diff, got: {out:?}");
     }
 
@@ -338,9 +338,9 @@ mod links {
     #[test]
     fn emit_id_param_included() {
         let mut t = term(20, 3);
-        let out = frame(&mut t, "AB", &[span(0, 2, "https://x.ai", Some(7))]);
+        let out = frame(&mut t, "AB", &[span(0, 2, "https://hystersis.com", Some(7))]);
         assert!(
-            out.contains("\x1b]8;id=1;https://x.ai\x07"),
+            out.contains("\x1b]8;id=1;https://hystersis.com\x07"),
             "id param missing: {out:?}"
         );
     }
@@ -457,9 +457,9 @@ mod links {
         let mut t = term(20, 3);
         // A width-2 char occupies two cells; only the lead cell is drawn, and
         // the OSC 8 wraps it.
-        let out = frame(&mut t, "世", &[span(0, 2, "https://x.ai", None)]);
+        let out = frame(&mut t, "世", &[span(0, 2, "https://hystersis.com", None)]);
         assert!(
-            out.contains("\x1b]8;;https://x.ai\x07世\x1b]8;;\x07"),
+            out.contains("\x1b]8;;https://hystersis.com\x07世\x1b]8;;\x07"),
             "wide-char run: {out:?}"
         );
     }
@@ -485,13 +485,13 @@ mod links {
             row: 5,
             col_start: 2,
             col_end: 4,
-            url: "https://x.ai".into(),
+            url: "https://hystersis.com".into(),
             id: None,
         }]);
         t.flush_with_links().unwrap();
         let out = String::from_utf8(t.backend().buf.clone()).unwrap();
         assert!(
-            out.contains("\x1b]8;;https://x.ai\x07AB\x1b]8;;\x07"),
+            out.contains("\x1b]8;;https://hystersis.com\x07AB\x1b]8;;\x07"),
             "non-origin mapping: {out:?}"
         );
     }

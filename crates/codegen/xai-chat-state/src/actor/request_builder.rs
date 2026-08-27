@@ -1,6 +1,6 @@
 //! ConversationRequest assembly — image compaction, pruning, repair, memory injection.
 
-use xai_grok_sampling_types::{ConversationItem, ConversationRequest, ToolSpec, TraceContext};
+use xai_hystersis_sampling_types::{ConversationItem, ConversationRequest, ToolSpec, TraceContext};
 
 use super::ChatStateActor;
 use crate::events::ChatStateEvent;
@@ -98,13 +98,13 @@ impl ChatStateActor {
             temperature: self.state.sampling_config.temperature,
             max_output_tokens: self.state.sampling_config.max_completion_tokens,
             top_p: self.state.sampling_config.top_p,
-            x_grok_conv_id: Some(conv_id),
-            x_grok_req_id: Some(req_id),
-            x_grok_session_id: None,
-            x_grok_turn_idx: None,
-            x_grok_agent_id: None,
-            x_grok_deployment_id: None,
-            x_grok_user_id: None,
+            x_hystersis_conv_id: Some(conv_id),
+            x_hystersis_req_id: Some(req_id),
+            x_hystersis_session_id: None,
+            x_hystersis_turn_idx: None,
+            x_hystersis_agent_id: None,
+            x_hystersis_deployment_id: None,
+            x_hystersis_user_id: None,
             trace,
             prompt_cache_key: None,
             reasoning_effort: self.state.sampling_config.reasoning_effort,

@@ -4,7 +4,7 @@ use std::num::NonZeroU64;
 use std::time::Duration;
 
 use tokio::sync::mpsc;
-use xai_grok_sampling_types::{ConversationItem, SamplingConfig};
+use xai_hystersis_sampling_types::{ConversationItem, SamplingConfig};
 
 use crate::StrictAppendAck;
 use crate::actor::ChatStateActor;
@@ -455,7 +455,7 @@ async fn record_token_usage_emits_event() {
 
 #[tokio::test]
 async fn record_last_turn_usage_round_trip() {
-    use xai_grok_sampling_types::TokenUsage;
+    use xai_hystersis_sampling_types::TokenUsage;
 
     let h = TestHarness::new();
 
@@ -498,7 +498,7 @@ async fn record_last_turn_usage_round_trip() {
 
 #[tokio::test]
 async fn prompt_usage_ledger_via_handle_resets_and_clears() {
-    use xai_grok_sampling_types::TokenUsage;
+    use xai_hystersis_sampling_types::TokenUsage;
 
     let call = TokenUsage {
         prompt_tokens: 10,
@@ -672,7 +672,7 @@ async fn provider_counted_model_output_persists_without_bumping_estimate() {
     let h = TestHarness::new();
     h.handle.record_token_usage(100_000);
     h.handle.push_model_output(ConversationItem::Reasoning(
-        xai_grok_sampling_types::synthesized_reasoning_item("r".repeat(4_000)),
+        xai_hystersis_sampling_types::synthesized_reasoning_item("r".repeat(4_000)),
     ));
 
     assert!(matches!(
@@ -779,7 +779,7 @@ async fn strip_conversation_images_replaces_only_listed_urls_and_persists() {
     assert!(
         u.content
             .iter()
-            .all(|p| !matches!(p, xai_grok_sampling_types::ContentPart::Image { .. })),
+            .all(|p| !matches!(p, xai_hystersis_sampling_types::ContentPart::Image { .. })),
         "listed image part must be replaced"
     );
     let ConversationItem::User(survivor) = &conv[1] else {
@@ -789,7 +789,7 @@ async fn strip_conversation_images_replaces_only_listed_urls_and_persists() {
         survivor
             .content
             .iter()
-            .any(|p| matches!(p, xai_grok_sampling_types::ContentPart::Image { .. })),
+            .any(|p| matches!(p, xai_hystersis_sampling_types::ContentPart::Image { .. })),
         "unlisted image must survive the scoped strip"
     );
 
@@ -1340,7 +1340,7 @@ async fn update_sampling_config_is_queryable() {
     let h = TestHarness::new();
     let new_config = SamplingConfig {
         base_url: "https://new.example.com".to_string(),
-        model: "grok-3".to_string(),
+        model: "hystersis-3".to_string(),
         max_completion_tokens: Some(4096),
         temperature: Some(0.5),
         top_p: None,
@@ -1355,7 +1355,7 @@ async fn update_sampling_config_is_queryable() {
     h.handle.update_sampling_config(new_config.clone());
 
     let config = h.handle.get_sampling_config().await.unwrap();
-    assert_eq!(config.model, "grok-3");
+    assert_eq!(config.model, "hystersis-3");
     assert_eq!(config.context_window, NonZeroU64::new(200_000).unwrap());
 }
 
@@ -1589,8 +1589,8 @@ async fn build_request_includes_all_messages() {
         .await
         .unwrap();
     assert_eq!(request.items.len(), 2);
-    assert_eq!(request.x_grok_conv_id, Some("conv-1".to_string()));
-    assert_eq!(request.x_grok_req_id, Some("req-1".to_string()));
+    assert_eq!(request.x_hystersis_conv_id, Some("conv-1".to_string()));
+    assert_eq!(request.x_hystersis_req_id, Some("req-1".to_string()));
 }
 
 #[tokio::test]
@@ -1700,7 +1700,7 @@ async fn build_request_injects_memory_when_no_system() {
 
 #[tokio::test]
 async fn build_request_repairs_dangling_tool_calls() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     // Repair happens in ChatState::new() (called by with_conversation → spawn),
     // not in build_request. Both handler and clone-level repair are no-ops here.
@@ -1728,7 +1728,7 @@ async fn build_request_repairs_dangling_tool_calls() {
 
 #[tokio::test]
 async fn build_request_with_tool_definitions() {
-    use xai_grok_sampling_types::ToolSpec;
+    use xai_hystersis_sampling_types::ToolSpec;
 
     let h = TestHarness::with_conversation(vec![
         ConversationItem::system("sys"),
@@ -1755,7 +1755,7 @@ async fn build_request_with_tool_definitions() {
 async fn build_request_uses_sampling_config() {
     let config = SamplingConfig {
         base_url: "https://api.example.com".to_string(),
-        model: "grok-3".to_string(),
+        model: "hystersis-3".to_string(),
         max_completion_tokens: Some(8192),
         temperature: Some(0.7),
         top_p: Some(0.9),
@@ -1775,7 +1775,7 @@ async fn build_request_uses_sampling_config() {
         .await
         .unwrap();
 
-    assert_eq!(request.model, Some("grok-3".to_string()));
+    assert_eq!(request.model, Some("hystersis-3".to_string()));
     assert_eq!(request.temperature, Some(0.7));
     assert_eq!(request.max_output_tokens, Some(8192));
     assert_eq!(request.top_p, Some(0.9));
@@ -1853,7 +1853,7 @@ async fn build_request_can_persist_memory_into_actor_state() {
 
 #[tokio::test]
 async fn build_request_with_multiple_tool_calls_and_results() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let h = TestHarness::with_conversation(vec![
         ConversationItem::system("sys"),
@@ -1889,7 +1889,7 @@ async fn build_request_with_multiple_tool_calls_and_results() {
 // Parallel tool calls with mixed accept/reject
 // ============================================================================
 
-/// Simulates the exact sequence that `xai-grok-shell`'s `execute_tool_calls`
+/// Simulates the exact sequence that `xai-hystersis-shell`'s `execute_tool_calls`
 /// produces when the model emits 3 parallel tool calls and:
 ///   - Tool #1 (read_file):       user **accepts** → executed successfully
 ///   - Tool #2 (edit_file):       user **rejects** → handle_tool_not_executed
@@ -1908,7 +1908,7 @@ async fn build_request_with_multiple_tool_calls_and_results() {
 ///   [5] ToolResult for call_3 (cancellation due to earlier rejection)
 #[tokio::test]
 async fn parallel_tool_calls_accept_first_reject_second_skip_third() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let h = TestHarness::new();
 
@@ -1930,7 +1930,7 @@ async fn parallel_tool_calls_accept_first_reject_second_skip_third() {
     // In the real code, this is built from the streaming response and pushed
     // via `push_assistant_response`.
     let assistant_with_tools =
-        ConversationItem::Assistant(xai_grok_sampling_types::AssistantItem {
+        ConversationItem::Assistant(xai_hystersis_sampling_types::AssistantItem {
             content: "I'll read the file, fix it, and run tests.".into(),
             tool_calls: vec![
                 ToolCall {
@@ -1949,7 +1949,7 @@ async fn parallel_tool_calls_accept_first_reject_second_skip_third() {
                     arguments: r#"{"command":"cargo test"}"#.into(),
                 },
             ],
-            model_id: Some("grok-3".to_string()),
+            model_id: Some("hystersis-3".to_string()),
             model_fingerprint: None,
             reasoning_effort: None,
         });
@@ -2066,7 +2066,7 @@ async fn parallel_tool_calls_accept_first_reject_second_skip_third() {
 /// would corrupt the rejection messages.
 #[tokio::test]
 async fn parallel_tool_calls_with_rejection_has_no_dangling_calls() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let h = TestHarness::new();
 
@@ -2144,7 +2144,7 @@ async fn parallel_tool_calls_with_rejection_has_no_dangling_calls() {
 /// correctly for the parallel tool call scenario.
 #[tokio::test]
 async fn parallel_tool_calls_with_rejection_persists_all_items() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let mut h = TestHarness::new();
 
@@ -2208,7 +2208,7 @@ async fn parallel_tool_calls_with_rejection_persists_all_items() {
 /// clone produced by `build_request`.
 #[tokio::test]
 async fn dangling_tool_calls_after_crash_are_repaired_on_load() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     // Simulate what chat_history.jsonl looks like after a crash:
     // The assistant message (with 3 tool calls) was persisted, and only
@@ -2216,7 +2216,7 @@ async fn dangling_tool_calls_after_crash_are_repaired_on_load() {
     let crashed_conversation = vec![
         ConversationItem::system("You are a helpful assistant."),
         ConversationItem::user("Read, edit, and test"),
-        ConversationItem::Assistant(xai_grok_sampling_types::AssistantItem {
+        ConversationItem::Assistant(xai_hystersis_sampling_types::AssistantItem {
             content: std::sync::Arc::<str>::from(""),
             tool_calls: vec![
                 ToolCall {
@@ -2235,7 +2235,7 @@ async fn dangling_tool_calls_after_crash_are_repaired_on_load() {
                     arguments: r#"{"command":"cargo test"}"#.into(),
                 },
             ],
-            model_id: Some("grok-3".to_string()),
+            model_id: Some("hystersis-3".to_string()),
             model_fingerprint: None,
             reasoning_effort: None,
         }),
@@ -2317,7 +2317,7 @@ async fn dangling_tool_calls_after_crash_are_repaired_on_load() {
 /// consistent after repair — the synthetic results appear in both.
 #[tokio::test]
 async fn dangling_tool_calls_repair_is_consistent_between_state_and_request() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let crashed_conversation = vec![
         ConversationItem::system("sys"),
@@ -2366,7 +2366,7 @@ async fn dangling_tool_calls_repair_is_consistent_between_state_and_request() {
 /// ChatState::new should repair all 3 eagerly.
 #[tokio::test]
 async fn all_tool_calls_dangling_after_crash() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let crashed_conversation = vec![
         ConversationItem::system("sys"),
@@ -2450,7 +2450,7 @@ async fn all_tool_calls_dangling_after_crash() {
 /// message, so the conversation is cleaned up in-place.
 #[tokio::test]
 async fn live_cancel_before_any_tool_execution_repairs_on_next_user_message() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let h = TestHarness::new();
 
@@ -2555,7 +2555,7 @@ async fn live_cancel_before_any_tool_execution_repairs_on_next_user_message() {
 /// Tools #2 and #3 are dangling. Next user message should repair only those.
 #[tokio::test]
 async fn live_cancel_after_partial_tool_results_repairs_remaining() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let h = TestHarness::new();
 
@@ -2674,7 +2674,7 @@ async fn turn_capture_collects_all_message_types() {
 
 #[tokio::test]
 async fn harness_trace_items_ride_own_turn_not_the_live_capture() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
     let h = TestHarness::new();
 
     let live_before = h.handle.get_conversation().await.len();
@@ -2732,7 +2732,7 @@ async fn harness_trace_items_ride_own_turn_not_the_live_capture() {
 
 #[tokio::test]
 async fn harness_trace_recorded_before_capture_seals_into_own_turn() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
     let h = TestHarness::new();
 
     // Planner-style: synthetic pair recorded BEFORE the turn's capture starts
@@ -2780,7 +2780,7 @@ async fn harness_trace_recorded_before_capture_seals_into_own_turn() {
 
 #[tokio::test]
 async fn harness_trace_turns_separate_per_flush_and_drain_clears() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
     let h = TestHarness::new();
 
     let pair = |id: &str| {
@@ -2965,7 +2965,7 @@ async fn restore_snapshot_does_not_touch_turn_capture() {
 
 #[tokio::test]
 async fn turn_capture_survives_integrity_repair_prefix_shrink() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
     let h = TestHarness::new();
 
     // Build a prefix (before the capture starts) holding three removable
@@ -3126,7 +3126,7 @@ async fn get_conversation_len_matches_full_conversation() {
 
 #[tokio::test]
 async fn has_dangling_tool_calls_reflects_unanswered_calls() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
     let h = TestHarness::new();
     assert!(!h.handle.has_dangling_tool_calls().await);
 
@@ -3301,7 +3301,7 @@ async fn get_conversation_item_at_does_not_mutate_state() {
 /// original call-site semantics used by the memory-search path.
 #[tokio::test]
 async fn get_first_user_text_image_first_returns_none() {
-    use xai_grok_sampling_types::{ContentPart, UserItem};
+    use xai_hystersis_sampling_types::{ContentPart, UserItem};
 
     let h = TestHarness::new();
     // First message: image-only user message (no text part)
@@ -3321,7 +3321,7 @@ async fn get_first_user_text_image_first_returns_none() {
 /// `get_first_user_text()` still returns `None` (first-part-is-text semantics).
 #[tokio::test]
 async fn get_first_user_text_image_then_text_returns_none() {
-    use xai_grok_sampling_types::{ContentPart, UserItem};
+    use xai_hystersis_sampling_types::{ContentPart, UserItem};
 
     let h = TestHarness::new();
     h.handle.push_user_message(ConversationItem::User(UserItem {
@@ -3344,7 +3344,7 @@ async fn get_first_user_text_image_then_text_returns_none() {
 /// Confirms the happy path for text-first multimodal messages.
 #[tokio::test]
 async fn get_first_user_text_text_then_image_returns_text() {
-    use xai_grok_sampling_types::{ContentPart, UserItem};
+    use xai_hystersis_sampling_types::{ContentPart, UserItem};
 
     let h = TestHarness::new();
     h.handle.push_user_message(ConversationItem::User(UserItem {
@@ -3864,16 +3864,16 @@ async fn get_last_model_metadata_returns_both_fields() {
     let h = TestHarness::with_conversation(vec![
         ConversationItem::system("sys"),
         ConversationItem::user("hi"),
-        ConversationItem::Assistant(xai_grok_sampling_types::AssistantItem {
+        ConversationItem::Assistant(xai_hystersis_sampling_types::AssistantItem {
             content: "hello".into(),
             tool_calls: vec![],
-            model_id: Some("grok-4.5".into()),
+            model_id: Some("hystersis-4.5".into()),
             model_fingerprint: Some("fp_abc123".into()),
             reasoning_effort: None,
         }),
     ]);
     let meta = h.handle.get_last_model_metadata().await;
-    assert_eq!(meta.resolved_model_id.as_deref(), Some("grok-4.5"));
+    assert_eq!(meta.resolved_model_id.as_deref(), Some("hystersis-4.5"));
     assert_eq!(meta.model_fingerprint.as_deref(), Some("fp_abc123"));
 }
 
@@ -3894,11 +3894,11 @@ async fn get_last_model_metadata_returns_default_when_no_assistant() {
 /// not touch it.
 #[tokio::test]
 async fn sampling_config_survives_compaction_replacement() {
-    use xai_grok_sampling_types::ApiBackend;
+    use xai_hystersis_sampling_types::ApiBackend;
 
     let config = SamplingConfig {
         base_url: "https://api.example.com".to_string(),
-        model: "grok-build".to_string(),
+        model: "hystersis".to_string(),
         max_completion_tokens: None,
         temperature: Some(0.7),
         top_p: Some(0.95),
@@ -3915,10 +3915,10 @@ async fn sampling_config_survives_compaction_replacement() {
         vec![
             ConversationItem::system("You are a helpful assistant."),
             ConversationItem::user("fix the bug"),
-            ConversationItem::Assistant(xai_grok_sampling_types::AssistantItem {
+            ConversationItem::Assistant(xai_hystersis_sampling_types::AssistantItem {
                 content: "I'll fix it.".into(),
                 tool_calls: vec![],
-                model_id: Some("grok-4.5".into()),
+                model_id: Some("hystersis-4.5".into()),
                 model_fingerprint: Some("fp_abc123".into()),
                 reasoning_effort: None,
             }),
@@ -3928,12 +3928,12 @@ async fn sampling_config_survives_compaction_replacement() {
 
     // Pre-compaction: everything correct.
     let pre = h.handle.get_sampling_config().await.unwrap();
-    assert_eq!(pre.model, "grok-build");
+    assert_eq!(pre.model, "hystersis");
     assert_eq!(pre.context_window.get(), 500_000);
     assert_eq!(pre.api_backend, ApiBackend::Responses);
 
     let pre_meta = h.handle.get_last_model_metadata().await;
-    assert_eq!(pre_meta.resolved_model_id.as_deref(), Some("grok-4.5"));
+    assert_eq!(pre_meta.resolved_model_id.as_deref(), Some("hystersis-4.5"));
     assert_eq!(pre_meta.model_fingerprint.as_deref(), Some("fp_abc123"));
 
     // Simulate compaction: replace conversation with compacted history.
@@ -3946,7 +3946,7 @@ async fn sampling_config_survives_compaction_replacement() {
     // Post-compaction: SamplingConfig MUST be preserved.
     let post = h.handle.get_sampling_config().await.unwrap();
     assert_eq!(
-        post.model, "grok-build",
+        post.model, "hystersis",
         "BUG: model changed after compaction"
     );
     assert_eq!(
@@ -3975,7 +3975,7 @@ async fn sampling_config_survives_compaction_replacement() {
 
 /// After compaction, the `build_session_info` display path uses
 /// `get_sampling_config().model` as the source-of-truth model slug.
-/// If that model slug is e.g. "grok-build" and not in the ModelState
+/// If that model slug is e.g. "hystersis" and not in the ModelState
 /// catalog with a display name, the pager shows the raw slug. This
 /// test verifies the pager's `current_model_name()` behavior when the
 /// model ID doesn't match any catalog entry.
@@ -3983,7 +3983,7 @@ async fn sampling_config_survives_compaction_replacement() {
 async fn model_metadata_lost_after_compaction_then_recovered_on_next_turn() {
     let config = SamplingConfig {
         base_url: "https://api.example.com".to_string(),
-        model: "grok-build".to_string(),
+        model: "hystersis".to_string(),
         max_completion_tokens: None,
         temperature: Some(0.7),
         top_p: Some(0.95),
@@ -4000,10 +4000,10 @@ async fn model_metadata_lost_after_compaction_then_recovered_on_next_turn() {
         vec![
             ConversationItem::system("sys"),
             ConversationItem::user("task"),
-            ConversationItem::Assistant(xai_grok_sampling_types::AssistantItem {
+            ConversationItem::Assistant(xai_hystersis_sampling_types::AssistantItem {
                 content: "done".into(),
                 tool_calls: vec![],
-                model_id: Some("grok-4.5".into()),
+                model_id: Some("hystersis-4.5".into()),
                 model_fingerprint: Some("fp_acd3142484d3ad6f".into()),
                 reasoning_effort: None,
             }),
@@ -4013,7 +4013,7 @@ async fn model_metadata_lost_after_compaction_then_recovered_on_next_turn() {
 
     // Before compaction: metadata present.
     let meta = h.handle.get_last_model_metadata().await;
-    assert_eq!(meta.resolved_model_id.as_deref(), Some("grok-4.5"));
+    assert_eq!(meta.resolved_model_id.as_deref(), Some("hystersis-4.5"));
     assert_eq!(
         meta.model_fingerprint.as_deref(),
         Some("fp_acd3142484d3ad6f")
@@ -4035,10 +4035,10 @@ async fn model_metadata_lost_after_compaction_then_recovered_on_next_turn() {
         .push_user_message(ConversationItem::user("next task"));
     h.handle
         .push_assistant_response(ConversationItem::Assistant(
-            xai_grok_sampling_types::AssistantItem {
+            xai_hystersis_sampling_types::AssistantItem {
                 content: "working on it".into(),
                 tool_calls: vec![],
-                model_id: Some("grok-4.5".into()),
+                model_id: Some("hystersis-4.5".into()),
                 model_fingerprint: Some("fp_acd3142484d3ad6f".into()),
                 reasoning_effort: None,
             },
@@ -4046,7 +4046,7 @@ async fn model_metadata_lost_after_compaction_then_recovered_on_next_turn() {
 
     // Metadata recovered.
     let meta = h.handle.get_last_model_metadata().await;
-    assert_eq!(meta.resolved_model_id.as_deref(), Some("grok-4.5"));
+    assert_eq!(meta.resolved_model_id.as_deref(), Some("hystersis-4.5"));
     assert_eq!(
         meta.model_fingerprint.as_deref(),
         Some("fp_acd3142484d3ad6f")
@@ -4068,12 +4068,12 @@ async fn model_metadata_lost_after_compaction_then_recovered_on_next_turn() {
 /// in the session layer.
 #[tokio::test]
 async fn context_window_downgrade_triggers_auto_compact() {
-    use xai_grok_sampling_types::ApiBackend;
+    use xai_hystersis_sampling_types::ApiBackend;
 
-    // Initial config: 500k context, Responses backend (matches grok-4.5)
+    // Initial config: 500k context, Responses backend (matches hystersis-4.5)
     let config = SamplingConfig {
-        base_url: "https://api.x.ai/v1".to_string(),
-        model: "grok-4.5".to_string(),
+        base_url: "https://api.hystersis.com/v1".to_string(),
+        model: "hystersis-4.5".to_string(),
         max_completion_tokens: None,
         temperature: Some(0.7),
         top_p: Some(0.95),
@@ -4114,7 +4114,7 @@ async fn context_window_downgrade_triggers_auto_compact() {
         128_000,
         "context_window should be overwritten by update_sampling_config"
     );
-    assert_eq!(post.model, "grok-4.5", "model slug must not change");
+    assert_eq!(post.model, "hystersis-4.5", "model slug must not change");
     assert_eq!(
         post.api_backend,
         ApiBackend::Responses,
@@ -4164,12 +4164,12 @@ async fn context_window_downgrade_triggers_auto_compact() {
 /// `patch_reasoning_text_types` which only stamps a `type` field on nested
 /// reasoning content blocks and does not reorder items).
 fn serialize_via_public_api(
-    req: &xai_grok_sampling_types::ConversationRequest,
+    req: &xai_hystersis_sampling_types::ConversationRequest,
 ) -> serde_json::Value {
-    use xai_grok_sampling_types::rs;
+    use xai_hystersis_sampling_types::rs;
     let create_response: rs::CreateResponse = req.into();
     let mut body = serde_json::to_value(&create_response).unwrap();
-    xai_grok_sampling_types::patch_reasoning_text_types(&mut body);
+    xai_hystersis_sampling_types::patch_reasoning_text_types(&mut body);
     // Sanity guard: the placeholder string from the pre-refactor design
     // must never appear in the serialized output. If a future change
     // re-introduces a stringly-typed splice, this catches it.
@@ -4185,8 +4185,8 @@ fn serialize_via_public_api(
 /// Assert that request N's serialized input is a byte-stable prefix of
 /// request N+1's.
 fn assert_prefix_stable_pair(
-    base: &xai_grok_sampling_types::ConversationRequest,
-    extended: &xai_grok_sampling_types::ConversationRequest,
+    base: &xai_hystersis_sampling_types::ConversationRequest,
+    extended: &xai_hystersis_sampling_types::ConversationRequest,
     label: &str,
 ) {
     let base_body = serialize_via_public_api(base);
@@ -4220,7 +4220,7 @@ fn assert_prefix_stable_pair(
 /// encrypted_content. Replaces the pre-refactor "AssistantItem.raw_output"
 /// helper.
 fn reasoning_sibling(id: &str, encrypted: Option<&str>) -> ConversationItem {
-    use xai_grok_sampling_types::rs;
+    use xai_hystersis_sampling_types::rs;
     ConversationItem::Reasoning(rs::ReasoningItem {
         id: id.to_string(),
         summary: vec![rs::SummaryPart::SummaryText(rs::SummaryTextContent {
@@ -4377,7 +4377,7 @@ async fn prefix_stable_with_reasoning_siblings_through_build_request() {
 /// Changing the tool set between requests must not affect the input prefix.
 #[tokio::test]
 async fn prefix_stable_after_tool_schema_change() {
-    use xai_grok_sampling_types::ToolSpec;
+    use xai_hystersis_sampling_types::ToolSpec;
 
     let h = TestHarness::with_conversation(vec![
         ConversationItem::system("sys"),
@@ -4444,7 +4444,7 @@ async fn prefix_stable_after_model_switch() {
         .push_user_message(ConversationItem::user("continue"));
 
     let new_config = SamplingConfig {
-        model: "grok-3-mini".to_string(),
+        model: "hystersis-3-mini".to_string(),
         ..test_config()
     };
     h.handle.update_sampling_config(new_config);
@@ -4500,7 +4500,7 @@ async fn prefix_stable_with_synthetic_user_messages() {
 /// past `IMAGE_COMPACT_TRIGGER_BYTES` so the eviction actually fires.
 #[tokio::test]
 async fn prefix_stable_after_image_pruning() {
-    use xai_grok_sampling_types::ContentPart;
+    use xai_hystersis_sampling_types::ContentPart;
 
     // Large enough that the serialized body crosses the compaction trigger.
     let big_image_url = format!(
@@ -4510,7 +4510,7 @@ async fn prefix_stable_after_image_pruning() {
 
     let h = TestHarness::with_conversation(vec![
         ConversationItem::system("sys"),
-        ConversationItem::User(xai_grok_sampling_types::UserItem {
+        ConversationItem::User(xai_hystersis_sampling_types::UserItem {
             content: vec![
                 ContentPart::Text {
                     text: "look at this image".into(),
@@ -4535,7 +4535,7 @@ async fn prefix_stable_after_image_pruning() {
     h.handle
         .push_assistant_response(ConversationItem::assistant("a2"));
     h.handle
-        .push_user_message(ConversationItem::User(xai_grok_sampling_types::UserItem {
+        .push_user_message(ConversationItem::User(xai_hystersis_sampling_types::UserItem {
             content: vec![
                 ContentPart::Text {
                     text: "new image".into(),
@@ -4606,7 +4606,7 @@ async fn prefix_stable_after_image_pruning() {
 /// behavior this size-gate replaces).
 #[tokio::test]
 async fn build_request_preserves_small_old_images() {
-    use xai_grok_sampling_types::{ContentPart, UserItem};
+    use xai_hystersis_sampling_types::{ContentPart, UserItem};
 
     let h = TestHarness::with_conversation(vec![
         ConversationItem::system("sys"),
@@ -4646,7 +4646,7 @@ async fn build_request_preserves_small_old_images() {
 
 #[tokio::test]
 async fn build_request_budgets_tool_images_on_request_copy_only() {
-    use xai_grok_sampling_types::{ContentPart, ToolCall};
+    use xai_hystersis_sampling_types::{ContentPart, ToolCall};
 
     let image_url = format!(
         "data:image/png;base64,{}",
@@ -4794,7 +4794,7 @@ async fn prefix_stable_after_tool_result_pruning() {
 /// in the conversation list and the wire input.
 #[tokio::test]
 async fn prefix_stable_with_backend_tool_calls() {
-    use xai_grok_sampling_types::{BackendToolCallItem, BackendToolKind, rs};
+    use xai_hystersis_sampling_types::{BackendToolCallItem, BackendToolKind, rs};
 
     let h = TestHarness::with_conversation(vec![
         ConversationItem::system("sys"),
@@ -4896,7 +4896,7 @@ async fn prefix_stable_after_session_resume() {
 }
 
 // ============================================================================
-// Out-of-band history repair (x.ai/session/repair)
+// Out-of-band history repair (hystersis.com/session/repair)
 // ============================================================================
 
 /// Bricked-session shape: an orphaned tool result survives load (the eager
@@ -4904,7 +4904,7 @@ async fn prefix_stable_after_session_resume() {
 /// out-of-band `RepairHistory` command must strip it and persist the fix.
 #[tokio::test]
 async fn repair_history_command_strips_orphan_and_persists() {
-    use xai_grok_sampling_types::ToolCall;
+    use xai_hystersis_sampling_types::ToolCall;
 
     let corrupted = vec![
         ConversationItem::system("sys"),

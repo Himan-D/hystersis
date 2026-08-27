@@ -6,7 +6,7 @@ use crate::test_support::{expire_now, expire_now_forced};
 
 #[test]
 fn a_candidate_the_pass_has_no_time_for_is_kept_and_named() {
-    let fx = crate::db::GrokHomeFixture::new();
+    let fx = crate::db::HystersisHomeFixture::new();
     let db = WorktreeDb::open(&fx.home).unwrap();
     let path = expiring_worktree(&db, &fx, "no-time");
 
@@ -29,7 +29,7 @@ fn a_candidate_the_pass_has_no_time_for_is_kept_and_named() {
 
 #[test]
 fn a_worktree_entered_during_the_gate_is_kept() {
-    let fx = crate::db::GrokHomeFixture::new();
+    let fx = crate::db::HystersisHomeFixture::new();
     let db = WorktreeDb::open(&fx.home).unwrap();
     let path = expiring_worktree(&db, &fx, "entered-late");
 
@@ -53,7 +53,7 @@ fn a_worktree_entered_during_the_gate_is_kept() {
 /// the verdict back to Keep. Liveness alone cannot see this — only the re-gate.
 #[test]
 fn work_appearing_during_the_gate_window_is_not_deleted() {
-    let fx = crate::db::GrokHomeFixture::new();
+    let fx = crate::db::HystersisHomeFixture::new();
     let db = WorktreeDb::open(&fx.home).unwrap();
     let path = expiring_worktree(&db, &fx, "committed-late");
 
@@ -85,7 +85,7 @@ fn work_appearing_during_the_gate_window_is_not_deleted() {
 
 #[test]
 fn a_record_the_first_re_check_rejects_is_never_put_through_the_gate() {
-    let fx = crate::db::GrokHomeFixture::new();
+    let fx = crate::db::HystersisHomeFixture::new();
     let db = WorktreeDb::open(&fx.home).unwrap();
     let path = expiring_worktree(&db, &fx, "entered-early");
 
@@ -123,7 +123,7 @@ fn enter_worktree(db: &WorktreeDb, when: Entered) -> impl Fn(Entered) + '_ {
     }
 }
 
-fn expiring_worktree(db: &WorktreeDb, fx: &crate::db::GrokHomeFixture, name: &str) -> PathBuf {
+fn expiring_worktree(db: &WorktreeDb, fx: &crate::db::HystersisHomeFixture, name: &str) -> PathBuf {
     let path = crate::test_support::deletable_linked_worktree(&fx.home, name);
     db.register(&session_record(
         &format!("{name}-1"),
@@ -138,7 +138,7 @@ fn expiring_worktree(db: &WorktreeDb, fx: &crate::db::GrokHomeFixture, name: &st
 
 #[test]
 fn a_dry_run_does_not_move_where_the_next_pass_starts() {
-    let fx = crate::db::GrokHomeFixture::new();
+    let fx = crate::db::HystersisHomeFixture::new();
     let db = WorktreeDb::open(&fx.home).unwrap();
     let path = crate::test_support::deletable_linked_worktree(&fx.home, "previewed");
     db.register(&session_record(
@@ -164,7 +164,7 @@ fn a_dry_run_does_not_move_where_the_next_pass_starts() {
 
 #[test]
 fn a_pass_that_runs_out_of_time_resumes_where_it_stopped() {
-    let fx = crate::db::GrokHomeFixture::new();
+    let fx = crate::db::HystersisHomeFixture::new();
     let db = WorktreeDb::open(&fx.home).unwrap();
     for id in ["older", "newer"] {
         std::fs::create_dir_all(fx.home.join(id)).unwrap();
@@ -398,7 +398,7 @@ fn run_pass_prunes_orphan_grove_pins_after_grace() {
     xai_test_utils::require_git!();
     use xai_test_utils::git::{git_commit_all, init_git_repo};
 
-    let mut fx = crate::db::GrokHomeFixture::new();
+    let mut fx = crate::db::HystersisHomeFixture::new();
     let grove = fx.isolate_xdg_grove_data();
     let repo = fx.home.join("src-repo");
     std::fs::create_dir_all(&repo).unwrap();
@@ -415,7 +415,7 @@ fn run_pass_prunes_orphan_grove_pins_after_grace() {
             .unwrap();
         String::from_utf8_lossy(&out.stdout).trim().to_owned()
     };
-    let pin = "refs/grok/worktrees/wt-orphan";
+    let pin = "refs/hystersis/worktrees/wt-orphan";
     let mut uref = std::process::Command::new("git");
     xai_tty_utils::detach_std_command(&mut uref);
     assert!(

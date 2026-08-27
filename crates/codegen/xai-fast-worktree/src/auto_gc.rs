@@ -7,7 +7,7 @@ use anyhow::Result;
 
 use crate::CleanupReport;
 use crate::api::gc::{GcOptions, GcReport, age_path_enabled, gc_worktrees};
-use crate::db::{ListFilter, WorktreeDb, WorktreeKind, now_epoch_secs, resolve_grok_home};
+use crate::db::{ListFilter, WorktreeDb, WorktreeKind, now_epoch_secs, resolve_hystersis_home};
 use crate::discovery::{RebuildReport, rebuild_worktree_db};
 
 pub(crate) const META_LAST_AUTO_GC_AT: &str = "last_auto_gc_at";
@@ -15,15 +15,15 @@ pub(crate) const META_LAST_AUTO_GC_AT: &str = "last_auto_gc_at";
 pub(crate) const META_LAST_AUTO_REBUILD_AT: &str = "last_auto_rebuild_at";
 
 /// `0` / `false` / `off` / empty disables auto-GC.
-pub const ENV_AUTO_GC: &str = "GROK_WORKTREE_AUTO_GC";
+pub const ENV_AUTO_GC: &str = "HYSTERSIS_WORKTREE_AUTO_GC";
 /// `1` / `true` / `on` forces age-count without delete.
-pub const ENV_AUTO_GC_DRY_RUN: &str = "GROK_WORKTREE_AUTO_GC_DRY_RUN";
+pub const ENV_AUTO_GC_DRY_RUN: &str = "HYSTERSIS_WORKTREE_AUTO_GC_DRY_RUN";
 /// Default max age in seconds (overrides TOML/remote when set and parseable).
-pub const ENV_AUTO_GC_MAX_AGE: &str = "GROK_WORKTREE_AUTO_GC_MAX_AGE";
+pub const ENV_AUTO_GC_MAX_AGE: &str = "HYSTERSIS_WORKTREE_AUTO_GC_MAX_AGE";
 /// `1` / `true` / `on` enables optional discovery rebuild + stale git prune.
-pub const ENV_AUTO_GC_REBUILD: &str = "GROK_WORKTREE_AUTO_GC_REBUILD";
+pub const ENV_AUTO_GC_REBUILD: &str = "HYSTERSIS_WORKTREE_AUTO_GC_REBUILD";
 
-/// Remove every `GROK_WORKTREE_AUTO_GC*` env var so a test starts from a clean
+/// Remove every `HYSTERSIS_WORKTREE_AUTO_GC*` env var so a test starts from a clean
 /// slate. Exposed (not `cfg(test)`) so other crates' tests can share the single
 /// source of truth for the var list; not intended for production use.
 ///
@@ -74,7 +74,7 @@ pub struct WorktreeAutoGcLayer {
     pub dry_run: Option<bool>,
     pub include_orphan_snapshots: Option<bool>,
     pub max_age_by_kind: BTreeMap<WorktreeKind, Option<u64>>,
-    /// Optional discovery rebuild + grok-scoped stale `.git/worktrees/` scrub (default off).
+    /// Optional discovery rebuild + hystersis-scoped stale `.git/worktrees/` scrub (default off).
     pub include_rebuild: Option<bool>,
     /// Independent rebuild throttle; absent ⇒ 24h.
     pub rebuild_min_interval_secs: Option<u64>,
@@ -285,7 +285,7 @@ pub(crate) fn env_auto_gc_rebuild() -> bool {
     env_var_truthy(ENV_AUTO_GC_REBUILD)
 }
 
-/// Parse `GROK_WORKTREE_AUTO_GC_MAX_AGE` as seconds; invalid/absent → None.
+/// Parse `HYSTERSIS_WORKTREE_AUTO_GC_MAX_AGE` as seconds; invalid/absent → None.
 pub(crate) fn env_auto_gc_max_age() -> Option<u64> {
     match std::env::var(ENV_AUTO_GC_MAX_AGE) {
         Ok(v) => {
@@ -583,10 +583,10 @@ fn maybe_run_rebuild(
         RebuildMetaClass::Throttled | RebuildMetaClass::SkipFailed => return (None, false),
     }
 
-    let home = match resolve_grok_home() {
+    let home = match resolve_hystersis_home() {
         Ok(h) => h,
         Err(e) => {
-            tracing::warn!(error = %e, "auto worktree rebuild skipped: grok home unresolved");
+            tracing::warn!(error = %e, "auto worktree rebuild skipped: hystersis home unresolved");
             return (None, false);
         }
     };
@@ -625,19 +625,19 @@ fn collect_source_repos_for_prune(db: &WorktreeDb) -> BTreeSet<PathBuf> {
         .collect()
 }
 
-/// Scrub stale grok-owned registrations from each known source repo,
-/// scoped to worktrees under the grok home to prove ownership (see
+/// Scrub stale hystersis-owned registrations from each known source repo,
+/// scoped to worktrees under the hystersis home to prove ownership (see
 /// [`crate::git::remove_stale_worktree_registrations_under`] for why a blanket
 /// `git worktree prune` is unsafe here).
 fn prune_stale_git_worktree_registrations(repos: &BTreeSet<PathBuf>) -> u64 {
-    let Ok(grok_home) = resolve_grok_home() else {
-        tracing::warn!("auto worktree registration scrub skipped: grok home unresolved");
+    let Ok(hystersis_home) = resolve_hystersis_home() else {
+        tracing::warn!("auto worktree registration scrub skipped: hystersis home unresolved");
         return 0;
     };
     let cleaned: u64 = repos
         .iter()
         .filter(|repo| repo.is_dir())
-        .map(|repo| crate::git::remove_stale_worktree_registrations_under(repo, &grok_home))
+        .map(|repo| crate::git::remove_stale_worktree_registrations_under(repo, &hystersis_home))
         .fold(0u64, u64::saturating_add);
     if cleaned > 0 {
         tracing::info!(
@@ -976,7 +976,7 @@ mod tests {
         );
     }
 
-    /// Kill switch: env `GROK_WORKTREE_AUTO_GC=0` or `opts.enabled=false` both
+    /// Kill switch: env `HYSTERSIS_WORKTREE_AUTO_GC=0` or `opts.enabled=false` both
     /// short-circuit to `Disabled` with no stamp; an enabled pass with a clean
     /// env runs and stamps.
     #[test]
@@ -1396,10 +1396,10 @@ mod tests {
     }
 
     #[test]
-    fn include_rebuild_true_registers_untracked_under_grok_home() {
+    fn include_rebuild_true_registers_untracked_under_hystersis_home() {
         let _g = env_guard();
         clear_auto_gc_env();
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
 
         let wt = fx.home.join("worktrees/repo/untracked-sess");
@@ -1420,7 +1420,7 @@ mod tests {
         );
         assert!(
             db.get(&wt.to_string_lossy()).unwrap().is_some(),
-            "untracked dir under grok_home/worktrees must be registered"
+            "untracked dir under hystersis_home/worktrees must be registered"
         );
     }
 
@@ -1434,7 +1434,7 @@ mod tests {
             let case = format!("include_rebuild={include_rebuild} dry_run={dry_run}");
             let _g = env_guard();
             clear_auto_gc_env();
-            let fx = crate::db::GrokHomeFixture::new();
+            let fx = crate::db::HystersisHomeFixture::new();
             let db = WorktreeDb::open(&fx.home).unwrap();
 
             // An untracked tree a rebuild *would* register.
@@ -1487,7 +1487,7 @@ mod tests {
     fn rebuild_throttled_independently_of_gc() {
         let _g = env_guard();
         clear_auto_gc_env();
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
 
         let opts = ResolvedWorktreeAutoGc {
@@ -1528,7 +1528,7 @@ mod tests {
         // dead-path GC still work so reclaim continues after rebuild Err.
         let _g = env_guard();
         clear_auto_gc_env();
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
 
         db.register(&make_rec(
@@ -1571,7 +1571,7 @@ mod tests {
         assert!(report.stamped, "GC Ok must still stamp last_auto_gc_at");
     }
 
-    /// A real rebuild pass prunes a stale grok-owned git registration. The
+    /// A real rebuild pass prunes a stale hystersis-owned git registration. The
     /// source repo is discovered from the tracked row's snapshot, which holds
     /// even when that row is the sole record and is *dead* (GC unregisters it
     /// only after the prune snapshot is taken).
@@ -1581,7 +1581,7 @@ mod tests {
             let case = format!("dead_source={dead_source}");
             let _g = env_guard();
             clear_auto_gc_env();
-            let fx = crate::db::GrokHomeFixture::new();
+            let fx = crate::db::HystersisHomeFixture::new();
             let db = WorktreeDb::open(&fx.home).unwrap();
 
             let repo = fx.home.join("src-repo");
@@ -1626,7 +1626,7 @@ mod tests {
         // Rebuild meta must stay unset so the next pass can re-discover.
         let _g = env_guard();
         clear_auto_gc_env();
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
         db.register(&make_rec(
             "alive-missing-path",
@@ -1690,7 +1690,7 @@ mod tests {
     fn rebuild_set_meta_failure_still_continues_gc() {
         let _g = env_guard();
         clear_auto_gc_env();
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
         db.register(&make_rec(
             "dead-stamp",
@@ -1726,7 +1726,7 @@ mod tests {
         let _g = env_guard();
         clear_auto_gc_env();
         unsafe { std::env::set_var(ENV_AUTO_GC_REBUILD, "1") };
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
         let wt = fx.home.join("worktrees/repo/env-rebuild-sess");
         std::fs::create_dir_all(wt.join(".git")).unwrap();
@@ -1752,7 +1752,7 @@ mod tests {
     fn gc_throttled_short_circuits_rebuild() {
         let _g = env_guard();
         clear_auto_gc_env();
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
         // GC recently stamped; rebuild never stamped and would be due.
         db.set_meta(META_LAST_AUTO_GC_AT, &now_epoch_secs().to_string())
@@ -1782,7 +1782,7 @@ mod tests {
         let _g = env_guard();
         let _cwd_lock = crate::api::cwd_test_guard();
         clear_auto_gc_env();
-        let fx = crate::db::GrokHomeFixture::new();
+        let fx = crate::db::HystersisHomeFixture::new();
         let db = WorktreeDb::open(&fx.home).unwrap();
         let wt = fx.home.join("worktrees/repo/fresh-rebuild");
         std::fs::create_dir_all(wt.join(".git")).unwrap();

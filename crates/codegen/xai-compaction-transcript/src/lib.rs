@@ -9,7 +9,7 @@
 use std::sync::OnceLock;
 
 use regex::Regex;
-use xai_grok_sampling_types::ConversationItem;
+use xai_hystersis_sampling_types::ConversationItem;
 
 /// Layout of the per-session segment store — single source of the path
 /// convention (writer, index parser, and transcript-hint builder all use these).
@@ -18,7 +18,7 @@ pub const INDEX_FILE: &str = "INDEX.md";
 const SEGMENT_PREFIX: &str = "segment_";
 
 /// Whole-turn-boundary truncation cap for one segment's verbatim section.
-const SEGMENT_MAX_BYTES: usize = 512 * 1024;
+const SEGMENT_MAX_BYTES: usize = 2048 * 1024;
 const TRUNCATION_NOTICE: &str =
     "\n\n[... TRUNCATED at {limit} bytes, {omitted} turns omitted ...]\n";
 /// Per-turn text/arg caps for the `balanced` detail level (chars, like the Python implementation).
@@ -666,8 +666,8 @@ mod tests {
     /// is exceeded, with a notice naming how many turns were omitted.
     #[test]
     fn verbatim_turns_truncate_at_turn_boundary() {
-        // Each turn renders ~200 KB, so the 3rd turn blows the 512 KB budget.
-        let big = "x".repeat(200 * 1024);
+        // Each turn renders ~200 KB, so the 4th turn blows the 2MB budget.
+        let big = "x".repeat(600 * 1024);
         let items = [user(&big), user(&big), user(&big), user(&big)];
         let md = render_segment_md(&items, "s", 0, CompactionDetail::Verbose, "t");
         assert!(md.contains("### Turn 0 (Human)"));
@@ -761,7 +761,7 @@ mod tests {
     /// role/tool/file/error stats (roles mapped User→Human, ToolResult→Function).
     #[test]
     fn parity_turn_stats_matches_basic_counts() {
-        use xai_grok_sampling_types::{AssistantItem, ToolCall};
+        use xai_hystersis_sampling_types::{AssistantItem, ToolCall};
         let tc = |name: &str, args: &str| ToolCall {
             id: "t".into(),
             name: name.to_string(),

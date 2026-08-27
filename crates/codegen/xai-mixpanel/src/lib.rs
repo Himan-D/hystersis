@@ -28,7 +28,7 @@ const REQUEST_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(10);
 
 impl Mixpanel {
     /// Create a new Mixpanel client with the given project token.
-    #[allow(clippy::disallowed_methods)] // transport-neutral crate; the grok CLI injects a policy client via with_client
+    #[allow(clippy::disallowed_methods)] // transport-neutral crate; the hystersis CLI injects a policy client via with_client
     pub fn new(token: impl Into<String>) -> Self {
         Self {
             token: token.into(),
@@ -52,7 +52,7 @@ impl Mixpanel {
         mut properties: HashMap<String, serde_json::Value>,
     ) -> HashMap<String, serde_json::Value> {
         for v in properties.values_mut() {
-            xai_grok_secrets::redact_json_string_values(v);
+            xai_hystersis_secrets::redact_json_string_values(v);
         }
         properties.insert("token".to_owned(), serde_json::json!(self.token));
         properties
@@ -95,7 +95,7 @@ impl Mixpanel {
     ) -> Result<(), Error> {
         let mut scrubbed = set;
         for v in scrubbed.values_mut() {
-            xai_grok_secrets::redact_json_string_values(v);
+            xai_hystersis_secrets::redact_json_string_values(v);
         }
 
         let payload = serde_json::json!([{

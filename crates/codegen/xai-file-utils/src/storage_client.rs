@@ -1,6 +1,6 @@
 //! REST client for uploading files to GCS via cli-chat-proxy.
 //!
-//! Routes requests through cli-chat-proxy using user's grok.com auth token.
+//! Routes requests through cli-chat-proxy using user's hystersis.com auth token.
 //! The proxy handles GCS authentication server-side.
 //!
 //! For large files that exceed Cloudflare's body size limit, use the multipart
@@ -27,7 +27,7 @@ use tokio_stream::wrappers::ReceiverStream;
 use tokio_util::bytes::Bytes;
 use tokio_util::io::ReaderStream;
 use xai_circuit_breaker::{BreakerConfig, BreakerOpen, CircuitBreaker, Outcome, RetryPolicy};
-use xai_grok_auth::AuthCredentialProvider;
+use xai_hystersis_auth::AuthCredentialProvider;
 
 use crate::circuit_breaker_observer::TracingObserver;
 
@@ -50,8 +50,8 @@ fn storage_breaker_config() -> BreakerConfig {
 /// Hook invoked by [`StorageClient`] at every 401 response site so that
 /// the embedding application can record auth-attribution telemetry.
 ///
-/// Mirrors the pattern in `xai-grok-sampler::Auth401AttributionCallback`
-/// and `xai-grok-tools::Auth401AttributionCallback`. The shell installs
+/// Mirrors the pattern in `xai-hystersis-sampler::Auth401AttributionCallback`
+/// and `xai-hystersis-tools::Auth401AttributionCallback`. The shell installs
 /// a bridge implementation that wires into
 /// `crate::auth::attribution::record_consumer_401`.
 ///
@@ -363,16 +363,16 @@ mod retry_status_tests {
 /// is available (bins, tests, bare `TraceExportConfig` with no auth wrap).
 ///
 /// SAFETY: only hit by bins/tests/no-AuthManager paths; the refresh-aware
-/// path uses the obfuscated shell impl (`GrokAuthCredentials::apply` via
+/// path uses the obfuscated shell impl (`HystersisAuthCredentials::apply` via
 /// `ShellAuthCredentialProvider`). A future reader should not innocently
 /// make the static provider the production default -- the obfuscated
 /// routing + obfstr-protected literals only live in the shell impl.
-pub struct StaticGrokAuth {
+pub struct StaticHystersisAuth {
     pub user_token: Option<String>,
     pub deployment_key: Option<String>,
 }
 
-impl StaticGrokAuth {
+impl StaticHystersisAuth {
     pub fn new(user_token: Option<String>) -> Self {
         Self {
             user_token,
@@ -390,7 +390,7 @@ impl StaticGrokAuth {
     }
 }
 
-impl xai_grok_auth::HttpAuth for StaticGrokAuth {
+impl xai_hystersis_auth::HttpAuth for StaticHystersisAuth {
     fn apply(&self, builder: reqwest::RequestBuilder, _base_url: &str) -> reqwest::RequestBuilder {
         if let Some(ref key) = self.deployment_key {
             builder.header("Authorization", format!("Bearer {}", key))
@@ -405,18 +405,18 @@ impl xai_grok_auth::HttpAuth for StaticGrokAuth {
 }
 
 #[cfg(test)]
-mod static_grok_auth_tests {
-    use super::StaticGrokAuth;
+mod static_hystersis_auth_tests {
+    use super::StaticHystersisAuth;
 
     /// Deployment key must win over the user token (incl. the empty one the
     /// deployment-key path supplies); falls back to the user token otherwise.
     #[test]
     fn wire_bearer_prefers_deployment_key_then_falls_back_to_user_token() {
-        let mut deployment = StaticGrokAuth::new(Some(String::new()));
+        let mut deployment = StaticHystersisAuth::new(Some(String::new()));
         deployment.deployment_key = Some("deploy-key".to_string());
         assert_eq!(deployment.wire_bearer().as_deref(), Some("deploy-key"));
 
-        let oauth = StaticGrokAuth::new(Some("oauth-token".to_string()));
+        let oauth = StaticHystersisAuth::new(Some("oauth-token".to_string()));
         assert_eq!(oauth.wire_bearer().as_deref(), Some("oauth-token"));
     }
 }
@@ -426,7 +426,7 @@ mod static_grok_auth_tests {
 /// `crate::http::shared_upload_client()`) to `with_provider`.
 fn default_upload_client() -> Client {
     #[expect(clippy::expect_used)]
-    xai_grok_extra_ca::build_reqwest_client(|builder| builder)
+    xai_hystersis_extra_ca::build_reqwest_client(|builder| builder)
         .expect("default reqwest client builds")
 }
 
@@ -438,7 +438,7 @@ pub struct StorageClient {
     /// auth middleware (direct GCS uploads via signed URLs, signed-URL
     /// downloads, etc.).
     raw_http_client: Client,
-    /// Base URL for the proxy (e.g., "https://cli-chat-proxy.grok.com/v1")
+    /// Base URL for the proxy (e.g., "https://cli-chat-proxy.hystersis.com/v1")
     base_url: String,
     /// Retry configuration for handling transient failures (especially 429 errors)
     retry_config: RetryConfig,
@@ -471,12 +471,12 @@ impl StorageClient {
     /// Production code with refresh-aware auth should use [`Self::with_provider`].
     ///
     /// # Arguments
-    /// * `proxy_base_url` - Base URL for the proxy (e.g., "https://cli-chat-proxy.grok.com/v1")
-    /// * `user_token` - User's grok.com auth token
+    /// * `proxy_base_url` - Base URL for the proxy (e.g., "https://cli-chat-proxy.hystersis.com/v1")
+    /// * `user_token` - User's hystersis.com auth token
     pub fn new(proxy_base_url: &str, user_token: &str) -> Self {
-        let creds = StaticGrokAuth::new(Some(user_token.to_owned()));
+        let creds = StaticHystersisAuth::new(Some(user_token.to_owned()));
         let bearer = creds.wire_bearer();
-        let provider = Arc::new(xai_grok_auth::StaticAuthCredentialProvider::new(
+        let provider = Arc::new(xai_hystersis_auth::StaticAuthCredentialProvider::new(
             Box::new(creds),
             bearer,
         ));
@@ -563,16 +563,16 @@ impl StorageClient {
     ///
     /// These become the headers:
     ///   - `x-grok-client-version`
-    ///   - `x-grok-client-identifier` (one of "grok-shell", "grok-pager",
-    ///     "grok-desktop", "grok-extension", "grok-agent-sdk")
+    ///   - `x-grok-client-identifier` (one of "hystersis-shell", "hystersis-pager",
+    ///     "hystersis-desktop", "hystersis-extension", "hystersis-agent-sdk")
     ///
     /// Server-side logs in `cli-chat-proxy` and analytics queries now
     /// surface these values, making it easy to attribute 400/403 errors to
     /// specific client versions and products.
     ///
-    /// Preferred way to construct the client from the Grok shell/pager:
+    /// Preferred way to construct the client from the Hystersis shell/pager:
     ///   `build_storage_client_for_proxy(..., client_identifier)`
-    /// (see `xai-grok-shell/src/auth/credential_provider.rs`).
+    /// (see `xai-hystersis-shell/src/auth/credential_provider.rs`).
     ///
     /// Direct callers (tests, load-test binaries, etc.) can use:
     ///   `StorageClient::with_provider(...).with_client_identity(version, identifier)`
@@ -1115,12 +1115,12 @@ impl StorageClient {
     ) -> reqwest_middleware::RequestBuilder {
         // Prefer caller-provided identity (from shell/pager/etc.) so that
         // cli-chat-proxy logs and metrics see the real end-user client
-        // (e.g. "0.1.210-alpha.5", "grok-shell" / "grok-pager").
+        // (e.g. "0.1.210-alpha.5", "hystersis-shell" / "hystersis-pager").
         // Falls back to the library's own version for bins/tests.
         let version = self
             .client_version
             .as_deref()
-            .unwrap_or(xai_grok_version::VERSION);
+            .unwrap_or(xai_hystersis_version::VERSION);
         let mut builder = builder.header("x-grok-client-version", version);
 
         if let Some(id) = &self.client_identifier {
@@ -1996,7 +1996,7 @@ async fn upload_part_streaming(
         let mut request = client
             .post(&url)
             .header("Content-Type", "application/octet-stream")
-            .header("x-grok-client-version", xai_grok_version::VERSION)
+            .header("x-grok-client-version", xai_hystersis_version::VERSION)
             .header("Content-Length", length.to_string());
         for (name, value) in crate::trace_context::trace_context_headers().iter() {
             request = request.header(name.clone(), value.clone());

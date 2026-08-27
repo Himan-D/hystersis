@@ -1009,7 +1009,7 @@ pub enum IdleWithholdReason {
     PreviewAttached,
     /// Recent `Routed` preview traffic — a human loading the app.
     PreviewRouted,
-    /// Only the preview pane's own `/__grok-preview/status` liveness poll.
+    /// Only the preview pane's own `/__hystersis-preview/status` liveness poll.
     PreviewStatusOnly,
     /// A recent client-driven mutation RPC (file write, git commit, …) — a
     /// human working on the workspace through its RPC surface rather than
@@ -1792,7 +1792,7 @@ mod tests {
     fn image_capability_tokens_accepted() {
         for name in [
             IMAGE_CAPABILITIES_V1,
-            "grok-files.occ",
+            "hystersis-files.occ",
             "playwright.chromium-headless-shell",
             "app-template.v2",
             "a.b.c",
@@ -1812,7 +1812,7 @@ mod tests {
             ".hidden",
             "trailing.",
             "Grove.Daemon",
-            "grok_files.occ",
+            "hystersis_files.occ",
             "-lead.ing",
             "trail-.ing",
             "seg..empty",

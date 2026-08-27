@@ -1,0 +1,8 @@
+.{
+    .provider = .openai,
+    .model = "gpt-5.5",
+    .effort = .low,
+    .verbosity = .low,
+    .stream = true,
+    .search_engine = .auto,
+}

@@ -386,7 +386,7 @@ pub struct BackgroundNoticeNaming<'a> {
 }
 
 impl BackgroundNoticeNaming<'static> {
-    /// Canonical grok-build names, for hosts without renaming.
+    /// Canonical hystersis names, for hosts without renaming.
     pub const CANONICAL: Self = Self {
         task_output_tool: "get_task_output",
         task_ids_param: "task_ids",
@@ -587,14 +587,14 @@ pub fn task_output_waits(timeout_ms: Option<u64>) -> bool {
 /// the model, so a truncated wait costs one more poll, not the result.
 pub const MAX_WAIT_BLOCK_MS_DEFAULT: u64 = 600_000;
 
-/// The blocking-wait ceiling in effect, honoring `GROK_MAX_WAIT_BLOCK_MS`.
+/// The blocking-wait ceiling in effect, honoring `HYSTERSIS_MAX_WAIT_BLOCK_MS`.
 ///
 /// A host whose transport deadline is shorter than the default sets the env var
 /// so the server enforces — and the tool descriptions advertise — the same
 /// number the caller will actually wait for. Without that, a model believing the
 /// default asks for a wait its own client will abandon first.
 pub fn max_wait_block_ms() -> u64 {
-    std::env::var("GROK_MAX_WAIT_BLOCK_MS")
+    std::env::var("HYSTERSIS_MAX_WAIT_BLOCK_MS")
         .ok()
         .and_then(|raw| raw.parse::<u64>().ok())
         .unwrap_or(MAX_WAIT_BLOCK_MS_DEFAULT)
@@ -800,7 +800,7 @@ pub struct SubagentDescriptor {
     pub tools: Option<String>,
 }
 
-/// A built-in subagent type shared by the CLI (`xai-grok-agent`) and other
+/// A built-in subagent type shared by the CLI (`xai-hystersis-agent`) and other
 /// agent hosts: its `subagent_type` name, canonical model-facing description,
 /// tool-access fragment, and type-specific prompt body.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1392,9 +1392,9 @@ mod tests {
     #[test]
     fn task_tool_input_model_parses_explicit() {
         let input: TaskToolInput =
-            serde_json::from_str(r#"{"description": "d", "prompt": "p", "model": "grok-3"}"#)
+            serde_json::from_str(r#"{"description": "d", "prompt": "p", "model": "hystersis-3"}"#)
                 .unwrap();
-        assert_eq!(input.model.as_deref(), Some("grok-3"));
+        assert_eq!(input.model.as_deref(), Some("hystersis-3"));
     }
 
     #[test]
@@ -1482,12 +1482,12 @@ mod tests {
     #[test]
     fn sanitize_optional_arg_moves_when_no_trim() {
         assert_eq!(
-            sanitize_optional_arg(Some("grok-3".into())).as_deref(),
-            Some("grok-3")
+            sanitize_optional_arg(Some("hystersis-3".into())).as_deref(),
+            Some("hystersis-3")
         );
         assert_eq!(
-            sanitize_optional_arg(Some("  grok-3  ".into())).as_deref(),
-            Some("grok-3")
+            sanitize_optional_arg(Some("  hystersis-3  ".into())).as_deref(),
+            Some("hystersis-3")
         );
         assert!(sanitize_optional_arg(Some("null".into())).is_none());
         assert!(sanitize_optional_arg(Some("  NULL  ".into())).is_none());
@@ -1723,8 +1723,8 @@ mod tests {
     // ── Lifecycle tool descriptions ──────────────────────────────────────
     //
     // These lock the exact model-facing text. The "cli_default" cases must
-    // match what the grok-shell MiniJinja templates render for the default
-    // grok-build toolset (monitor + task + bash + read present, POSIX). The
+    // match what the hystersis-shell MiniJinja templates render for the default
+    // hystersis toolset (monitor + task + bash + read present, POSIX). The
     // "toolbox" cases lock the subagent-only rendering used by the backend toolbox.
 
     #[test]

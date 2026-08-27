@@ -1,0 +1,225 @@
+name: Release Hystersis
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'   # trigger on version tags: v1.0.10, v1.2.0, etc.
+
+permissions:
+  contents: write  # needed to create GitHub Releases
+
+env:
+  CARGO_TERM_COLOR: always
+  BINARY_NAME: xai-hystersis-pager
+
+jobs:
+  # ─── Build matrix ────────────────────────────────────────────────────────
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14          # Apple Silicon runner
+            target: aarch64-apple-darwin
+            artifact: hystersis-macos-arm64
+
+          - os: macos-13          # Intel runner
+            target: x86_64-apple-darwin
+            artifact: hystersis-macos-x64
+
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            artifact: hystersis-linux-x64
+
+          - os: ubuntu-22.04
+            target: aarch64-unknown-linux-gnu
+            artifact: hystersis-linux-arm64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install cross-compiler (Linux ARM64 only)
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.target }}-cargo-
+
+      - name: Build release binary
+        env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
+          VERSION_WITH_COMMIT: ${{ github.ref_name }}-${{ github.sha }}
+        run: |
+          cargo build \
+            --release \
+            --package xai-hystersis-pager-bin \
+            --target ${{ matrix.target }}
+
+      - name: Rename binary
+        run: |
+          cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} ${{ matrix.artifact }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}
+          retention-days: 1
+
+  # ─── Create GitHub Release + upload binaries ─────────────────────────────
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+
+      - name: Flatten dist dir
+        run: |
+          find dist/ -type f -exec mv {} dist/ \;
+
+      - name: Generate checksums
+        working-directory: dist
+        run: |
+          sha256sum hystersis-macos-arm64 hystersis-macos-x64 hystersis-linux-x64 hystersis-linux-arm64 > checksums.txt
+          cat checksums.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Hystersis ${{ github.ref_name }}
+          body: |
+            ## Hystersis ${{ github.ref_name }}
+
+            The autonomous AI coding assistant — powered by OpenRouter.
+
+            ### Install
+
+            ```bash
+            curl -fsSL https://code.hystersis.com/install.sh | sh
+            ```
+
+            ### Manual Download
+            | Platform | Binary |
+            |----------|--------|
+            | macOS Apple Silicon | `hystersis-macos-arm64` |
+            | macOS Intel         | `hystersis-macos-x64`   |
+            | Linux x64           | `hystersis-linux-x64`   |
+            | Linux ARM64         | `hystersis-linux-arm64` |
+
+            ### Checksums (SHA256)
+            See `checksums.txt` attached below.
+          files: |
+            dist/hystersis-macos-arm64
+            dist/hystersis-macos-x64
+            dist/hystersis-linux-x64
+            dist/hystersis-linux-arm64
+            dist/checksums.txt
+          draft: false
+          prerelease: false
+
+  # ─── Deploy landing page + install.sh to Cloudflare Pages ────────────────
+  deploy:
+    name: Deploy code.hystersis.com
+    needs: release
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build site
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: |
+          mkdir -p site
+
+          # install.sh — the one-liner people run
+          cat > site/install.sh << 'SCRIPT'
+          #!/usr/bin/env sh
+          set -e
+          VERSION=$(curl -fsSL https://api.github.com/repos/hystersis/hystersis/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
+          OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+          ARCH=$(uname -m)
+          case "${OS}-${ARCH}" in
+            darwin-arm64)  BINARY="hystersis-macos-arm64" ;;
+            darwin-x86_64) BINARY="hystersis-macos-x64"   ;;
+            linux-x86_64)  BINARY="hystersis-linux-x64"   ;;
+            linux-aarch64) BINARY="hystersis-linux-arm64" ;;
+            *) echo "Unsupported platform: ${OS}-${ARCH}"; exit 1 ;;
+          esac
+          URL="https://github.com/hystersis/hystersis/releases/download/${VERSION}/${BINARY}"
+          DEST="/usr/local/bin/hystersis"
+          echo "→ Downloading Hystersis ${VERSION} for ${OS}/${ARCH}..."
+          curl -fsSL "${URL}" -o "${DEST}"
+          chmod +x "${DEST}"
+          echo "✅ Hystersis installed! Run: hystersis configure"
+          SCRIPT
+
+          # Simple landing page
+          cat > site/index.html << 'HTML'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Hystersis — Autonomous AI Coding</title>
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { background: #0d0d0d; color: #e5e5e5; font-family: 'SF Mono', 'Fira Code', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
+              h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
+              h1 span { color: #7c3aed; }
+              p { color: #888; margin-bottom: 2rem; font-size: 1rem; }
+              .install { background: #111; border: 1px solid #222; border-radius: 8px; padding: 1rem 1.5rem; font-size: 0.9rem; cursor: pointer; display: flex; gap: 1rem; align-items: center; }
+              .install code { flex: 1; color: #a78bfa; }
+              .copy-btn { background: #7c3aed; color: white; border: none; border-radius: 4px; padding: 0.4rem 0.8rem; cursor: pointer; font-size: 0.75rem; font-family: inherit; }
+              .copy-btn:hover { background: #6d28d9; }
+              .links { margin-top: 2rem; display: flex; gap: 1.5rem; }
+              .links a { color: #666; text-decoration: none; font-size: 0.875rem; }
+              .links a:hover { color: #a78bfa; }
+            </style>
+          </head>
+          <body>
+            <h1><span>Hystersis</span></h1>
+            <p>The autonomous AI coding assistant. Bring your own model.</p>
+            <div class="install">
+              <code>curl -fsSL https://code.hystersis.com/install.sh | sh</code>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://code.hystersis.com/install.sh | sh'); this.textContent='Copied!'">Copy</button>
+            </div>
+            <div class="links">
+              <a href="https://github.com/hystersis/hystersis/releases">Releases</a>
+              <a href="https://github.com/hystersis/hystersis">GitHub</a>
+              <a href="https://hystersis.com">hystersis.com</a>
+            </div>
+          </body>
+          </html>
+          HTML
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: hystersis-code         # matches your Pages project name
+          directory: site
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

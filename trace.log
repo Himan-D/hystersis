@@ -1,0 +1,2 @@
+Internal error: "reqwest error stream: error sending request for url (https://cli-chat-proxy.hystersis.com/v1/chat/completions)"
+Error: Internal error: "reqwest error stream: error sending request for url (https://cli-chat-proxy.hystersis.com/v1/chat/completions)"

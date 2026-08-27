@@ -63,7 +63,7 @@ pub use auto_gc::{
 #[cfg(feature = "metadata")]
 pub use db::{
     DbStats, ListFilter, META_KEY_LABEL, RegistryOpen, SqliteFailureKind, WorktreeDb, WorktreeKind,
-    WorktreeRecord, WorktreeStatus, classify_sqlite_error, now_epoch_secs, resolve_grok_home,
+    WorktreeRecord, WorktreeStatus, classify_sqlite_error, now_epoch_secs, resolve_hystersis_home,
 };
 #[cfg(feature = "metadata")]
 pub use discovery::{
