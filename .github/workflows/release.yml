@@ -134,23 +134,18 @@ jobs:
         run: |
           npm ci
           npm run build
-          # Ensure install.sh is executable and has correct repo (Himan-D/hystersis)
           chmod +x public/install.sh
           cp public/install.sh dist/install.sh
-          # Verify og tags for WhatsApp
           grep -q 'og:image:width' dist/index.html || (echo "Missing WhatsApp OG tags" && exit 1)
           grep -q 'og:image:height' dist/index.html || (echo "Missing WhatsApp OG tags" && exit 1)
           ls -lh dist/og.png
-      - name: Deploy to Cloudflare Pages (via Wrangler - supports OAuth)
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          wranglerVersion: "4.27.0"
-          command: pages deploy landing/dist --project-name=code
+      - name: Deploy to Cloudflare Pages (via Wrangler - OAuth)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: npx wrangler@4.27.0 pages deploy landing/dist --project-name=code
       - name: Deploy Worker (assets) for code.hystersis.com
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          wranglerVersion: "4.27.0"
-          command: deploy --config landing/wrangler.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: npx wrangler@4.27.0 deploy --config landing/wrangler.toml
