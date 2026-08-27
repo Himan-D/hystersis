@@ -1,3 +1,6 @@
-/target
-**/*.rs.bk
+/target/
+*.log
+*.py
+*.rs.bak
+npm-package/bin/
 .DS_Store
