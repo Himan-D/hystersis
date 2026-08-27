@@ -1,140 +1,183 @@
 <div align="center">
 
-<h1>
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://media.x.ai/v1/website/spacexai-symbol-white-transparent-0c31957f.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://media.x.ai/v1/website/spacexai-symbol-black-transparent-6435cf42.png">
-    <img alt="SpaceXAI logo" src="https://media.x.ai/v1/website/spacexai-symbol-black-transparent-6435cf42.png" width="96">
-  </picture>
-  <br>
-  Hystersis (<code>hystersis</code>)
-</h1>
+# Hystersis
 
-**Hystersis** is SpaceXAI's terminal-based AI coding agent. It runs as a
-full-screen TUI that understands your codebase, edits files, executes shell
-commands, searches the web, and manages long-running tasks — interactively,
-headlessly for scripting/CI, or embedded in editors via the Agent Client
-Protocol (ACP).
+**The autonomous AI coding assistant. Bring your own model.**
 
-[Installing the released binary](#installing-the-released-binary) ·
-[Building from source](#building-from-source) ·
-[Documentation](#documentation) ·
-[Repository layout](#repository-layout) ·
-[Development](#development) ·
-[Contributing](#contributing) ·
-[License](#license)
+[![Private](https://img.shields.io/badge/repo-private-555?style=flat-square)](#)
+[![Rust](https://img.shields.io/badge/built%20with-Rust-orange?style=flat-square&logo=rust)](#)
+[![OpenRouter](https://img.shields.io/badge/powered%20by-OpenRouter-7c3aed?style=flat-square)](#)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](#license)
 
-![Hystersis TUI](https://media.x.ai/v1/website/universe-tui-screenshot-6f7a0837.png)
-
-**Learn more about Hystersis at [x.ai/cli](https://x.ai/cli)**
-
-This repository contains the Rust source for the `hystersis` CLI/TUI and its agent
-runtime. It is synced periodically from the SpaceXAI monorepo.
-
-A small `SOURCE_REV` file at the root records the full monorepo commit SHA
-for the version of the code present in this tree.
+```
+curl -fsSL https://code.hystersis.com/install.sh | sh
+```
 
 </div>
 
 ---
 
-## Installing the released binary
+## What is Hystersis?
 
-Prebuilt binaries are published for macOS, Linux, and Windows:
+Hystersis is a terminal-native, autonomous AI coding agent — a full-screen TUI that:
 
-```sh
-curl -fsSL https://x.ai/cli/install.sh | bash   # macOS / Linux / Git Bash
-irm https://x.ai/cli/install.ps1 | iex          # Windows PowerShell
-hystersis --version
+- **Understands your codebase** — semantic search, grep, file navigation
+- **Edits files** — exact search-replace with live inline diff previews
+- **Executes shell commands** — runs tests, builds, scripts autonomously
+- **Loops without pausing** — continuous agentic execution like Claude Code
+- **Brings your own model** — OpenRouter, Anthropic, OpenAI via `~/.hystersis/config.toml`
+- **Manages subagents** — spawn parallel task agents with `TaskTool`
+- **Thinks out loud** — collapsible `<thought>` blocks visible in real-time
+
+---
+
+## Install
+
+```bash
+curl -fsSL https://code.hystersis.com/install.sh | sh
 ```
 
-See the [changelog](https://x.ai/build/changelog) for the latest fixes,
-features, and improvements in each release.
+Then configure your API key:
+
+```bash
+hystersis configure
+# or from inside the TUI: /settings
+```
+
+### Supported platforms
+
+| Platform | Binary |
+|----------|--------|
+| macOS Apple Silicon | `hystersis-macos-arm64` |
+| macOS Intel | `hystersis-macos-x64` |
+| Linux x86_64 | `hystersis-linux-x64` |
+| Linux ARM64 | `hystersis-linux-arm64` |
+
+---
+
+## Quick start
+
+```bash
+# Interactive TUI
+hystersis
+
+# Single-turn headless
+hystersis -p "refactor the auth module to use JWT"
+
+# Continue last session
+hystersis --continue
+
+# Headless with streaming JSON output
+hystersis -p "fix the bug" --output-format streaming-json
+```
+
+---
+
+## Configuration
+
+Hystersis is configured via `~/.hystersis/config.toml`.
+
+### OpenRouter (recommended — access to all models)
+
+```toml
+[model_providers.openrouter]
+api_key = "sk-or-v1-..."
+base_url = "https://openrouter.ai/api/v1"
+
+[models]
+default = "openrouter/claude-sonnet-4.6"
+
+[model."openrouter/claude-sonnet-4.6"]
+model = "anthropic/claude-sonnet-4.6"
+base_url = "https://openrouter.ai/api/v1"
+api_key = "sk-or-v1-..."
+api_backend = "chat_completions"
+```
+
+### Anthropic direct
+
+```toml
+[model_providers.anthropic]
+api_key = "sk-ant-..."
+base_url = "https://api.anthropic.com/v1"
+
+[models]
+default = "claude-sonnet-4-6"
+```
+
+You can also set these from inside the TUI with `/settings` → **Models**.
+
+---
+
+## TUI shortcuts
+
+| Key | Action |
+|-----|--------|
+| `Ctrl+X` | Shortcuts / command palette |
+| `/settings` | Open settings modal |
+| `/configure` | Re-run setup wizard |
+| `Esc` | Cancel current action |
+| `Shift+Tab` | Toggle mode |
+
+---
 
 ## Building from source
 
-Requirements:
+```bash
+# Prerequisites: Rust stable (https://rustup.rs)
+git clone https://github.com/Himan-D/hystersis
+cd hystersis
+cargo build --release -p xai-hystersis-pager-bin
 
-- **Rust** — the toolchain is pinned by [`rust-toolchain.toml`](rust-toolchain.toml);
-  `rustup` installs it automatically on first build.
-- **[DotSlash](https://dotslash-cli.com)** — required so hermetic tools under
-  [`bin/`](bin/) (notably [`bin/protoc`](bin/protoc)) can download and run.
-  Install it and ensure `dotslash` is on your `PATH` **before** building:
-
-  ```sh
-  cargo install dotslash
-  # or: prebuilt packages — https://dotslash-cli.com/docs/installation/
-  /usr/bin/env dotslash --help   # sanity check
-  ```
-
-- **protoc** — proto codegen resolves [`bin/protoc`](bin/protoc) via DotSlash,
-  or falls back to a `protoc` on `PATH` / `$PROTOC`.
-- macOS and Linux are supported build hosts; Windows builds are best-effort
-  and not currently tested from this tree.
-
-```sh
-cargo run -p xai-hystersis-pager-bin              # build + launch the TUI
-cargo build -p xai-hystersis-pager-bin --release  # release binary: target/release/xai-hystersis-pager
-cargo check -p xai-hystersis-pager-bin            # fast validation
+# Binary at:
+./target/release/xai-hystersis-pager
 ```
 
-The binary artifact is named `xai-hystersis-pager`; official installs ship it as
-`hystersis`. On first launch it opens your browser to authenticate — see the
-[authentication guide](crates/codegen/xai-hystersis-pager/docs/user-guide/02-authentication.md).
-
-## Documentation
-
-Full online documentation is available at
-[docs.x.ai/build/overview](https://docs.x.ai/build/overview).
-
-The user guide ships with the pager crate:
-[`crates/codegen/xai-hystersis-pager/docs/user-guide/`](crates/codegen/xai-hystersis-pager/docs/user-guide/)
-— getting started, keyboard shortcuts, slash commands, configuration, theming,
-MCP servers, skills, plugins, hooks, headless mode, sandboxing, and more.
+---
 
 ## Repository layout
 
-| Path | Contents |
-|------|----------|
-| `crates/codegen/xai-hystersis-pager-bin` | Composition-root package; builds the `xai-hystersis-pager` binary |
-| `crates/codegen/xai-hystersis-pager` | The TUI: scrollback, prompt, modals, rendering |
-| `crates/codegen/xai-hystersis-shell` | Agent runtime + leader/stdio/headless entry points |
-| `crates/codegen/xai-hystersis-tools` | Tool implementations (terminal, file edit, search, ...) |
-| `crates/codegen/xai-hystersis-workspace` | Host filesystem, VCS, execution, checkpoints |
-| `crates/codegen/...` | The rest of the CLI crate closure (config, MCP, markdown, sandbox, ...) |
-| `crates/common/`, `crates/build/`, `prod/mc/` | Small shared leaf crates pulled in by the closure |
-| `third_party/` | Vendored upstream source (Mermaid diagram stack) — see below |
-
-> [!IMPORTANT]
-> The root `Cargo.toml` (workspace members, dependency versions, lints,
-> profiles) is **generated** — treat it as read-only. Prefer editing per-crate
-> `Cargo.toml` files.
-
-## Development
-
-```sh
-cargo check -p <crate>        # always target specific crates; full-workspace builds are slow
-cargo test -p xai-hystersis-config # per-crate tests
-cargo clippy -p <crate>       # lint config: clippy.toml at the repo root
-cargo fmt --all               # rustfmt.toml at the repo root
+```
+crates/
+├── codegen/
+│   ├── xai-hystersis-pager-bin/     # CLI entrypoint binary
+│   ├── xai-hystersis-pager/         # TUI app + slash commands + settings
+│   ├── xai-hystersis-pager-diff/    # Inline diff renderer (Ratatui + Syntect)
+│   ├── xai-hystersis-shell/         # Agent loop, config, model providers, BYOK
+│   ├── xai-hystersis-workspace/     # File system ops, git integration
+│   └── xai-compaction-transcript/   # Context window management (2MB segments)
+└── common/
+    └── xai-hystersis-compaction/    # Conversation compaction strategies
+npm-package/                         # npm global install wrapper
+.github/workflows/release.yml        # Cross-platform release pipeline
 ```
 
-## Contributing
+---
 
-> [!NOTE]
-> External contributions are not accepted. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+## Releasing
+
+Tag a version to trigger the GitHub Actions release pipeline:
+
+```bash
+git tag v1.0.11
+git push origin main --tags
+```
+
+This automatically:
+1. Builds binaries for all 4 platforms
+2. Creates a GitHub Release with checksums
+3. Deploys `install.sh` + landing page to `code.hystersis.com`
+
+---
 
 ## License
 
-First-party code in this repository is licensed under the **Apache License,
-Version 2.0** — see [`LICENSE`](LICENSE).
+MIT — see [LICENSE](./LICENSE).
 
-Third-party and vendored code remains under its original licenses. See:
+---
 
-- [`THIRD-PARTY-NOTICES`](THIRD-PARTY-NOTICES) — crates.io / git dependencies,
-  bundled UI themes, and **in-tree source ports** (including openai/codex and
-  sst/opencode tool implementations)
-- [`crates/codegen/xai-hystersis-tools/THIRD_PARTY_NOTICES.md`](crates/codegen/xai-hystersis-tools/THIRD_PARTY_NOTICES.md)
-  — crate-local notice for the codex and opencode ports (license texts +
-  Apache §4(b) change notice)
-- [`third_party/NOTICE`](third_party/NOTICE) — vendored Mermaid-stack index
+<div align="center">
+  <a href="https://hystersis.com">hystersis.com</a> ·
+  <a href="https://code.hystersis.com">code.hystersis.com</a> ·
+  <a href="https://openrouter.ai/keys">Get OpenRouter Key</a>
+</div>
