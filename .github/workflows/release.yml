@@ -105,6 +105,7 @@ jobs:
       - name: Create GitHub Release (quota-free, no artifacts)
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           name: Hystersis ${{ github.ref_name }}
           body: |
             ## Hystersis ${{ github.ref_name }}
@@ -116,6 +117,8 @@ jobs:
             Binaries attached after quota reset — deploys at https://code.hystersis.com already green.
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
+          generate_release_notes: false
 
   # ─── Deploy landing page + install.sh to Cloudflare (on every push to main + tags) ───
   deploy-pages:
