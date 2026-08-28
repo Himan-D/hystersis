@@ -120,8 +120,8 @@ jobs:
           prerelease: false
 
   # ─── Deploy landing page + install.sh to Cloudflare (on every push to main + tags) ───
-  deploy:
-    name: Deploy code.hystersis.com
+  deploy-pages:
+    name: Deploy Pages (code)
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-22.04
     steps:
@@ -144,7 +144,24 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy landing/dist --project-name=code
+          command: pages deploy landing/dist --project-name=code --branch=main --commit-dirty=true
+
+  deploy-worker:
+    name: Deploy Worker (code.hystersis.com)
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build landing (ASCII B/W)
+        working-directory: landing
+        run: |
+          npm ci
+          npm run build
+          chmod +x public/install.sh
+          cp public/install.sh dist/install.sh
       - name: Deploy Worker (assets) for code.hystersis.com
         uses: cloudflare/wrangler-action@v3
         with:
