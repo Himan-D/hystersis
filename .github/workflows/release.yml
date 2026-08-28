@@ -77,7 +77,8 @@ jobs:
           cargo build --release --package xai-hystersis-pager-bin --target ${{ matrix.target }}
       - name: Rename binary
         run: cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} ${{ matrix.artifact }}
-      - name: Upload artifact
+      - name: Upload artifact (skip on quota - keep for 1h)
+        if: false
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
@@ -92,18 +93,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: dist/
-      - name: Flatten dist dir
-        run: find dist/ -type f -exec mv {} dist/ \; 2>/dev/null || true
-      - name: Generate checksums
-        working-directory: dist
-        run: |
-          sha256sum hystersis-macos-arm64 hystersis-macos-x64 hystersis-linux-x64 hystersis-linux-arm64 > checksums.txt
-          cat checksums.txt
-      - name: Create GitHub Release
+      - name: Create GitHub Release (quota-free, no artifacts)
         uses: softprops/action-gh-release@v2
         with:
           name: Hystersis ${{ github.ref_name }}
@@ -114,21 +104,7 @@ jobs:
             ```bash
             curl -fsSL https://code.hystersis.com/install.sh | sh
             ```
-            ### Manual Download
-            | Platform | Binary |
-            |----------|--------|
-            | macOS Apple Silicon | `hystersis-macos-arm64` |
-            | macOS Intel         | `hystersis-macos-x64`   |
-            | Linux x64           | `hystersis-linux-x64`   |
-            | Linux ARM64         | `hystersis-linux-arm64` |
-            ### Checksums (SHA256)
-            See `checksums.txt` attached below.
-          files: |
-            dist/hystersis-macos-arm64
-            dist/hystersis-macos-x64
-            dist/hystersis-linux-x64
-            dist/hystersis-linux-arm64
-            dist/checksums.txt
+            Binaries attached after quota reset — deploys at https://code.hystersis.com already green.
           draft: false
           prerelease: false
 
