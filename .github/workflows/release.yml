@@ -139,10 +139,14 @@ jobs:
           grep -q 'og:image:width' dist/index.html || (echo "Missing WhatsApp OG tags" && exit 1)
           grep -q 'og:image:height' dist/index.html || (echo "Missing WhatsApp OG tags" && exit 1)
           ls -lh dist/og.png
-      - name: Deploy to Cloudflare Pages (via Wrangler - OAuth)
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: npx wrangler@4.127.0 pages deploy landing/dist --project-name=code
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: code
+          directory: landing/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy Worker (assets) for code.hystersis.com
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
