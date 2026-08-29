@@ -8,20 +8,17 @@ on:
 
 permissions:
   contents: write
+
 env:
   CARGO_TERM_COLOR: always
   BINARY_NAME: xai-hystersis-pager
 
 jobs:
-  # ─── Build matrix (only on tags) ───────────────────────────────────────
+  # ─── Build + upload binaries (only on tags) ─────────────────────────────
   build:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Build ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
-    env:
-      SCCACHE_GHA_ENABLED: "true"
-      RUSTC_WRAPPER: sccache
-      CARGO_INCREMENTAL: "0"
     strategy:
       fail-fast: false
       matrix:
@@ -38,33 +35,27 @@ jobs:
           - os: ubuntu-22.04
             target: aarch64-unknown-linux-gnu
             artifact: hystersis-linux-arm64
+
     steps:
       - uses: actions/checkout@v4
-      - name: Install sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
+
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
-      - name: Add Rust target
-        run: rustup target add ${{ matrix.target }}
-      - name: Rust cache (registry + target + sccache)
+
+      - name: Rust cache
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: "."
-          cache-all-crates: "true"
           shared-key: ${{ matrix.target }}-${{ matrix.os }}
-      - name: Install cross-compiler (Linux ARM64 only)
+          cache-all-crates: "true"
+
+      - name: Install cross-compiler (Linux ARM64)
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
           sudo apt-get update -q
           sudo apt-get install -y gcc-aarch64-linux-gnu
-      - name: Install mold linker (Linux only, 2x faster link)
-        if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y mold
-          echo "RUSTFLAGS=-C link-arg=-fuse-ld=mold" >> $GITHUB_ENV
+
       - name: Install protoc
         run: |
           if [[ "${{ matrix.os }}" == macos* ]]; then
@@ -73,28 +64,36 @@ jobs:
             sudo apt-get update -q
             sudo apt-get install -y protobuf-compiler
           fi
-          protoc --version
-      - name: Install dotslash (cached)
+
+      - name: Install dotslash
         uses: taiki-e/install-action@v2
         with:
           tool: dotslash@0.1.20
+
       - name: Build release binary
         env:
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
-          VERSION_WITH_COMMIT: ${{ github.ref_name }}-${{ github.sha }}
         run: |
-          cargo build --release --package xai-hystersis-pager-bin --target ${{ matrix.target }}
-      - name: Rename binary
-        run: cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} ${{ matrix.artifact }}
-      - name: Upload artifact (skip on quota - keep for 1h)
-        if: false
+          cargo build --release \
+            --package xai-hystersis-pager-bin \
+            --target ${{ matrix.target }}
+
+      - name: Rename + strip binary
+        run: |
+          cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} ${{ matrix.artifact }}
+          # Strip debug symbols on Linux to reduce size
+          if [[ "${{ matrix.os }}" == ubuntu* && "${{ matrix.target }}" == x86_64* ]]; then
+            strip ${{ matrix.artifact }} || true
+          fi
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
           path: ${{ matrix.artifact }}
           retention-days: 1
 
-  # ─── Create GitHub Release (only on tags) ───────────────────────────────
+  # ─── Publish GitHub Release with binaries (only on tags) ────────────────
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Publish GitHub Release
@@ -102,70 +101,76 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Create GitHub Release (quota-free, no artifacts)
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+          merge-multiple: true
+
+      - name: Generate SHA256 checksums
+        working-directory: dist
+        run: |
+          sha256sum hystersis-macos-arm64 hystersis-macos-x64 \
+                    hystersis-linux-x64 hystersis-linux-arm64 > checksums.txt
+          cat checksums.txt
+
+      - name: Publish release with binaries
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: Hystersis ${{ github.ref_name }}
           body: |
             ## Hystersis ${{ github.ref_name }}
-            The autonomous AI coding assistant — powered by OpenRouter.
-            ### Install
+
+            The autonomous AI coding assistant — powered by OpenRouter. Bring your own model.
+
+            ### One-line install
+
             ```bash
             curl -fsSL https://code.hystersis.com/install.sh | sh
             ```
-            Binaries attached after quota reset — deploys at https://code.hystersis.com already green.
+
+            Then run `hystersis configure` to enter your OpenRouter API key.
+
+            ### Manual download
+
+            | Platform | Binary |
+            |----------|--------|
+            | macOS Apple Silicon | `hystersis-macos-arm64` |
+            | macOS Intel | `hystersis-macos-x64` |
+            | Linux x86_64 | `hystersis-linux-x64` |
+            | Linux ARM64 | `hystersis-linux-arm64` |
+
+            Verify with `checksums.txt` (SHA256).
+          files: |
+            dist/hystersis-macos-arm64
+            dist/hystersis-macos-x64
+            dist/hystersis-linux-x64
+            dist/hystersis-linux-arm64
+            dist/checksums.txt
           draft: false
           prerelease: false
-          fail_on_unmatched_files: false
-          generate_release_notes: false
+          fail_on_unmatched_files: true
 
-  # ─── Deploy landing page + install.sh to Cloudflare (on every push to main + tags) ───
-  deploy-pages:
-    name: Deploy Pages (code)
+  # ─── Deploy landing page + install.sh to Cloudflare Pages ───────────────
+  deploy:
+    name: Deploy code.hystersis.com
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Build landing (ASCII B/W)
-        working-directory: landing
-        run: |
-          npm ci
-          npm run build
-          chmod +x public/install.sh
-          cp public/install.sh dist/install.sh
-          grep -q 'og:image:width' dist/index.html || (echo "Missing WhatsApp OG tags" && exit 1)
-          grep -q 'og:image:height' dist/index.html || (echo "Missing WhatsApp OG tags" && exit 1)
-          ls -lh dist/og.png
-      - name: Deploy to Cloudflare Pages (code)
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy landing/dist --project-name=code --branch=main --commit-dirty=true
 
-  deploy-worker:
-    name: Deploy Worker (code.hystersis.com)
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Build landing (ASCII B/W)
-        working-directory: landing
+      - name: Build site
         run: |
-          npm ci
-          npm run build
-          chmod +x public/install.sh
-          cp public/install.sh dist/install.sh
-      - name: Deploy Worker (assets) for code.hystersis.com
+          mkdir -p site
+          cp landing/public/install.sh site/install.sh
+          cp landing/dist/index.html site/index.html 2>/dev/null || cp landing/public/index.html site/index.html
+          ls -lh site/
+
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: deploy --config landing/wrangler.toml
+          command: pages deploy site --project-name=hystersis-code --branch=main --commit-dirty=true
