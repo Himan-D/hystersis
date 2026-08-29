@@ -204,12 +204,14 @@ async fn handle_get_billing(agent: &MvpAgent) -> ExtResult {
         "Billing data requires auth with hystersis.com. Run `hystersis login` to authenticate.",
     )?;
 
-    let proxy_base = agent.cli_chat_proxy_base_url();
-    let base = proxy_base.trim_end_matches('/');
+    let provider_base_url = agent.sampling_config.borrow().base_url.clone();
+    let mut parsed_url = reqwest::Url::parse(&provider_base_url)
+        .unwrap_or_else(|_| reqwest::Url::parse("http://localhost:8787/v1").unwrap());
+    parsed_url.set_path("/v1/billing/balance");
+    let credits_url = parsed_url.to_string();
 
-    // Credits balance / usage (new billing system) via the CLI proxy, which
+    // Credits balance / usage (new billing system) via the custom Gateway proxy, which
     // forwards to the backend `GetHystersisCreditsConfig`.
-    let credits_url = format!("{}/billing?format=credits", base);
     let credits_resp = crate::http::shared_client()
         .get(&credits_url)
         .header("Authorization", format!("Bearer {}", &auth.key))

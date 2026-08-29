@@ -1,0 +1,33 @@
+name = "trinetra-ai-gateway"
+main = "src/index.js"
+compatibility_date = "2024-05-12"
+
+# --- Custom Pricing (credits per 1K tokens, 1 credit = 1 cent) ---
+[vars]
+PRICE_GPT4O_INPUT_PER_1K = "10"
+PRICE_GPT4O_OUTPUT_PER_1K = "30"
+PRICE_GPT4O_MIN = "5"
+PRICE_MINI_INPUT_PER_1K = "2"
+PRICE_MINI_OUTPUT_PER_1K = "6"
+PRICE_MINI_MIN = "2"
+PRICE_DEFAULT_INPUT_PER_1K = "5"
+PRICE_DEFAULT_OUTPUT_PER_1K = "15"
+PRICE_DEFAULT_MIN = "5"
+
+[[kv_namespaces]]
+binding = "TRINETRA_BILLING"
+id = "37f3282163a547cc8416d11dcc6602cf"
+
+[triggers]
+crons = ["*/2 * * * *"]
+
+[observability]
+enabled = true
+
+# D1 for atomic billing (KV kept as cache, D1 is source of truth)
+[[d1_databases]]
+binding = "TRINETRA_DB"
+database_name = "trinetra-billing"
+database_id = "6e2ca34a-e704-4f97-9839-c98515a5ed41"
+
+

@@ -4,3 +4,4 @@
 *.rs.bak
 npm-package/bin/
 .DS_Store
+gateway-proxy/.wrangler/
