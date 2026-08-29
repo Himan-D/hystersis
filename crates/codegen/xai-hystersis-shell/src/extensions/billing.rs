@@ -106,6 +106,28 @@ pub struct BillingConfig {
     pub billing_period_end: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub history: Vec<BillingPeriodUsage>,
+    /// Gateway-enforced 5h rolling usage (Trinetra). Display-only; enforcement is in gateway D1.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage5h: Option<i64>,
+    /// Gateway-enforced period usage (weekly/monthly).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usagePeriod: Option<i64>,
+    /// Gateway rate limits (authoritative in gateway, mirrored here for display).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limits: Option<BillingLimits>,
+}
+
+/// Rate limits enforced in gateway (authoritative), mirrored in Rust for display only.
+/// Mirrors other companies: gateway enforces via D1/Redis, client only renders.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BillingLimits {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub fiveHour: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weekly: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub monthly: Option<i64>,
 }
 
 /// Top-level response (primarily from `GET /rest/hystersis/credits` + auto-topup-rule).
