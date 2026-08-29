@@ -19,7 +19,7 @@ curl -fsSL https://code.hystersis.com/install.sh | sh
 
 ## What is Hystersis?
 
-Hystersis is a terminal-native, autonomous AI coding agent — a full-screen TUI that:
+Hystersis is a terminal-native, autonomous AI coding agent - a full-screen TUI that:
 
 - **Understands your codebase** — semantic search, grep, file navigation
 - **Edits files** — exact search-replace with live inline diff previews
