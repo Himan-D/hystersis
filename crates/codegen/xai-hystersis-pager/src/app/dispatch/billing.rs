@@ -35,6 +35,15 @@ pub(crate) const UPSELL_URL_UPGRADE: &str = "https://hystersis.com/upgrade";
 /// URL for managing pay-as-you-go / on-demand spending / purchasing credits.
 pub(crate) const UPSELL_URL_PAYG: &str = "https://hystersis.com?_s=usage";
 
+/// Returns `true` when the user has configured a custom model provider (BYOK).
+/// In BYOK mode, all subscription paywalls and upsell modals are suppressed —
+/// the user's own API key is billed directly by the upstream provider.
+pub(crate) fn byok_active() -> bool {
+    let config = xai_hystersis_shell::config::load_agent_config_disk_only()
+        .unwrap_or_default();
+    !config.model_providers.is_empty()
+}
+
 /// Billing mode for credit-limit upsell copy.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum CreditLimitUpsellMode {
@@ -97,6 +106,11 @@ pub(super) fn open_credit_limit_upsell(
     mode: CreditLimitUpsellMode,
     max_tier: bool,
 ) {
+    // BYOK: 402/403 from the upstream provider (OpenRouter, Anthropic, etc.)
+    // is not a Hystersis subscription issue — don't show the upgrade modal.
+    if byok_active() {
+        return;
+    }
     use crate::scrollback::blocks::CreditLimitCardAction;
 
     let (
@@ -226,6 +240,11 @@ pub(super) fn open_credit_limit_upsell(
 /// which viewers never receive). `auth_method` feeds the
 /// `HystersisProUpsellShown` funnel event.
 pub(super) fn open_free_usage_upsell(agent: &mut AgentView, auth_method: Option<String>) {
+    // BYOK: when the user has configured their own model provider (OpenRouter,
+    // Anthropic, etc.) the subscription paywall does not apply.
+    if byok_active() {
+        return;
+    }
     open_hystersispro_upsell(agent, UpsellReason::FreeUsageLimit, auth_method);
 }
 
@@ -237,6 +256,10 @@ pub(super) fn open_restricted_command_upsell(
     agent: &mut AgentView,
     auth_method: Option<String>,
 ) -> bool {
+    // BYOK: all slash commands are unrestricted when using your own API key.
+    if byok_active() {
+        return false;
+    }
     open_hystersispro_upsell(agent, UpsellReason::RestrictedCommand, auth_method)
 }
 
