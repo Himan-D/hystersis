@@ -207,14 +207,18 @@ export default {
         const priceId = body.priceId || body.price_id;
         // Map frontend priceId to Stripe Price ID or amount
         const priceMap = {
-          "price_pro": env.STRIPE_PRICE_PRO || null,   // e.g. price_123
+          "price_pro": env.STRIPE_PRICE_PRO || null,
           "price_team": env.STRIPE_PRICE_TEAM || null,
+          "price_pro_yearly": env.STRIPE_PRICE_PRO_YEARLY || null,
+          "price_team_yearly": env.STRIPE_PRICE_TEAM_YEARLY || null,
         };
         let stripePrice = priceMap[priceId];
         let amount = null;
         let credits = 0;
         if (priceId === "price_pro") { amount = 1900; credits = 2000; }
         else if (priceId === "price_team") { amount = 4900; credits = 6000; }
+        else if (priceId === "price_pro_yearly") { amount = 18200; credits = 24000; }
+        else if (priceId === "price_team_yearly") { amount = 47000; credits = 72000; }
         if (!amount && !stripePrice) return new Response(JSON.stringify({ error: "Unknown priceId" }), { status: 400, headers: { 'Content-Type': 'application/json' } });
 
         const successUrl = body.successUrl || "https://code.hystersis.com/?paid=1";

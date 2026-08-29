@@ -76,40 +76,57 @@ export default function App(){
 
         <section aria-label="Pricing" style={{padding:'14px 12px 0'}}>
           <h2 style={{fontSize:'11px', margin:0, opacity:0.7}}>&gt; pricing</h2>
-          <p style={{fontSize:'10px', margin:'6px 0 0', opacity:0.7}}>Simple, usage-based.</p>
-          <div style={{marginTop:'10px', display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'8px'}}>
-            {[
-              {name:'Free', price:'$0', credits:'100', features:['100 credits/mo','Community','Hystersis TUI'], cta:'[ Start free ]', href:'#install', primary:false},
-              {name:'Pro', price:'$19', credits:'2,000', highlight:true, features:['2,000 credits/mo','Email support','All features'], cta:'[ Subscribe — Pro ]', priceId:'price_pro'},
-              {name:'Team', price:'$49', credits:'6,000', features:['6,000 credits/mo','Priority support','Team billing','All features'], cta:'[ Subscribe — Team ]', priceId:'price_team'},
-            ].map(p=>(
-              <div key={p.name} style={{border: p.highlight ? '2px solid #fff' : '1px solid #fff', padding:'10px', background: p.highlight ? '#fff' : 'transparent', color: p.highlight ? '#000' : '#fff'}}>
-                <h3 style={{fontSize:'11px', margin:0}}>{p.name} {p.highlight && <span style={{fontSize:'8px', border:'1px solid #000', padding:'1px 4px', marginLeft:'6px'}}>POPULAR</span>}</h3>
-                <div style={{fontSize:'18px', fontWeight:800, margin:'6px 0 0'}}>{p.price}<span style={{fontSize:'10px', fontWeight:400, opacity:0.7}}>/mo</span></div>
-                <div style={{fontSize:'10px', opacity:0.7}}>{p.credits} credits included</div>
-                <ul style={{fontSize:'10px', margin:'8px 0 0 14px', lineHeight:'14px'}}>
-                  {p.features.map(f=><li key={f}>{f}</li>)}
-                </ul>
-                <button onClick={async()=>{
-                  if(!p.priceId){ window.location.hash='#install'; return; }
-                  const key = prompt('Enter your Trinetra API key (from `hystersis configure`):');
-                  if(!key) return;
-                  try{
-                    const res = await fetch('https://trinetra-ai-gateway.himanshu-dixit.workers.dev/v1/billing/create-checkout', {
-                      method:'POST', headers:{'Content-Type':'application/json', 'Authorization': `Bearer ${key}`},
-                      body: JSON.stringify({ priceId: p.priceId, successUrl: window.location.href + '?paid=1', cancelUrl: window.location.href })
-                    });
-                    const data = await res.json();
-                    if(data.url) window.location.href = data.url;
-                    else alert(data.error || 'Checkout failed — set STRIPE_SECRET_KEY in Worker');
-                  }catch(e){ alert('Checkout error: '+e.message)}
-                }} style={{marginTop:'10px', width:'100%', background: p.highlight ? '#000' : '#fff', color: p.highlight ? '#fff' : '#000', border:'1px solid '+(p.highlight?'#000':'#fff'), padding:'6px', fontFamily:'JetBrains Mono, monospace', fontSize:'11px', cursor:'pointer', fontWeight:700}}>
-                  {p.cta}
+          <p style={{fontSize:'10px', margin:'6px 0 0', opacity:0.7}}>Simple, usage-based. Save 20% yearly.</p>
+          {(() => {
+            const [yearly, setYearly] = useState(false)
+            const plans = yearly ? [
+              {name:'Free', price:'$0', period:'/mo', credits:'100', features:['100 credits/mo','Community','Hystersis TUI'], cta:'[ Start free ]'},
+              {name:'Pro', price:'$182', period:'/yr', sub:'/mo $15.17', credits:'24,000/yr', save:'Save $46', highlight:true, features:['2,000 credits/mo','Email support','All features'], cta:'[ Subscribe — Pro Yearly ]', priceId:'price_pro_yearly'},
+              {name:'Team', price:'$470', period:'/yr', sub:'/mo $39.17', credits:'72,000/yr', save:'Save $118', features:['6,000 credits/mo','Priority support','Team billing','All features'], cta:'[ Subscribe — Team Yearly ]', priceId:'price_team_yearly'},
+            ] : [
+              {name:'Free', price:'$0', period:'/mo', credits:'100', features:['100 credits/mo','Community','Hystersis TUI'], cta:'[ Start free ]'},
+              {name:'Pro', price:'$19', period:'/mo', credits:'2,000', highlight:true, features:['2,000 credits/mo','Email support','All features'], cta:'[ Subscribe — Pro ]', priceId:'price_pro'},
+              {name:'Team', price:'$49', period:'/mo', credits:'6,000', features:['6,000 credits/mo','Priority support','Team billing','All features'], cta:'[ Subscribe — Team ]', priceId:'price_team'},
+            ]
+            return <>
+              <div style={{marginTop:'8px', display:'flex', gap:'6px', alignItems:'center', fontSize:'10px'}}>
+                <span style={{opacity: yearly?0.5:1}}>Monthly</span>
+                <button onClick={()=>setYearly(!yearly)} aria-label="Toggle billing period" style={{width:'36px', height:'18px', border:'1px solid #fff', background: yearly ? '#fff' : '#000', position:'relative', cursor:'pointer'}}>
+                  <span style={{position:'absolute', top:'2px', left: yearly ? '18px' : '2px', width:'12px', height:'12px', background: yearly ? '#000' : '#fff', transition:'left 0.15s'}} />
                 </button>
+                <span style={{opacity: yearly?1:0.5}}>Yearly <span style={{fontSize:'8px', border:'1px solid #fff', padding:'1px 3px', marginLeft:'4px'}}>−20%</span></span>
               </div>
-            ))}
-          </div>
-          <p style={{fontSize:'9px', opacity:0.5, marginTop:'6px'}}>Secure checkout via Stripe.</p>
+              <div style={{marginTop:'10px', display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'8px'}}>
+                {plans.map(p=>(
+                  <div key={p.name+String(yearly)} style={{border: p.highlight ? '2px solid #fff' : '1px solid #fff', padding:'10px', background: p.highlight ? '#fff' : 'transparent', color: p.highlight ? '#000' : '#fff'}}>
+                    <h3 style={{fontSize:'11px', margin:0}}>{p.name} {p.highlight && <span style={{fontSize:'8px', border:'1px solid #000', padding:'1px 4px', marginLeft:'6px'}}>POPULAR</span>} {p.save && <span style={{fontSize:'8px', background:'#000', color:'#fff', padding:'1px 4px', marginLeft:'6px'}}>{p.save}</span>}</h3>
+                    <div style={{fontSize:'18px', fontWeight:800, margin:'6px 0 0'}}>{p.price}<span style={{fontSize:'10px', fontWeight:400, opacity:0.7}}>{p.period}</span>{p.sub && <span style={{fontSize:'9px', fontWeight:400, opacity:0.6}}> {p.sub}</span>}</div>
+                    <div style={{fontSize:'10px', opacity:0.7}}>{p.credits} credits</div>
+                    <ul style={{fontSize:'10px', margin:'8px 0 0 14px', lineHeight:'14px'}}>
+                      {p.features.map(f=><li key={f}>{f}</li>)}
+                    </ul>
+                    <button onClick={async()=>{
+                      if(!p.priceId){ window.location.hash='#install'; return; }
+                      const key = prompt('Enter your Trinetra API key (from `hystersis configure`):');
+                      if(!key) return;
+                      try{
+                        const res = await fetch('https://trinetra-ai-gateway.himanshu-dixit.workers.dev/v1/billing/create-checkout', {
+                          method:'POST', headers:{'Content-Type':'application/json', 'Authorization': `Bearer ${key}`},
+                          body: JSON.stringify({ priceId: p.priceId, successUrl: window.location.href + '?paid=1', cancelUrl: window.location.href })
+                        });
+                        const data = await res.json();
+                        if(data.url) window.location.href = data.url;
+                        else alert(data.error || 'Checkout failed');
+                      }catch(e){ alert('Checkout error: '+e.message)}
+                    }} style={{marginTop:'10px', width:'100%', background: p.highlight ? '#000' : '#fff', color: p.highlight ? '#fff' : '#000', border:'1px solid '+(p.highlight?'#000':'#fff'), padding:'6px', fontFamily:'JetBrains Mono, monospace', fontSize:'11px', cursor:'pointer', fontWeight:700}}>
+                      {p.cta}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
+          })()}
+          <p style={{fontSize:'9px', opacity:0.5, marginTop:'6px'}}>Secure checkout via Stripe. Yearly = 12× monthly credits upfront.</p>
         </section>
 
         <section aria-label="Playground" style={{padding:'14px 12px 0'}}>
