@@ -2,152 +2,163 @@ import { useState } from 'react'
 
 export default function App(){
   const [copied,setCopied]=useState(false)
+  const [yearly,setYearly]=useState(false)
   const cmd='curl -fsSL https://code.hystersis.com/install.sh | sh'
 
   return (
-    <div style={{background:'#000', color:'#fff', fontFamily:'JetBrains Mono, monospace', minHeight:'100vh', padding:'12px'}}>
+    <div style={{background:'#0a0a0a', color:'#e8e8e8', fontFamily:'Inter, system-ui, -apple-system, sans-serif', minHeight:'100vh'}}>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
         *{box-sizing:border-box}
-        pre{margin:0; white-space:pre-wrap; word-break:break-word}
-        a{color:#fff}
-        ::selection{background:#fff;color:#000}
-        @media(max-width:600px){
-          .hero-title{font-size:18px !important; line-height:20px !important}
-          .curl{flex-direction:column !important; align-items:stretch !important; gap:8px !important}
-          .curl code{font-size:9px !important; white-space:normal !important; word-break:break-all !important; overflow-wrap:anywhere !important}
-          .curl button{width:100% !important}
-          .tui{font-size:9px !important}
+        ::selection{background:#e8e8e8;color:#0a0a0a}
+        a{color:inherit; text-decoration:none}
+        a:hover{opacity:0.7}
+        pre{margin:0}
+        @media(max-width:640px){
+          .hero-title{font-size:32px !important}
+          .nav{font-size:12px !important}
         }
       `}</style>
 
-      <header style={{maxWidth:'760px', margin:'0 auto', border:'1px solid #fff', display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 10px', fontSize:'11px'}}>
-        <a href="/" style={{textDecoration:'none', fontWeight:700}}>hystersis</a>
-        <nav style={{display:'flex', gap:'12px'}}>
-          <a href="#pricing" style={{textDecoration:'none'}}>[Pricing]</a>
-          <a href="#install" style={{textDecoration:'none'}}>[Install]</a>
-          <a href="https://github.com/Himan-D/code" target="_blank" rel="noreferrer" style={{textDecoration:'none'}}>[GitHub]</a>
-        </nav>
+      {/* Nav — zen: thin, airy */}
+      <header style={{maxWidth:'960px', margin:'0 auto', padding:'20px 24px', display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid #1a1a1a'}}>
+        <div style={{display:'flex', gap:'32px', alignItems:'center'}}>
+          <a href="/" style={{fontFamily:'JetBrains Mono, monospace', fontSize:'14px', fontWeight:600, letterSpacing:'-0.02em'}}>hystersis</a>
+          <nav className="nav" style={{display:'flex', gap:'20px', fontSize:'13px', color:'#888'}}>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#team">Team</a>
+          </nav>
+        </div>
+        <div style={{display:'flex', gap:'12px', alignItems:'center'}}>
+          <a href="https://github.com/Himan-D/hystersis" target="_blank" rel="noreferrer" style={{fontSize:'13px', color:'#888'}}>GitHub</a>
+          <a href="#install" style={{fontSize:'13px', background:'#fff', color:'#000', padding:'6px 14px', fontWeight:500}}>Install</a>
+        </div>
       </header>
 
-      <main style={{maxWidth:'760px', margin:'0 auto', border:'1px solid #fff', borderTop:'none', padding:'0'}}>
-        <section aria-label="Hero" style={{padding:'16px 12px 0'}}>
-          <h1 className="hero-title" style={{fontSize:'22px', lineHeight:'22px', margin:0, fontWeight:800, letterSpacing:'0.06em'}}>HYSTERSIS</h1>
-          <h2 style={{fontSize:'13px', lineHeight:'15px', margin:'6px 0 0', fontWeight:400, letterSpacing:'0.12em', opacity:0.95}}>YOUR CODEBASE<br/>UNDERSTOOD.</h2>
-          <p style={{fontSize:'11px', lineHeight:'15px', margin:'8px 0 0', opacity:0.8}}>terminal-based AI coding agent — Rust-native.<br/>Full-screen TUI. Same UI you run locally.</p>
-        </section>
+      <main style={{maxWidth:'960px', margin:'0 auto', padding:'0 24px'}}>
 
-        <section id="install" aria-label="Install" style={{margin:'16px 12px 0', border:'1px solid #fff', padding:'8px 10px'}}>
-          <div className="curl" style={{display:'flex', gap:'8px', alignItems:'center', flexWrap:'wrap'}}>
-            <span style={{opacity:0.6, fontSize:'10px'}}>$</span>
-            <code style={{fontSize:'10px', flex:1, minWidth:'160px', wordBreak:'break-all'}}>{cmd}</code>
-            <button onClick={()=>{navigator.clipboard.writeText(cmd); setCopied(true); setTimeout(()=>setCopied(false),1200)}} aria-label="Copy install command" style={{background:'#fff', color:'#000', border:'1px solid #fff', padding:'4px 10px', fontFamily:'JetBrains Mono, monospace', fontSize:'11px', cursor:'pointer', fontWeight:700, whiteSpace:'nowrap'}}>{copied?'[ COPIED ]':'[ COPY ]'}</button>
+        {/* Hero — zen: huge, quiet, centered */}
+        <section style={{padding:'80px 0 40px', textAlign:'center'}}>
+          <div style={{fontFamily:'JetBrains Mono, monospace', fontSize:'11px', letterSpacing:'0.15em', color:'#666', marginBottom:'24px'}}>TERMINAL-NATIVE • RUST-NATIVE • OPEN SOURCE</div>
+          <h1 className="hero-title" style={{fontSize:'48px', fontWeight:700, letterSpacing:'-0.03em', lineHeight:'1', margin:0}}>Your codebase,<br/><span style={{color:'#888', fontWeight:400}}>understood.</span></h1>
+          <p style={{fontSize:'16px', color:'#888', margin:'16px auto 0', maxWidth:'520px', lineHeight:'1.6'}}>The autonomous coding agent that reads before it writes. Full-screen TUI, sandboxed tools, checkpointed edits.</p>
+          
+          <div id="install" style={{margin:'32px auto 0', maxWidth:'560px', background:'#111', border:'1px solid #222', padding:'14px 16px', display:'flex', gap:'12px', alignItems:'center'}}>
+            <span style={{fontFamily:'JetBrains Mono, monospace', fontSize:'12px', color:'#555'}}>$</span>
+            <code style={{fontFamily:'JetBrains Mono, monospace', fontSize:'13px', flex:1, textAlign:'left', color:'#e8e8e8'}}>{cmd}</code>
+            <button onClick={()=>{navigator.clipboard.writeText(cmd); setCopied(true); setTimeout(()=>setCopied(false),1500)}} style={{fontFamily:'JetBrains Mono, monospace', fontSize:'12px', background:'#fff', color:'#000', border:'none', padding:'6px 12px', cursor:'pointer', fontWeight:500}}>{copied?'Copied':'Copy'}</button>
           </div>
+          <div style={{fontSize:'12px', color:'#555', marginTop:'10px'}}>macOS • Linux • Windows • <span style={{color:'#888'}}>hystersis --version</span></div>
         </section>
-        <p style={{fontSize:'9px', opacity:0.5, textAlign:'center', margin:'6px 12px 0'}}>hystersis --version · cargo run -p hystersis-pager-bin · macOS / Linux / Windows</p>
 
-        <section aria-label="About" style={{padding:'18px 12px 0'}}>
-          <h2 style={{fontSize:'11px', margin:0, opacity:0.7}}>&gt; about</h2>
-          <p style={{fontSize:'11px', lineHeight:'16px', margin:'8px 0 0'}}>Hystersis is an engineering-driven terminal agent. Pinned toolchain, sandboxed tools, full-screen TUI with checkpointing. Reads your codebase before it touches it.</p>
-          <div style={{marginTop:'12px', display:'grid', gap:'8px'}}>
-            <div style={{border:'1px solid #fff', padding:'8px'}}>
-              <h3 style={{fontSize:'10px', margin:0, letterSpacing:'0.06em'}}>RUST-NATIVE, NO WRAPPER</h3>
-              <p style={{fontSize:'10px', margin:'4px 0 0', opacity:0.8, lineHeight:'14px'}}>Workspace-aware edits, hunk tracking, VCS safety, fast worktree, process-scope enroll.</p>
-            </div>
-            <div style={{border:'1px solid #fff', padding:'8px'}}>
-              <h3 style={{fontSize:'10px', margin:0, letterSpacing:'0.06em'}}>TUI + HEADLESS + ACP</h3>
-              <p style={{fontSize:'10px', margin:'4px 0 0', opacity:0.8, lineHeight:'14px'}}>Same agent in TUI, headless for CI, or via ACP. Scrollback, modals, diff done right.</p>
-            </div>
-            <div style={{border:'1px solid #fff', padding:'8px'}}>
-              <h3 style={{fontSize:'10px', margin:0, letterSpacing:'0.06em'}}>TOOLS THAT RUN</h3>
-              <p style={{fontSize:'10px', margin:'4px 0 0', opacity:0.8, lineHeight:'14px'}}>Terminal, file edits, search, MCP, skills, hooks — checkpointed. Long tasks via queue.</p>
-            </div>
+        {/* TUI preview — zen: floating card */}
+        <section style={{margin:'20px 0 0', background:'#111', border:'1px solid #222', padding:'20px', fontFamily:'JetBrains Mono, monospace', fontSize:'12px', lineHeight:'1.6'}}>
+          <div style={{display:'flex', justifyContent:'space-between', color:'#555', borderBottom:'1px solid #1a1a1a', paddingBottom:'10px', marginBottom:'14px'}}>
+            <span>hystersis</span><span style={{color:'#4ade80'}}>● ready</span>
           </div>
+          <div style={{color:'#e8e8e8'}}>&gt; Refactor auth middleware to use new store</div>
+          <div style={{color:'#888', marginTop:'8px'}}>· [scan] crates/codegen/hystersis-agent ...<br/>· [edit] src/builder.rs +42 -8<br/>· [check] cargo check ✔ 1.79s · [test] 12 passed</div>
+          <div style={{color:'#555', marginTop:'12px', borderTop:'1px dashed #222', paddingTop:'10px'}}>— Done. 2 files edited, 0 conflicts. [Enter] send · [/] commands · [Ctrl+C] interrupt</div>
         </section>
 
-        <section aria-label="TUI preview" className="tui" style={{margin:'14px 12px 0', border:'1px solid #fff', padding:'10px', fontSize:'10px', lineHeight:'14px', overflow:'auto'}}>
-          <div style={{display:'flex', justifyContent:'space-between', opacity:0.7, borderBottom:'1px solid #fff', paddingBottom:'6px', marginBottom:'8px'}}>
-            <span>hystersis</span><span>[● ready]</span>
-          </div>
-          <div>&gt; Refactor auth middleware to use new store</div>
-          <div style={{marginTop:'6px', opacity:0.8}}>· [scan] crates/codegen/hystersis-agent ...<br/>· [edit] src/builder.rs +42 -8<br/>· [check] cargo check ✔ 1.79s · [test] 12 passed</div>
-          <div style={{marginTop:'8px', borderTop:'1px dashed #fff', paddingTop:'6px'}}>— Done. 2 files edited, 0 conflicts.</div>
-          <div style={{marginTop:'8px', opacity:0.6, fontSize:'9px', borderTop:'1px solid #fff', paddingTop:'6px'}}>[Enter] send &nbsp; [/] commands &nbsp; [Ctrl+C] interrupt</div>
-        </section>
-
-        <section aria-label="Pricing" style={{padding:'14px 12px 0'}}>
-          <h2 style={{fontSize:'11px', margin:0, opacity:0.7}}>&gt; pricing</h2>
-          <p style={{fontSize:'10px', margin:'6px 0 0', opacity:0.7}}>Simple, usage-based. Save 20% yearly.</p>
-          {(() => {
-            const [yearly, setYearly] = useState(false)
-            const plans = yearly ? [
-              {name:'Free', price:'$0', period:'/mo', credits:'100', features:['100 credits/mo','Community','Hystersis TUI'], cta:'[ Start free ]'},
-              {name:'Pro', price:'$182', period:'/yr', sub:'/mo $15.17', credits:'24,000/yr', save:'Save $46', highlight:true, features:['2,000 credits/mo','Email support','All features'], cta:'[ Subscribe — Pro Yearly ]', priceId:'price_pro_yearly'},
-              {name:'Team', price:'$470', period:'/yr', sub:'/mo $39.17', credits:'72,000/yr', save:'Save $118', features:['6,000 credits/mo','Priority support','Team billing','All features'], cta:'[ Subscribe — Team Yearly ]', priceId:'price_team_yearly'},
-            ] : [
-              {name:'Free', price:'$0', period:'/mo', credits:'100', features:['100 credits/mo','Community','Hystersis TUI'], cta:'[ Start free ]'},
-              {name:'Pro', price:'$19', period:'/mo', credits:'2,000', highlight:true, features:['2,000 credits/mo','Email support','All features'], cta:'[ Subscribe — Pro ]', priceId:'price_pro'},
-              {name:'Team', price:'$49', period:'/mo', credits:'6,000', features:['6,000 credits/mo','Priority support','Team billing','All features'], cta:'[ Subscribe — Team ]', priceId:'price_team'},
-            ]
-            return <>
-              <div style={{marginTop:'8px', display:'flex', gap:'6px', alignItems:'center', fontSize:'10px'}}>
-                <span style={{opacity: yearly?0.5:1}}>Monthly</span>
-                <button onClick={()=>setYearly(!yearly)} aria-label="Toggle billing period" style={{width:'36px', height:'18px', border:'1px solid #fff', background: yearly ? '#fff' : '#000', position:'relative', cursor:'pointer'}}>
-                  <span style={{position:'absolute', top:'2px', left: yearly ? '18px' : '2px', width:'12px', height:'12px', background: yearly ? '#000' : '#fff', transition:'left 0.15s'}} />
-                </button>
-                <span style={{opacity: yearly?1:0.5}}>Yearly <span style={{fontSize:'8px', border:'1px solid #fff', padding:'1px 3px', marginLeft:'4px'}}>−20%</span></span>
+        {/* Features — zen: 6, airy grid */}
+        <section id="features" style={{padding:'60px 0 0'}}>
+          <div style={{fontFamily:'JetBrains Mono, monospace', fontSize:'11px', letterSpacing:'0.12em', color:'#666', marginBottom:'24px'}}>— FEATURES</div>
+          <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(260px, 1fr))', gap:'1px', background:'#222', border:'1px solid #222'}}>
+            {[
+              ['Rust-native','Workspace-aware edits, hunk tracking, VCS safety, fast worktree. No wrapper, no lag.'],
+              ['TUI + Headless + ACP','Same agent in full-screen TUI, CI headless, or ACP. Scrollback and diff done right.'],
+              ['Tools that run','Terminal, file edits, search, MCP, skills, hooks — checkpointed. Long tasks via queue.'],
+              ['Checkpointing','Every edit is reversible. Rewind, diff, and re-apply without losing context.'],
+              ['Sandboxed','Process-scope enrollment, permission modes, yolo off by default. Safe by design.'],
+              ['Bring your model','OpenRouter, Anthropic, OpenAI, Azure — or Trinetra gateway. You own the key.'],
+            ].map(([t,d])=>(
+              <div key={t} style={{background:'#0a0a0a', padding:'24px'}}>
+                <h3 style={{fontSize:'13px', fontWeight:600, margin:'0 0 8px'}}>{t}</h3>
+                <p style={{fontSize:'13px', color:'#888', lineHeight:'1.5', margin:0}}>{d}</p>
               </div>
-              <div style={{marginTop:'10px', display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'8px'}}>
+            ))}
+          </div>
+        </section>
+
+        {/* Pricing — zen: toggle, clean cards */}
+        <section id="pricing" style={{padding:'60px 0 0'}}>
+          <div style={{fontFamily:'JetBrains Mono, monospace', fontSize:'11px', letterSpacing:'0.12em', color:'#666', marginBottom:'8px'}}>— PRICING</div>
+          <h2 style={{fontSize:'24px', fontWeight:600, margin:'0 0 8px', letterSpacing:'-0.02em'}}>Simple, usage-based.</h2>
+          <p style={{fontSize:'14px', color:'#888', margin:'0 0 16px'}}>Credits = 1¢. Save 20% yearly. Secure checkout via Stripe.</p>
+          <div style={{display:'flex', gap:'8px', alignItems:'center', marginBottom:'20px', fontSize:'13px'}}>
+            <span style={{color: yearly?'#555':'#fff'}}>Monthly</span>
+            <button onClick={()=>setYearly(!yearly)} style={{width:'40px', height:'22px', background: yearly?'#fff':'#222', border:'1px solid #333', borderRadius:'999px', position:'relative', cursor:'pointer'}}>
+              <span style={{position:'absolute', top:'2px', left: yearly?'18px':'2px', width:'16px', height:'16px', background: yearly?'#000':'#888', borderRadius:'50%', transition:'left 0.15s'}}/>
+            </button>
+            <span style={{color: yearly?'#fff':'#555'}}>Yearly <span style={{fontSize:'10px', background:'#fff', color:'#000', padding:'2px 6px', marginLeft:'6px', fontWeight:600}}>−20%</span></span>
+          </div>
+          {(() => {
+            const plans = yearly ? [
+              {name:'Free', price:'$0', period:'/mo', credits:'100', features:['100 credits/mo','Community','Hystersis TUI'], cta:'Start free'},
+              {name:'Pro', price:'$182', period:'/yr', sub:'$15.17/mo', credits:'24,000/yr', save:'Save $46', highlight:true, features:['2,000 credits/mo','Email support','All features'], cta:'Subscribe — Pro Yearly', priceId:'price_pro_yearly'},
+              {name:'Team', price:'$470', period:'/yr', sub:'$39.17/mo', credits:'72,000/yr', save:'Save $118', features:['6,000 credits/mo','Priority support','Team billing','All features'], cta:'Subscribe — Team Yearly', priceId:'price_team_yearly'},
+            ] : [
+              {name:'Free', price:'$0', period:'/mo', credits:'100', features:['100 credits/mo','Community','Hystersis TUI'], cta:'Start free'},
+              {name:'Pro', price:'$19', period:'/mo', credits:'2,000', highlight:true, features:['2,000 credits/mo','Email support','All features'], cta:'Subscribe — Pro', priceId:'price_pro'},
+              {name:'Team', price:'$49', period:'/mo', credits:'6,000', features:['6,000 credits/mo','Priority support','Team billing','All features'], cta:'Subscribe — Team', priceId:'price_team'},
+            ]
+            return (
+              <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(240px, 1fr))', gap:'1px', background:'#222', border:'1px solid #222'}}>
                 {plans.map(p=>(
-                  <div key={p.name+String(yearly)} style={{border: p.highlight ? '2px solid #fff' : '1px solid #fff', padding:'10px', background: p.highlight ? '#fff' : 'transparent', color: p.highlight ? '#000' : '#fff'}}>
-                    <h3 style={{fontSize:'11px', margin:0}}>{p.name} {p.highlight && <span style={{fontSize:'8px', border:'1px solid #000', padding:'1px 4px', marginLeft:'6px'}}>POPULAR</span>} {p.save && <span style={{fontSize:'8px', background:'#000', color:'#fff', padding:'1px 4px', marginLeft:'6px'}}>{p.save}</span>}</h3>
-                    <div style={{fontSize:'18px', fontWeight:800, margin:'6px 0 0'}}>{p.price}<span style={{fontSize:'10px', fontWeight:400, opacity:0.7}}>{p.period}</span>{p.sub && <span style={{fontSize:'9px', fontWeight:400, opacity:0.6}}> {p.sub}</span>}</div>
-                    <div style={{fontSize:'10px', opacity:0.7}}>{p.credits} credits</div>
-                    <ul style={{fontSize:'10px', margin:'8px 0 0 14px', lineHeight:'14px'}}>
+                  <div key={p.name+String(yearly)} style={{background: p.highlight?'#fff':'#0a0a0a', color: p.highlight?'#000':'#e8e8e8', padding:'24px'}}>
+                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                      <h3 style={{fontSize:'14px', fontWeight:600, margin:0}}>{p.name}</h3>
+                      {p.highlight && <span style={{fontSize:'10px', background:'#000', color:'#fff', padding:'3px 8px'}}>POPULAR</span>}
+                      {p.save && <span style={{fontSize:'10px', background:'#000', color:'#fff', padding:'3px 8px'}}>{p.save}</span>}
+                    </div>
+                    <div style={{fontSize:'28px', fontWeight:700, marginTop:'12px'}}>{p.price}<span style={{fontSize:'13px', fontWeight:400, color: p.highlight?'#666':'#888'}}>{p.period}</span>{p.sub && <span style={{fontSize:'11px', color:'#888'}}> {p.sub}</span>}</div>
+                    <div style={{fontSize:'12px', color:'#888', marginTop:'4px'}}>{p.credits} credits</div>
+                    <ul style={{fontSize:'13px', color: p.highlight?'#444':'#888', margin:'16px 0 0 16px', lineHeight:'1.7'}}>
                       {p.features.map(f=><li key={f}>{f}</li>)}
                     </ul>
                     <button onClick={async()=>{
-                      if(!p.priceId){ window.location.hash='#install'; return; }
-                      const key = prompt('Enter your Trinetra API key (from `hystersis configure`):');
+                      if(!p.priceId){ document.getElementById('install')?.scrollIntoView({behavior:'smooth'}); return; }
+                      const key = prompt('Trinetra API key (hystersis configure):');
                       if(!key) return;
                       try{
                         const res = await fetch('https://trinetra-ai-gateway.himanshu-dixit.workers.dev/v1/billing/create-checkout', {
                           method:'POST', headers:{'Content-Type':'application/json', 'Authorization': `Bearer ${key}`},
-                          body: JSON.stringify({ priceId: p.priceId, successUrl: window.location.href + '?paid=1', cancelUrl: window.location.href })
+                          body: JSON.stringify({ priceId: p.priceId, successUrl: location.href+'?paid=1', cancelUrl: location.href })
                         });
-                        const data = await res.json();
-                        if(data.url) window.location.href = data.url;
-                        else alert(data.error || 'Checkout failed');
-                      }catch(e){ alert('Checkout error: '+e.message)}
-                    }} style={{marginTop:'10px', width:'100%', background: p.highlight ? '#000' : '#fff', color: p.highlight ? '#fff' : '#000', border:'1px solid '+(p.highlight?'#000':'#fff'), padding:'6px', fontFamily:'JetBrains Mono, monospace', fontSize:'11px', cursor:'pointer', fontWeight:700}}>
+                        const d = await res.json();
+                        if(d.url) location.href = d.url; else alert(d.error||'Checkout failed');
+                      }catch(e){ alert(e.message)}
+                    }} style={{marginTop:'20px', width:'100%', padding:'10px', fontSize:'13px', fontWeight:500, background: p.highlight?'#000':'#fff', color: p.highlight?'#fff':'#000', border:'none', cursor:'pointer'}}>
                       {p.cta}
                     </button>
                   </div>
                 ))}
               </div>
-            </>
+            )
           })()}
-          <p style={{fontSize:'9px', opacity:0.5, marginTop:'6px'}}>Secure checkout via Stripe. Yearly = 12× monthly credits upfront.</p>
         </section>
 
-        <section aria-label="Playground" style={{padding:'14px 12px 0'}}>
-          <h2 style={{fontSize:'10px', margin:0, opacity:0.7}}>&gt; playground</h2>
-          <p style={{fontSize:'11px', margin:'6px 0 0', lineHeight:'15px'}}>Paste the curl. Run hystersis. Ask it anything.</p>
-          <ul style={{fontSize:'10px', margin:'6px 0 0 14px', lineHeight:'15px', opacity:0.9}}>
-            <li>Refactor auth middleware to use session store</li>
-            <li>Explain this codebase in one page</li>
-            <li>Find where we handle checkpointing</li>
-          </ul>
-          <p style={{fontSize:'10px', margin:'6px 0 0', opacity:0.7}}>It reads, edits, checks — then shows you the diff.</p>
+        {/* Team — zen: minimal */}
+        <section id="team" style={{padding:'60px 0 0'}}>
+          <div style={{fontFamily:'JetBrains Mono, monospace', fontSize:'11px', letterSpacing:'0.12em', color:'#666', marginBottom:'24px'}}>— TEAM</div>
+          <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'24px'}}>
+            <div>
+              <div style={{width:'48px', height:'48px', background:'#222', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'16px'}}>HD</div>
+              <h3 style={{fontSize:'14px', fontWeight:600, margin:'12px 0 4px'}}>Himanshu Dixit</h3>
+              <p style={{fontSize:'13px', color:'#888', margin:0}}>Founder • Trinetra Labs • xAI Hystersis core</p>
+            </div>
+            <div style={{borderLeft:'1px solid #1a1a1a', paddingLeft:'24px'}}>
+              <p style={{fontSize:'14px', color:'#888', lineHeight:'1.6', margin:0}}>Building the autonomous coding agent — Rust-native, terminal-first, checkpointed. Forked from xAI monorepo, now serving Trinetra gateway with D1 billing and Stripe.</p>
+              <p style={{fontSize:'13px', marginTop:'12px'}}><a href="https://github.com/Himan-D/hystersis" style={{color:'#fff', borderBottom:'1px solid #333'}}>GitHub</a> · <a href="mailto:himan@trinetralabs.ai" style={{color:'#fff', borderBottom:'1px solid #333'}}>Contact</a></p>
+            </div>
+          </div>
         </section>
 
-        <div style={{margin:'16px 12px 0', border:'1px solid #fff', padding:'10px', textAlign:'center', display:'flex', gap:'12px', justifyContent:'center', flexWrap:'wrap'}}>
-          <a href="#install" style={{border:'1px solid #fff', padding:'6px 12px', textDecoration:'none', fontSize:'11px', background:'#fff', color:'#000', fontWeight:700}}>[ Install now ]</a>
-          <a href="https://github.com/Himan-D/code" target="_blank" rel="noreferrer" style={{border:'1px solid #fff', padding:'6px 12px', textDecoration:'none', fontSize:'11px'}}>[ GitHub → ]</a>
-        </div>
-
-        <footer style={{marginTop:'16px', borderTop:'1px solid #fff', padding:'10px 12px', display:'flex', justifyContent:'space-between', fontSize:'9px', opacity:0.5}}>
-          <span>© 2026 Hystersis</span>
-          <span>hystersis.com · code.hystersis.com</span>
+        <footer style={{marginTop:'60px', borderTop:'1px solid #1a1a1a', padding:'20px 0', display:'flex', justifyContent:'space-between', fontSize:'12px', color:'#555'}}>
+          <span>© 2026 Trinetra Labs • Hystersis</span>
+          <span>hystersis.com • code.hystersis.com • MIT</span>
         </footer>
       </main>
     </div>
