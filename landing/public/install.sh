@@ -60,18 +60,20 @@ echo "  ${ASSET_URL}"
 if [ -w "/usr/local/bin" ]; then
   curl -fsSL "${ASSET_URL}" -o "${DEST}"
   chmod +x "${DEST}"
+  ln -sf "${DEST}" "/usr/local/bin/hys" 2>/dev/null || true
   echo ""
-  echo "✅ Installed to ${DEST}"
+  echo "✅ Installed to ${DEST} (and /usr/local/bin/hys)"
   echo "   Run: hystersis configure    (set up your API key)"
-  echo "   Run: hystersis              (start coding)"
+  echo "   Run: hystersis  or  hys     (start coding)"
 else
   mkdir -p "$HOME/.local/bin"
   DEST="$HOME/.local/bin/hystersis"
   curl -fsSL "${ASSET_URL}" -o "${DEST}"
   chmod +x "${DEST}"
+  ln -sf "${DEST}" "$HOME/.local/bin/hys" 2>/dev/null || true
   echo ""
-  echo "✅ Installed to ${DEST}"
+  echo "✅ Installed to ${DEST} (and $HOME/.local/bin/hys)"
   echo "   Add to PATH: export PATH=\"\$HOME/.local/bin:\$PATH\""
   echo "   Run: hystersis configure    (set up your API key)"
-  echo "   Run: hystersis              (start coding)"
+  echo "   Run: hystersis  or  hys     (start coding)"
 fi
