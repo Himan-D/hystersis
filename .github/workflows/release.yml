@@ -35,6 +35,12 @@ jobs:
           - os: ubuntu-22.04
             target: aarch64-unknown-linux-gnu
             artifact: hystersis-linux-arm64
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: hystersis-windows-x64
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
+            artifact: hystersis-windows-arm64
 
     steps:
       - uses: actions/checkout@v4
@@ -57,20 +63,25 @@ jobs:
           sudo apt-get install -y gcc-aarch64-linux-gnu
 
       - name: Install protoc
+        shell: bash
         run: |
           if [[ "${{ matrix.os }}" == macos* ]]; then
             brew install protobuf
+          elif [[ "${{ matrix.os }}" == windows* ]]; then
+            choco install protoc
           else
             sudo apt-get update -q
             sudo apt-get install -y protobuf-compiler
           fi
 
       - name: Install dotslash
+        if: matrix.os != 'windows-latest'
         uses: taiki-e/install-action@v2
         with:
           tool: dotslash@0.1.20
 
       - name: Build release binary
+        shell: bash
         env:
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         run: |
@@ -79,18 +90,23 @@ jobs:
             --target ${{ matrix.target }}
 
       - name: Rename + strip binary
+        shell: bash
         run: |
-          cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} ${{ matrix.artifact }}
-          # Strip debug symbols on Linux to reduce size
-          if [[ "${{ matrix.os }}" == ubuntu* && "${{ matrix.target }}" == x86_64* ]]; then
-            strip ${{ matrix.artifact }} || true
+          if [[ "${{ matrix.os }}" == windows* ]]; then
+            cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }}.exe ${{ matrix.artifact }}.exe
+          else
+            cp target/${{ matrix.target }}/release/${{ env.BINARY_NAME }} ${{ matrix.artifact }}
+            # Strip debug symbols on Linux to reduce size
+            if [[ "${{ matrix.os }}" == ubuntu* && "${{ matrix.target }}" == x86_64* ]]; then
+              strip ${{ matrix.artifact }} || true
+            fi
           fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
           retention-days: 1
 
   # ─── Publish GitHub Release with binaries (only on tags) ────────────────
@@ -112,7 +128,8 @@ jobs:
         working-directory: dist
         run: |
           sha256sum hystersis-macos-arm64 hystersis-macos-x64 \
-                    hystersis-linux-x64 hystersis-linux-arm64 > checksums.txt
+                    hystersis-linux-x64 hystersis-linux-arm64 \
+                    hystersis-windows-x64.exe hystersis-windows-arm64.exe > checksums.txt
           cat checksums.txt
 
       - name: Publish release with binaries
@@ -128,7 +145,11 @@ jobs:
             ### One-line install
 
             ```bash
+            # macOS / Linux
             curl -fsSL https://code.hystersis.com/install.sh | sh
+            
+            # Windows
+            powershell -NoProfile -c "irm https://code.hystersis.com/install.ps1 | iex"
             ```
 
             Then run `hystersis configure` to enter your OpenRouter API key.
@@ -141,6 +162,8 @@ jobs:
             | macOS Intel | `hystersis-macos-x64` |
             | Linux x86_64 | `hystersis-linux-x64` |
             | Linux ARM64 | `hystersis-linux-arm64` |
+            | Windows x64 | `hystersis-windows-x64.exe` |
+            | Windows ARM64 | `hystersis-windows-arm64.exe` |
 
             Verify with `checksums.txt` (SHA256).
           files: |
@@ -148,6 +171,8 @@ jobs:
             dist/hystersis-macos-x64
             dist/hystersis-linux-x64
             dist/hystersis-linux-arm64
+            dist/hystersis-windows-x64.exe
+            dist/hystersis-windows-arm64.exe
             dist/checksums.txt
           draft: false
           prerelease: false
