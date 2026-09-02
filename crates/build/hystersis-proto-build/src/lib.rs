@@ -144,9 +144,14 @@ impl XaiProtoBuilder {
         // Can only process one input file when using --dependency_out=FILE.
         for proto in protos {
             let mut command = Command::new(protoc.unwrap_or(Path::new("protoc")));
+            
+            let temp_dir = tempfile::tempdir().context("failed to create temp dir")?;
+            let dep_file = temp_dir.path().join("deps.txt");
+            let desc_file = temp_dir.path().join("desc.bin");
+            
             command
-                .arg("--dependency_out=/dev/stdout")
-                .arg("--descriptor_set_out=/dev/null");
+                .arg(format!("--dependency_out={}", dep_file.display()))
+                .arg(format!("--descriptor_set_out={}", desc_file.display()));
 
             // Add protoc's well-known types include directory first (if found).
             // This is needed for Bazel sandboxed builds where protoc and its
@@ -172,15 +177,17 @@ impl XaiProtoBuilder {
                 return Err(anyhow::anyhow!("protoc command failed"));
             }
 
-            let output =
-                String::from_utf8(output.stdout).context("protoc command output not UTF-8")?;
+            let output_str = fs::read_to_string(&dep_file).context("failed to read protoc dependency output")?;
 
-            let mut lines = output.lines();
+            let mut lines = output_str.lines();
             let first_line = lines.next().context("protoc command output is empty")?;
-            let prefix = "/dev/null:";
-            let rem = first_line.strip_prefix(prefix).with_context(|| {
-                format!("protoc command output must start with /dev/null: {output:?}")
-            })?;
+            let prefix = format!("{}:", desc_file.display());
+            // It might format the path slightly differently, so let's just split at the first ": "
+            let rem = if let Some((_, rest)) = first_line.split_once(": ") {
+                rest
+            } else {
+                return Err(anyhow::anyhow!("protoc command output missing ': ': {first_line:?}"));
+            };
             for line in iter::once(rem).chain(lines) {
                 let line = line.trim();
                 let line = line.strip_suffix("\\").unwrap_or(line);

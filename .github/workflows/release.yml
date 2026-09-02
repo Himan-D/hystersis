@@ -80,6 +80,7 @@ jobs:
         env:
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         run: |
+          rustup target add ${{ matrix.target }}
           cargo build --release \
             --package hystersis-pager-bin \
             --target ${{ matrix.target }}
