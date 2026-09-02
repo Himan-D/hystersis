@@ -191,11 +191,16 @@ impl XaiProtoBuilder {
                     line = line[..line.len() - 1].trim();
                 }
 
-                // If line contains ':', split and take the right side (the dependencies)
-                if let Some((_, deps)) = line.split_once(':') {
-                    line = deps.trim();
+                // If line contains ': ', split and take the right side (the dependencies).
+                // Or if the line ends with ':', the dependencies are on the next line.
+                // We use ": " to avoid matching "C:\" in Windows absolute paths.
+                if let Some(idx) = line.find(": ") {
+                    line = &line[idx + 2..];
+                } else if line.ends_with(':') {
+                    line = "";
                 }
 
+                let line = line.trim();
                 if line.is_empty() {
                     continue;
                 }
