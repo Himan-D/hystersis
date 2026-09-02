@@ -163,9 +163,14 @@ jobs:
 
       - name: Build site
         run: |
+          cd landing
+          npm install
+          npm run build
+          cd ..
           mkdir -p site
           cp landing/public/install.sh site/install.sh
-          cp landing/dist/index.html site/index.html 2>/dev/null || cp landing/public/index.html site/index.html
+          cp -r landing/dist/* site/
+          ls -lh site/
           ls -lh site/
 
       - name: Deploy to Cloudflare Pages
