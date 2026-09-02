@@ -180,30 +180,37 @@ impl XaiProtoBuilder {
 
             let output_str = fs::read_to_string(&dep_file).context("failed to read protoc dependency output")?;
 
-            let mut lines = output_str.lines();
-            let first_line = lines.next().context("protoc command output is empty")?;
-            let prefix = format!("{}:", desc_file.display());
-            // It might format the path slightly differently, so let's just split at the first ": "
-            let rem = if let Some((_, rest)) = first_line.split_once(": ") {
-                rest
-            } else {
-                return Err(anyhow::anyhow!("protoc command output missing ': ': {first_line:?}"));
-            };
-            for line in iter::once(rem).chain(lines) {
-                let line = line.trim();
-                let line = line.strip_suffix("\\").unwrap_or(line);
-                // Depending on absolute paths like
-                // /Users/user/homebrew/Cellar/protobuf/29.1/include/google/protobuf/timestamp.proto
-                // is valid, but we want to have output more deterministic.
-                if line.contains("/include/google/protobuf/") {
+            for line in output_str.lines() {
+                let mut line = line.trim();
+                if line.is_empty() {
+                    continue;
+                }
+                
+                // Strip trailing `\` if it exists
+                if line.ends_with('\\') {
+                    line = line[..line.len() - 1].trim();
+                }
+
+                // If line contains ':', split and take the right side (the dependencies)
+                if let Some((_, deps)) = line.split_once(':') {
+                    line = deps.trim();
+                }
+
+                if line.is_empty() {
                     continue;
                 }
 
-                if !fs::exists(line)? {
-                    return Err(anyhow::anyhow!("dependency file not found: {line}"));
+                // Split by spaces to handle multiple dependencies on one line
+                for dep in line.split_whitespace() {
+                    let dep = dep.trim();
+                    if dep.contains("/include/google/protobuf/") {
+                        continue;
+                    }
+                    if !fs::exists(dep)? {
+                        return Err(anyhow::anyhow!("dependency file not found: {dep}"));
+                    }
+                    println!("cargo:rerun-if-changed={dep}");
                 }
-
-                println!("cargo:rerun-if-changed={line}");
             }
         }
 
