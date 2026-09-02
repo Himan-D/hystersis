@@ -1,4 +1,4 @@
-name = "trinetra-ai-gateway"
+name = "hystersis-gateway"
 main = "src/index.js"
 compatibility_date = "2024-05-12"
 
@@ -15,6 +15,10 @@ PRICE_DEFAULT_OUTPUT_PER_1K = "15"
 PRICE_DEFAULT_MIN = "5"
 
 [[kv_namespaces]]
+binding = "HYSTERSIS_BILLING"
+id = "37f3282163a547cc8416d11dcc6602cf"
+
+[[kv_namespaces]]
 binding = "TRINETRA_BILLING"
 id = "37f3282163a547cc8416d11dcc6602cf"
 
@@ -25,6 +29,11 @@ crons = ["*/2 * * * *"]
 enabled = true
 
 # D1 for atomic billing (KV kept as cache, D1 is source of truth)
+[[d1_databases]]
+binding = "HYSTERSIS_DB"
+database_name = "hystersis-billing"
+database_id = "6e2ca34a-e704-4f97-9839-c98515a5ed41"
+
 [[d1_databases]]
 binding = "TRINETRA_DB"
 database_name = "trinetra-billing"

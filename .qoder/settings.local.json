@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(cargo metadata:*)",
+      "Bash(cargo check:*)",
+      "Bash(cargo fmt:*)",
+      "Bash(node --check npm-package/install.js && node --check crates/codegen/hystersis-pager/npm/hystersis/scripts/assemble-platform-packages.js)",
+      "Bash(git diff --check && git diff --cached --check && cargo metadata --format-version 1 --no-deps >/dev/null)",
+      "Bash(cargo test:*)"
+    ]
+  }
+}

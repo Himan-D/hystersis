@@ -8,8 +8,15 @@
   "scripts": {
     "postinstall": "node install.js"
   },
-  "os": ["darwin", "linux"],
-  "cpu": ["x64", "arm64"],
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
   "author": "Hystersis AI",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": "github:Himan-D/hystersis"
 }

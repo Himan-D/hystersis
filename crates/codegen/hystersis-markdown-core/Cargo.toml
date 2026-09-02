@@ -1,0 +1,13 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+name = "hystersis-markdown-core"
+version = "0.1.0"
+edition.workspace = true
+description = "Headless markdown analysis sharing Hystersis's exact pulldown-cmark config."
+
+[dependencies]
+pulldown-cmark = { workspace = true }
+
+[lints]
+workspace = true

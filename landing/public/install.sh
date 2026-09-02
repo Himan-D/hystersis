@@ -14,7 +14,7 @@ case "${OS}-${ARCH}" in
   Linux-aarch64|Linux-arm64) BINARY="hystersis-linux-arm64" ;;
   *)
     echo "Unsupported platform: ${OS}-${ARCH}"
-    echo "Build from source: cargo install --git https://github.com/${REPO} --package xai-hystersis-pager-bin --bin xai-hystersis-pager"
+    echo "Build from source: cargo install --git https://github.com/${REPO} --package hystersis-pager-bin --bin hystersis || cargo install --git https://github.com/${REPO} --package xai-hystersis-pager-bin --bin xai-hystersis-pager"
     exit 1
     ;;
 esac
@@ -34,7 +34,7 @@ if [ -z "$VERSION" ]; then
   echo ""
   echo "No published release found for ${REPO}."
   echo "Build from source:"
-  echo "  cargo install --git https://github.com/${REPO} --package xai-hystersis-pager-bin --bin xai-hystersis-pager"
+  echo "  cargo install --git https://github.com/${REPO} --package hystersis-pager-bin --bin hystersis || cargo install --git https://github.com/${REPO} --package xai-hystersis-pager-bin --bin xai-hystersis-pager"
   echo ""
   echo "Or wait for: https://github.com/${REPO}/releases"
   exit 1
@@ -49,7 +49,7 @@ if [ -z "$ASSET_URL" ]; then
   echo "Check: https://github.com/${REPO}/releases/tag/${VERSION}"
   echo ""
   echo "Try again in a few minutes, or build from source:"
-  echo "  cargo install --git https://github.com/${REPO} --package xai-hystersis-pager-bin --bin xai-hystersis-pager"
+  echo "  cargo install --git https://github.com/${REPO} --package hystersis-pager-bin --bin hystersis || cargo install --git https://github.com/${REPO} --package xai-hystersis-pager-bin --bin xai-hystersis-pager"
   exit 1
 fi
 

@@ -11,7 +11,7 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
-  BINARY_NAME: xai-hystersis-pager
+  BINARY_NAME: hystersis
 
 jobs:
   # ─── Build + upload binaries (only on tags) ─────────────────────────────
@@ -75,7 +75,7 @@ jobs:
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         run: |
           cargo build --release \
-            --package xai-hystersis-pager-bin \
+            --package hystersis-pager-bin \
             --target ${{ matrix.target }}
 
       - name: Rename + strip binary

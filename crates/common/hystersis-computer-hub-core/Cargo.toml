@@ -1,0 +1,26 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+name = "hystersis-computer-hub-core"
+version = "0.1.0"
+edition.workspace = true
+description = "Transport, ToolRegistry, and resolver abstractions for the Hystersis Computer Hub"
+
+[dependencies]
+async-trait = { workspace = true }
+chrono = { workspace = true }
+futures = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+hystersis-tool-protocol = { workspace = true }
+hystersis-tool-runtime = { workspace = true }
+hystersis-tool-types = { workspace = true }
+
+[dev-dependencies]
+dashmap = { workspace = true }
+schemars = { workspace = true }
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "test-util", "sync"] }
+serde = { workspace = true, features = ["derive"] }
+
+[lints]
+workspace = true

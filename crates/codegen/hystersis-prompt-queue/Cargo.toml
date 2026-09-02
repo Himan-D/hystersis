@@ -1,0 +1,14 @@
+[package]
+edition.workspace = true
+license = "MIT"
+authors = ["Hystersis AI"]
+name = "hystersis-prompt-queue"
+version = "0.1.0"
+description = "Shared prompt-queue wire types for hystersis-shell and hystersis-pager"
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

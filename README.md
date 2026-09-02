@@ -127,10 +127,10 @@ You can also set these from inside the TUI with `/settings` → **Models**.
 # Prerequisites: Rust stable (https://rustup.rs)
 git clone https://github.com/Himan-D/hystersis
 cd hystersis
-cargo build --release -p xai-hystersis-pager-bin
+cargo build --release -p hystersis-pager-bin
 
 # Binary at:
-./target/release/xai-hystersis-pager
+./target/release/hystersis
 ```
 
 ---
@@ -140,14 +140,14 @@ cargo build --release -p xai-hystersis-pager-bin
 ```
 crates/
 ├── codegen/
-│   ├── xai-hystersis-pager-bin/     # CLI entrypoint binary
-│   ├── xai-hystersis-pager/         # TUI app + slash commands + settings
-│   ├── xai-hystersis-pager-diff/    # Inline diff renderer (Ratatui + Syntect)
-│   ├── xai-hystersis-shell/         # Agent loop, config, model providers, BYOK
-│   ├── xai-hystersis-workspace/     # File system ops, git integration
-│   └── xai-compaction-transcript/   # Context window management (2MB segments)
+│   ├── hystersis-pager-bin/     # CLI entrypoint binary
+│   ├── hystersis-pager/         # TUI app + slash commands + settings
+│   ├── hystersis-pager-diff/    # Inline diff renderer (Ratatui + Syntect)
+│   ├── hystersis-shell/         # Agent loop, config, model providers, BYOK
+│   ├── hystersis-workspace/     # File system ops, git integration
+│   └── hystersis-compaction-transcript/   # Context window management (2MB segments)
 └── common/
-    └── xai-hystersis-compaction/    # Conversation compaction strategies
+    └── hystersis-compaction/    # Conversation compaction strategies
 npm-package/                         # npm global install wrapper
 .github/workflows/release.yml        # Cross-platform release pipeline
 ```

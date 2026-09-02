@@ -24,82 +24,127 @@ function timingSafeEqual(a, b) {
 }
 
 // --- Billing helpers: D1 primary, KV cache fallback ---
+function getDB(env){ return env.HYSTERSIS_DB ?? env.TRINETRA_DB; }
+function getKV(env){ return env.HYSTERSIS_BILLING ?? env.TRINETRA_BILLING; }
+
 async function ensureBillingTable(env) {
-  if (!env.TRINETRA_DB) return;
+  if (!getDB(env)) return;
   try {
-    await env.TRINETRA_DB.prepare("CREATE TABLE IF NOT EXISTS billing (key TEXT PRIMARY KEY, balance INTEGER)").run();
+    await getDB(env).prepare("CREATE TABLE IF NOT EXISTS billing (key TEXT PRIMARY KEY, balance INTEGER)").run();
   } catch {}
 }
 
 async function getBalance(env, key) {
   // Try D1 first (atomic, strongly consistent)
-  if (env.TRINETRA_DB) {
+  if (getDB(env)) {
     try {
       await ensureBillingTable(env);
-      const row = await env.TRINETRA_DB.prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
+      const row = await getDB(env).prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
       if (row) return parseFloat(row.balance);
     } catch {}
   }
-  const v = await env.TRINETRA_BILLING.get(key);
+  const v = await getKV(env).get(key);
   return v !== null ? parseFloat(v) : 0;
 }
 
 async function setBalance(env, key, balance) {
   const b = Math.max(0, Math.floor(balance)).toString();
   // Write D1 + KV (KV as read cache)
-  if (env.TRINETRA_DB) {
+  if (getDB(env)) {
     try {
-      await env.TRINETRA_DB.prepare("INSERT INTO billing (key, balance) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET balance = excluded.balance").bind(key, parseInt(b)).run();
+      await getDB(env).prepare("INSERT INTO billing (key, balance) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET balance = excluded.balance").bind(key, parseInt(b)).run();
     } catch {}
   }
-  try { await env.TRINETRA_BILLING.put(key, b); } catch {}
+  try { await getKV(env).put(key, b); } catch {}
 }
 
 async function addBalance(env, key, delta) {
   delta = Math.floor(delta);
-  if (env.TRINETRA_DB) {
+  if (getDB(env)) {
     try {
       await ensureBillingTable(env);
-      await env.TRINETRA_DB.prepare("INSERT INTO billing (key, balance) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET balance = balance + excluded.balance").bind(key, delta).run();
-      const row = await env.TRINETRA_DB.prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
+      await getDB(env).prepare("INSERT INTO billing (key, balance) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET balance = balance + excluded.balance").bind(key, delta).run();
+      const row = await getDB(env).prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
       const bal = row ? parseFloat(row.balance) : delta;
-      try { await env.TRINETRA_BILLING.put(key, Math.max(0, bal).toString()); } catch {}
+      try { await getKV(env).put(key, Math.max(0, bal).toString()); } catch {}
       return bal;
     } catch {}
   }
-  const cur = parseFloat((await env.TRINETRA_BILLING.get(key)) || "0");
+  const cur = parseFloat((await getKV(env).get(key)) || "0");
   const next = cur + delta;
-  await env.TRINETRA_BILLING.put(key, Math.max(0, next).toString());
+  await getKV(env).put(key, Math.max(0, next).toString());
   return next;
 }
 
 async function deductBalanceAtomic(env, key, cost) {
   cost = Math.floor(cost);
-  if (env.TRINETRA_DB) {
+  if (getDB(env)) {
     try {
       await ensureBillingTable(env);
       // Atomic deduct only if sufficient balance
-      const res = await env.TRINETRA_DB.prepare("UPDATE billing SET balance = balance - ? WHERE key = ? AND balance >= ?").bind(cost, key, cost).run();
+      const res = await getDB(env).prepare("UPDATE billing SET balance = balance - ? WHERE key = ? AND balance >= ?").bind(cost, key, cost).run();
       // Cloudflare D1 run() returns meta.changes
       if (res.meta && res.meta.changes > 0) {
-        const row = await env.TRINETRA_DB.prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
+        const row = await getDB(env).prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
         const bal = row ? parseFloat(row.balance) : 0;
-        try { await env.TRINETRA_BILLING.put(key, bal.toString()); } catch {}
+        try { await getKV(env).put(key, bal.toString()); } catch {}
         return { ok: true, balance: bal };
       }
       // Check if key had 0 or insufficient
-      const row = await env.TRINETRA_DB.prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
+      const row = await getDB(env).prepare("SELECT balance FROM billing WHERE key = ?").bind(key).first();
       const bal = row ? parseFloat(row.balance) : 0;
       if (bal < cost) return { ok: false, balance: bal, reason: "insufficient" };
       return { ok: false, balance: bal };
     } catch {}
   }
   // KV fallback (eventual, but with compare)
-  const cur = parseFloat((await env.TRINETRA_BILLING.get(key)) || "0");
+  const cur = parseFloat((await getKV(env).get(key)) || "0");
   if (cur < cost) return { ok: false, balance: cur, reason: "insufficient" };
   const next = cur - cost;
-  await env.TRINETRA_BILLING.put(key, Math.max(0, next).toString());
+  await getKV(env).put(key, Math.max(0, next).toString());
   return { ok: true, balance: Math.max(0, next) };
+}
+
+function extractBillingKey(token) {
+  // Stable key for OIDC JWTs: use `sub` claim so balance survives token rotation / re-login.
+  // For mock `hystersis.com` tokens sub is ephemeral (random per login), so
+  // fall back to stable `aud` (client_id) for those — ensures multiple logins
+  // persist usage for the demo. Real x.ai tokens have stable UUID subs.
+  try {
+    const parts = token.split('.');
+    if (parts.length === 3) {
+      const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const pad = '='.repeat((4 - (b64.length % 4)) % 4);
+      const json = atob(b64 + pad);
+      const claims = JSON.parse(json);
+      const sub = claims.sub || claims.user_id || claims.principal_id;
+      const aud = claims.aud;
+      if (sub && typeof sub === 'string' && sub.length >= 4) {
+        if (sub.startsWith('hystersis-user-')) {
+          // Mock/demo issuer: sub is ephemeral → key by client_id so
+          // re-login (new random sub) keeps same prepaidBalance.
+          if (aud && typeof aud === 'string') return `demo:${aud}`;
+          return 'demo:hystersis-mock';
+        }
+        return `user:${sub}`;
+      }
+      if (aud && typeof aud === 'string' && aud.length >= 8) return `demo:${aud}`;
+    }
+  } catch {}
+  return token;
+}
+async function getBalanceWithFallback(env, billingKey, rawKey) {
+  const bal = await getBalance(env, billingKey);
+  if (bal > 0) return bal;
+  if (rawKey !== billingKey) {
+    const legacy = await getBalance(env, rawKey);
+    if (legacy > 0) {
+      // Migrate legacy per-token balance to stable key (one-time copy).
+      await setBalance(env, billingKey, legacy);
+      return legacy;
+    }
+  }
+  return bal;
 }
 
 export default {
@@ -120,6 +165,7 @@ export default {
       }
       customerKey = k;
     }
+    const billingKey = extractBillingKey(customerKey);
 
     const PRICING = {
       "gpt-4o": {
@@ -167,7 +213,7 @@ export default {
     }
 
     if (request.method === 'GET' && url.pathname === '/v1/billing/balance') {
-      const balance = await getBalance(env, customerKey);
+      const balance = await getBalanceWithFallback(env, billingKey, customerKey);
       return new Response(JSON.stringify({
         config: { prepaidBalance: { val: balance }, creditUsagePercent: balance > 0 ? 0 : 100, isUnifiedBillingUser: true }
       }), { status: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
@@ -193,10 +239,10 @@ export default {
 
     if (request.method === 'GET' && url.pathname === '/health') {
       let dbOk = false;
-      if (env.TRINETRA_DB) {
-        try { await env.TRINETRA_DB.prepare("SELECT 1").first(); dbOk = true; } catch {}
+      if (getDB(env)) {
+        try { await getDB(env).prepare("SELECT 1").first(); dbOk = true; } catch {}
       }
-      return new Response(JSON.stringify({ ok: true, db: dbOk, kv: !!env.TRINETRA_BILLING, azure: !!env.AZURE_OPENAI_ENDPOINT }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ ok: true, db: dbOk, kv: !!getKV(env), azure: !!env.AZURE_OPENAI_ENDPOINT }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
     // POST /v1/billing/create-checkout — Stripe Checkout Session
@@ -230,16 +276,20 @@ export default {
         params.append("success_url", successUrl + (successUrl.includes("?") ? "&" : "?") + "session_id={CHECKOUT_SESSION_ID}&key=" + encodeURIComponent(customerKey));
         params.append("cancel_url", cancelUrl);
         params.append("client_reference_id", customerKey);
+        params.append("metadata[hystersis_key]", customerKey);
         params.append("metadata[trinetra_key]", customerKey);
         params.append("metadata[credits]", String(credits));
         if (stripePrice) {
           params.append("line_items[0][price]", stripePrice);
           params.append("line_items[0][quantity]", "1");
         } else {
+          const isYearly = priceId === "price_pro_yearly" || priceId === "price_team_yearly";
+          const isPro = priceId === "price_pro" || priceId === "price_pro_yearly";
+          const prodName = isPro ? (isYearly ? "Hystersis Pro Yearly — 24,000 credits" : "Hystersis Pro — 2,000 credits") : (isYearly ? "Hystersis Team Yearly — 72,000 credits" : "Hystersis Team — 6,000 credits");
           params.append("line_items[0][price_data][currency]", "usd");
-          params.append("line_items[0][price_data][product_data][name]", priceId === "price_pro" ? "Hystersis Pro — 2,000 credits" : "Hystersis Team — 6,000 credits");
+          params.append("line_items[0][price_data][product_data][name]", prodName);
           params.append("line_items[0][price_data][unit_amount]", String(amount));
-          params.append("line_items[0][price_data][recurring][interval]", "month");
+          params.append("line_items[0][price_data][recurring][interval]", isYearly ? "year" : "month");
           params.append("line_items[0][quantity]", "1");
         }
 
@@ -265,7 +315,7 @@ export default {
         const event = JSON.parse(bodyText);
         if (event.type === 'checkout.session.completed' || event.type === 'invoice.payment_succeeded') {
           const session = event.data.object;
-          const key = session.client_reference_id || session.metadata?.trinetra_key;
+          const key = session.client_reference_id || (session.metadata?.hystersis_key ?? session.metadata?.trinetra_key);
           const credits = parseInt(session.metadata?.credits || (session.amount_total ? Math.floor(session.amount_total/0.95) : 0));
           // Pro=2000, Team=6000 fallback
           let add = credits;
@@ -286,7 +336,7 @@ export default {
     }
 
     if (request.method === 'POST' && url.pathname === '/v1/chat/completions') {
-      const balance = await getBalance(env, customerKey);
+      const balance = await getBalanceWithFallback(env, billingKey, customerKey);
       if (balance <= 0) {
         return new Response(JSON.stringify({ error: { message: "Payment Required: Insufficient balance", code: 402 } }), { status: 402, headers: { 'Content-Type': 'application/json' } });
       }
@@ -442,7 +492,7 @@ export default {
               cost = Math.max(pricing.minCharge, Math.min(cost, pricing.minCharge * 3));
             }
             cost = cost || getPricing(requestedModel).minCharge;
-            const res = await deductBalanceAtomic(env, customerKey, cost);
+            const res = await deductBalanceAtomic(env, billingKey, cost);
             // Log for observability
             console.log(`[billing] ${customerKey.slice(0,8)} ${requestedModel} cost=${cost} bal=${res.balance} ok=${res.ok}`);
           } catch (e) {
@@ -469,16 +519,20 @@ export default {
           cost = calcCost({ prompt_tokens: 10, completion_tokens: estTokens, total_tokens: 10+estTokens }, requestedModel);
         }
         cost = cost || getPricing(requestedModel).minCharge;
-        const deductRes = await deductBalanceAtomic(env, customerKey, cost);
+        const deductRes = await deductBalanceAtomic(env, billingKey, cost);
         if (!deductRes.ok) {
           return new Response(JSON.stringify({ error: { message: "Payment Required: Insufficient balance", code: 402 } }), { status: 402, headers: { 'Content-Type': 'application/json' } });
         }
         const headers2 = new Headers(aiResponse.headers);
+        headers2.set('X-Hystersis-Cost', String(cost));
+        headers2.set('X-Hystersis-Balance', String(deductRes.balance));
         headers2.set('X-Trinetra-Cost', String(cost));
         headers2.set('X-Trinetra-Balance', String(deductRes.balance));
         headers2.set('Content-Type', 'application/json');
         let outText = respText;
         if (respJson) {
+          respJson._hystersis_cost = cost;
+          respJson._hystersis_balance = deductRes.balance;
           respJson._trinetra_cost = cost;
           respJson._trinetra_balance = deductRes.balance;
           outText = JSON.stringify(respJson);
@@ -493,10 +547,10 @@ export default {
   async scheduled(event, env, ctx) {
     const now = new Date().toISOString();
     try {
-      if (env.TRINETRA_DB) {
-        await env.TRINETRA_DB.prepare("CREATE TABLE IF NOT EXISTS billing (key TEXT PRIMARY KEY, balance INTEGER)").run();
+      if (getDB(env)) {
+        await getDB(env).prepare("CREATE TABLE IF NOT EXISTS billing (key TEXT PRIMARY KEY, balance INTEGER)").run();
         // GC: ensure no negative balances
-        await env.TRINETRA_DB.prepare("UPDATE billing SET balance = 0 WHERE balance < 0").run();
+        await getDB(env).prepare("UPDATE billing SET balance = 0 WHERE balance < 0").run();
       }
     } catch(e) {}
     console.log(`[autoscale SLA] tick ${event.cron} at ${now}`);

@@ -6,95 +6,95 @@ async-openai = { git = "https://github.com/our-forks/async-openai.git", rev = "9
 [workspace]
 resolver = "2"
 members = [
-    "crates/build/xai-proto-build",
+    "crates/build/hystersis-proto-build",
     "crates/codegen/ptyctl",
     "crates/codegen/ptyctl-cli",
-    "crates/codegen/xai-acp-lib",
-    "crates/codegen/xai-agent-lifecycle",
-    "crates/codegen/xai-chat-state",
-    "crates/codegen/xai-codebase-graph",
-    "crates/codegen/xai-compaction-transcript",
-    "crates/codegen/xai-crash-handler",
-    "crates/codegen/xai-fast-worktree",
-    "crates/codegen/xai-file-utils",
-    "crates/codegen/xai-fsnotify",
-    "crates/codegen/xai-fuzzy-file-search",
-    "crates/codegen/xai-gix-status",
-    "crates/codegen/xai-hystersis-active-sessions",
-    "crates/codegen/xai-hystersis-agent",
-    "crates/codegen/xai-hystersis-announcements",
-    "crates/codegen/xai-hystersis-auth",
-    "crates/codegen/xai-hystersis-bundle",
-    "crates/codegen/xai-hystersis-config",
-    "crates/codegen/xai-hystersis-config-types",
-    "crates/codegen/xai-hystersis-diag-server",
-    "crates/codegen/xai-hystersis-env",
-    "crates/codegen/xai-hystersis-extra-ca",
-    "crates/codegen/xai-hystersis-foreign-sessions",
-    "crates/codegen/xai-hystersis-home",
-    "crates/codegen/xai-hystersis-hooks",
-    "crates/codegen/xai-hystersis-http",
-    "crates/codegen/xai-hystersis-markdown",
-    "crates/codegen/xai-hystersis-markdown-core",
-    "crates/codegen/xai-hystersis-mcp",
-    "crates/codegen/xai-hystersis-memory",
-    "crates/codegen/xai-hystersis-mermaid",
-    "crates/codegen/xai-hystersis-models",
-    "crates/codegen/xai-hystersis-pager",
-    "crates/codegen/xai-hystersis-pager-bin",
-    "crates/codegen/xai-hystersis-pager-diff",
-    "crates/codegen/xai-hystersis-pager-minimal",
-    "crates/codegen/xai-hystersis-pager-pty-harness",
-    "crates/codegen/xai-hystersis-pager-render",
-    "crates/codegen/xai-hystersis-paths",
-    "crates/codegen/xai-hystersis-plugin-marketplace",
-    "crates/codegen/xai-hystersis-sampler",
-    "crates/codegen/xai-hystersis-sampling-types",
-    "crates/codegen/xai-hystersis-sandbox",
-    "crates/codegen/xai-hystersis-secrets",
-    "crates/codegen/xai-hystersis-session-events",
-    "crates/codegen/xai-hystersis-session-search",
-    "crates/codegen/xai-hystersis-shared",
-    "crates/codegen/xai-hystersis-shell",
-    "crates/codegen/xai-hystersis-shell-base",
-    "crates/codegen/xai-hystersis-shell-session-support",
-    "crates/codegen/xai-hystersis-shell-terminal",
-    "crates/codegen/xai-hystersis-status-line",
-    "crates/codegen/xai-hystersis-subagent-resolution",
-    "crates/codegen/xai-hystersis-telemetry",
-    "crates/codegen/xai-hystersis-test-support",
-    "crates/codegen/xai-hystersis-tools",
-    "crates/codegen/xai-hystersis-tools-api",
-    "crates/codegen/xai-hystersis-update",
-    "crates/codegen/xai-hystersis-version",
-    "crates/codegen/xai-hystersis-voice",
-    "crates/codegen/xai-hystersis-workspace",
-    "crates/codegen/xai-hystersis-workspace-client",
-    "crates/codegen/xai-hystersis-workspace-daemon",
-    "crates/codegen/xai-hystersis-workspace-types",
-    "crates/codegen/xai-hooks-plugins-types",
-    "crates/codegen/xai-hunk-tracker",
-    "crates/codegen/xai-mixpanel",
-    "crates/codegen/xai-prompt-queue",
-    "crates/codegen/xai-ratatui-inline",
-    "crates/codegen/xai-ratatui-textarea",
-    "crates/codegen/xai-sqlite-journal",
-    "crates/codegen/xai-system-power",
-    "crates/codegen/xai-token-estimation",
-    "crates/codegen/xai-tracing-macros",
-    "crates/codegen/xai-tty-utils",
-    "crates/codegen/xai-workflow",
-    "crates/common/xai-circuit-breaker",
-    "crates/common/xai-computer-hub-core",
-    "crates/common/xai-computer-hub-mcp-adapter",
-    "crates/common/xai-computer-hub-sdk",
-    "crates/common/xai-hystersis-compaction",
-    "crates/common/xai-interjection-core",
-    "crates/common/xai-test-utils",
-    "crates/common/xai-tool-protocol",
-    "crates/common/xai-tool-runtime",
-    "crates/common/xai-tool-types",
-    "crates/common/xai-tracing",
+    "crates/codegen/hystersis-acp-lib",
+    "crates/codegen/hystersis-agent-lifecycle",
+    "crates/codegen/hystersis-chat-state",
+    "crates/codegen/hystersis-codebase-graph",
+    "crates/codegen/hystersis-compaction-transcript",
+    "crates/codegen/hystersis-crash-handler",
+    "crates/codegen/hystersis-fast-worktree",
+    "crates/codegen/hystersis-file-utils",
+    "crates/codegen/hystersis-fsnotify",
+    "crates/codegen/hystersis-fuzzy-file-search",
+    "crates/codegen/hystersis-gix-status",
+    "crates/codegen/hystersis-active-sessions",
+    "crates/codegen/hystersis-agent",
+    "crates/codegen/hystersis-announcements",
+    "crates/codegen/hystersis-auth",
+    "crates/codegen/hystersis-bundle",
+    "crates/codegen/hystersis-config",
+    "crates/codegen/hystersis-config-types",
+    "crates/codegen/hystersis-diag-server",
+    "crates/codegen/hystersis-env",
+    "crates/codegen/hystersis-extra-ca",
+    "crates/codegen/hystersis-foreign-sessions",
+    "crates/codegen/hystersis-home",
+    "crates/codegen/hystersis-hooks",
+    "crates/codegen/hystersis-http",
+    "crates/codegen/hystersis-markdown",
+    "crates/codegen/hystersis-markdown-core",
+    "crates/codegen/hystersis-mcp",
+    "crates/codegen/hystersis-memory",
+    "crates/codegen/hystersis-mermaid",
+    "crates/codegen/hystersis-models",
+    "crates/codegen/hystersis-pager",
+    "crates/codegen/hystersis-pager-bin",
+    "crates/codegen/hystersis-pager-diff",
+    "crates/codegen/hystersis-pager-minimal",
+    "crates/codegen/hystersis-pager-pty-harness",
+    "crates/codegen/hystersis-pager-render",
+    "crates/codegen/hystersis-paths",
+    "crates/codegen/hystersis-plugin-marketplace",
+    "crates/codegen/hystersis-sampler",
+    "crates/codegen/hystersis-sampling-types",
+    "crates/codegen/hystersis-sandbox",
+    "crates/codegen/hystersis-secrets",
+    "crates/codegen/hystersis-session-events",
+    "crates/codegen/hystersis-session-search",
+    "crates/codegen/hystersis-shared",
+    "crates/codegen/hystersis-shell",
+    "crates/codegen/hystersis-shell-base",
+    "crates/codegen/hystersis-shell-session-support",
+    "crates/codegen/hystersis-shell-terminal",
+    "crates/codegen/hystersis-status-line",
+    "crates/codegen/hystersis-subagent-resolution",
+    "crates/codegen/hystersis-telemetry",
+    "crates/codegen/hystersis-test-support",
+    "crates/codegen/hystersis-tools",
+    "crates/codegen/hystersis-tools-api",
+    "crates/codegen/hystersis-update",
+    "crates/codegen/hystersis-version",
+    "crates/codegen/hystersis-voice",
+    "crates/codegen/hystersis-workspace",
+    "crates/codegen/hystersis-workspace-client",
+    "crates/codegen/hystersis-workspace-daemon",
+    "crates/codegen/hystersis-workspace-types",
+    "crates/codegen/hystersis-hooks-plugins-types",
+    "crates/codegen/hystersis-hunk-tracker",
+    "crates/codegen/hystersis-mixpanel",
+    "crates/codegen/hystersis-prompt-queue",
+    "crates/codegen/hystersis-ratatui-inline",
+    "crates/codegen/hystersis-ratatui-textarea",
+    "crates/codegen/hystersis-sqlite-journal",
+    "crates/codegen/hystersis-system-power",
+    "crates/codegen/hystersis-token-estimation",
+    "crates/codegen/hystersis-tracing-macros",
+    "crates/codegen/hystersis-tty-utils",
+    "crates/codegen/hystersis-workflow",
+    "crates/common/hystersis-circuit-breaker",
+    "crates/common/hystersis-computer-hub-core",
+    "crates/common/hystersis-computer-hub-mcp-adapter",
+    "crates/common/hystersis-computer-hub-sdk",
+    "crates/common/hystersis-compaction",
+    "crates/common/hystersis-interjection-core",
+    "crates/common/hystersis-test-utils",
+    "crates/common/hystersis-tool-protocol",
+    "crates/common/hystersis-tool-runtime",
+    "crates/common/hystersis-tool-types",
+    "crates/common/hystersis-tracing",
     "prod/mc/cli-chat-proxy-types",
     "third_party/dagre_rust",
     "third_party/graphlib_rust",
@@ -104,7 +104,7 @@ members = [
 
 [workspace.package]
 edition = "2024"
-license = "Apache-2.0"
+license = "MIT"
 
 [workspace.dependencies]
 agent-client-protocol = { version = "0.10.4", features = ["unstable"] }
@@ -305,66 +305,66 @@ wildmatch = "2"
 windows = { version = "0.61", features = ["Win32_Security", "Win32_Security_Authorization", "Win32_Foundation", "Win32_System_Threading", "Win32_System_JobObjects", "Win32_System_Console", "Win32_System_Pipes"] }
 wiremock = "0.6"
 wl-clipboard-rs = "0.9"
-xai-acp-lib = { path = "crates/codegen/xai-acp-lib" }
-xai-agent-lifecycle = { path = "crates/codegen/xai-agent-lifecycle" }
-xai-circuit-breaker = { path = "crates/common/xai-circuit-breaker" }
-xai-compaction-transcript = { path = "crates/codegen/xai-compaction-transcript" }
-xai-computer-hub-core = { path = "crates/common/xai-computer-hub-core" }
-xai-computer-hub-sdk = { path = "crates/common/xai-computer-hub-sdk" }
-xai-fuzzy-file-search = { path = "crates/codegen/xai-fuzzy-file-search" }
-xai-gix-status = { path = "crates/codegen/xai-gix-status" }
-xai-hystersis-active-sessions = { path = "crates/codegen/xai-hystersis-active-sessions" }
-xai-hystersis-agent = { path = "crates/codegen/xai-hystersis-agent" }
-xai-hystersis-announcements = { path = "crates/codegen/xai-hystersis-announcements" }
-xai-hystersis-auth = { path = "crates/codegen/xai-hystersis-auth" }
-xai-hystersis-bundle = { path = "crates/codegen/xai-hystersis-bundle" }
-xai-hystersis-config = { path = "crates/codegen/xai-hystersis-config" }
-xai-hystersis-config-types = { path = "crates/codegen/xai-hystersis-config-types" }
-xai-hystersis-diag-server = { path = "crates/codegen/xai-hystersis-diag-server" }
-xai-hystersis-env = { path = "crates/codegen/xai-hystersis-env" }
-xai-hystersis-extra-ca = { path = "crates/codegen/xai-hystersis-extra-ca" }
-xai-hystersis-foreign-sessions = { path = "crates/codegen/xai-hystersis-foreign-sessions" }
-xai-hystersis-home = { path = "crates/codegen/xai-hystersis-home" }
-xai-hystersis-http = { path = "crates/codegen/xai-hystersis-http" }
-xai-hystersis-markdown = { path = "crates/codegen/xai-hystersis-markdown" }
-xai-hystersis-markdown-core = { path = "crates/codegen/xai-hystersis-markdown-core" }
-xai-hystersis-mcp = { path = "crates/codegen/xai-hystersis-mcp" }
-xai-hystersis-memory = { path = "crates/codegen/xai-hystersis-memory" }
-xai-hystersis-mermaid = { path = "crates/codegen/xai-hystersis-mermaid" }
-xai-hystersis-models = { path = "crates/codegen/xai-hystersis-models" }
-xai-hystersis-sampler = { path = "crates/codegen/xai-hystersis-sampler" }
-xai-hystersis-secrets = { path = "crates/codegen/xai-hystersis-secrets" }
-xai-hystersis-session-events = { path = "crates/codegen/xai-hystersis-session-events" }
-xai-hystersis-session-search = { path = "crates/codegen/xai-hystersis-session-search" }
-xai-hystersis-shared = { path = "crates/codegen/xai-hystersis-shared" }
-xai-hystersis-shell = { path = "crates/codegen/xai-hystersis-shell" }
-xai-hystersis-shell-base = { path = "crates/codegen/xai-hystersis-shell-base" }
-xai-hystersis-shell-session-support = { path = "crates/codegen/xai-hystersis-shell-session-support" }
-xai-hystersis-shell-terminal = { path = "crates/codegen/xai-hystersis-shell-terminal" }
-xai-hystersis-status-line = { path = "crates/codegen/xai-hystersis-status-line" }
-xai-hystersis-telemetry = { path = "crates/codegen/xai-hystersis-telemetry" }
-xai-hystersis-test-support = { path = "crates/codegen/xai-hystersis-test-support" }
-xai-hystersis-tools = { path = "crates/codegen/xai-hystersis-tools" }
-xai-hystersis-tools-api = { path = "crates/codegen/xai-hystersis-tools-api" }
-xai-hystersis-version = { path = "crates/codegen/xai-hystersis-version" }
-xai-hystersis-workspace = { path = "crates/codegen/xai-hystersis-workspace", default-features = false }
-xai-hystersis-workspace-types = { path = "crates/codegen/xai-hystersis-workspace-types" }
-xai-hooks-plugins-types = { path = "crates/codegen/xai-hooks-plugins-types" }
-xai-interjection-core = { path = "crates/common/xai-interjection-core" }
-xai-mixpanel = { path = "crates/codegen/xai-mixpanel" }
-xai-prompt-queue = { path = "crates/codegen/xai-prompt-queue" }
-xai-proto-build = { path = "crates/build/xai-proto-build" }
-xai-ratatui-inline = { path = "crates/codegen/xai-ratatui-inline" }
-xai-ratatui-textarea = { path = "crates/codegen/xai-ratatui-textarea" }
-xai-sqlite-journal = { path = "crates/codegen/xai-sqlite-journal" }
-xai-system-power = { path = "crates/codegen/xai-system-power" }
-xai-test-utils = { path = "crates/common/xai-test-utils" }
-xai-token-estimation = { path = "crates/codegen/xai-token-estimation" }
-xai-tool-protocol = { path = "crates/common/xai-tool-protocol" }
-xai-tool-runtime = { path = "crates/common/xai-tool-runtime" }
-xai-tool-types = { path = "crates/common/xai-tool-types" }
-xai-tracing = { path = "crates/common/xai-tracing" }
-xai-tty-utils = { path = "crates/codegen/xai-tty-utils" }
+hystersis-acp-lib = { path = "crates/codegen/hystersis-acp-lib" }
+hystersis-agent-lifecycle = { path = "crates/codegen/hystersis-agent-lifecycle" }
+hystersis-circuit-breaker = { path = "crates/common/hystersis-circuit-breaker" }
+hystersis-compaction-transcript = { path = "crates/codegen/hystersis-compaction-transcript" }
+hystersis-computer-hub-core = { path = "crates/common/hystersis-computer-hub-core" }
+hystersis-computer-hub-sdk = { path = "crates/common/hystersis-computer-hub-sdk" }
+hystersis-fuzzy-file-search = { path = "crates/codegen/hystersis-fuzzy-file-search" }
+hystersis-gix-status = { path = "crates/codegen/hystersis-gix-status" }
+hystersis-active-sessions = { path = "crates/codegen/hystersis-active-sessions" }
+hystersis-agent = { path = "crates/codegen/hystersis-agent" }
+hystersis-announcements = { path = "crates/codegen/hystersis-announcements" }
+hystersis-auth = { path = "crates/codegen/hystersis-auth" }
+hystersis-bundle = { path = "crates/codegen/hystersis-bundle" }
+hystersis-config = { path = "crates/codegen/hystersis-config" }
+hystersis-config-types = { path = "crates/codegen/hystersis-config-types" }
+hystersis-diag-server = { path = "crates/codegen/hystersis-diag-server" }
+hystersis-env = { path = "crates/codegen/hystersis-env" }
+hystersis-extra-ca = { path = "crates/codegen/hystersis-extra-ca" }
+hystersis-foreign-sessions = { path = "crates/codegen/hystersis-foreign-sessions" }
+hystersis-home = { path = "crates/codegen/hystersis-home" }
+hystersis-http = { path = "crates/codegen/hystersis-http" }
+hystersis-markdown = { path = "crates/codegen/hystersis-markdown" }
+hystersis-markdown-core = { path = "crates/codegen/hystersis-markdown-core" }
+hystersis-mcp = { path = "crates/codegen/hystersis-mcp" }
+hystersis-memory = { path = "crates/codegen/hystersis-memory" }
+hystersis-mermaid = { path = "crates/codegen/hystersis-mermaid" }
+hystersis-models = { path = "crates/codegen/hystersis-models" }
+hystersis-sampler = { path = "crates/codegen/hystersis-sampler" }
+hystersis-secrets = { path = "crates/codegen/hystersis-secrets" }
+hystersis-session-events = { path = "crates/codegen/hystersis-session-events" }
+hystersis-session-search = { path = "crates/codegen/hystersis-session-search" }
+hystersis-shared = { path = "crates/codegen/hystersis-shared" }
+hystersis-shell = { path = "crates/codegen/hystersis-shell" }
+hystersis-shell-base = { path = "crates/codegen/hystersis-shell-base" }
+hystersis-shell-session-support = { path = "crates/codegen/hystersis-shell-session-support" }
+hystersis-shell-terminal = { path = "crates/codegen/hystersis-shell-terminal" }
+hystersis-status-line = { path = "crates/codegen/hystersis-status-line" }
+hystersis-telemetry = { path = "crates/codegen/hystersis-telemetry" }
+hystersis-test-support = { path = "crates/codegen/hystersis-test-support" }
+hystersis-tools = { path = "crates/codegen/hystersis-tools" }
+hystersis-tools-api = { path = "crates/codegen/hystersis-tools-api" }
+hystersis-version = { path = "crates/codegen/hystersis-version" }
+hystersis-workspace = { path = "crates/codegen/hystersis-workspace", default-features = false }
+hystersis-workspace-types = { path = "crates/codegen/hystersis-workspace-types" }
+hystersis-hooks-plugins-types = { path = "crates/codegen/hystersis-hooks-plugins-types" }
+hystersis-interjection-core = { path = "crates/common/hystersis-interjection-core" }
+hystersis-mixpanel = { path = "crates/codegen/hystersis-mixpanel" }
+hystersis-prompt-queue = { path = "crates/codegen/hystersis-prompt-queue" }
+hystersis-proto-build = { path = "crates/build/hystersis-proto-build" }
+hystersis-ratatui-inline = { path = "crates/codegen/hystersis-ratatui-inline" }
+hystersis-ratatui-textarea = { path = "crates/codegen/hystersis-ratatui-textarea" }
+hystersis-sqlite-journal = { path = "crates/codegen/hystersis-sqlite-journal" }
+hystersis-system-power = { path = "crates/codegen/hystersis-system-power" }
+hystersis-test-utils = { path = "crates/common/hystersis-test-utils" }
+hystersis-token-estimation = { path = "crates/codegen/hystersis-token-estimation" }
+hystersis-tool-protocol = { path = "crates/common/hystersis-tool-protocol" }
+hystersis-tool-runtime = { path = "crates/common/hystersis-tool-runtime" }
+hystersis-tool-types = { path = "crates/common/hystersis-tool-types" }
+hystersis-tracing = { path = "crates/common/hystersis-tracing" }
+hystersis-tty-utils = { path = "crates/codegen/hystersis-tty-utils" }
 zbus = { version = "5" }
 zip = "3"
 zstd = "0.13"

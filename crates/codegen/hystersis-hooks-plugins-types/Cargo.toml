@@ -1,0 +1,16 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+edition.workspace = true
+name = "hystersis-hooks-plugins-types"
+version = "0.1.0"
+description = "Shared DTO types for hooks/plugins ACP extensions (wire format only)"
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

@@ -5241,6 +5241,1966 @@ dependencies = [
 ]
 
 [[package]]
+name = "hystersis-acp-lib"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "async-trait",
+ "derive_more 2.1.1",
+ "futures",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-active-sessions"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "chrono",
+ "fs2",
+ "hystersis-config",
+ "libc",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tracing",
+ "windows 0.61.3",
+]
+
+[[package]]
+name = "hystersis-agent"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "dirs 6.0.0",
+ "dunce",
+ "git2",
+ "hystersis-config",
+ "hystersis-hooks",
+ "hystersis-sampling-types",
+ "hystersis-token-estimation",
+ "hystersis-tool-types",
+ "hystersis-tools",
+ "hystersis-tty-utils",
+ "ignore",
+ "minijinja",
+ "regex",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "serial_test",
+ "sha2 0.10.9",
+ "strum 0.27.2",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+ "zeroize",
+]
+
+[[package]]
+name = "hystersis-agent-lifecycle"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-announcements"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "hystersis-tools",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "ts-rs",
+]
+
+[[package]]
+name = "hystersis-auth"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "http 1.4.0",
+ "mockito",
+ "reqwest 0.12.24",
+ "reqwest-middleware 0.4.2",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-bundle"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "flate2",
+ "hystersis-config",
+ "prod-mc-cli-chat-proxy-types",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "tar",
+ "tempfile",
+]
+
+[[package]]
+name = "hystersis-chat-state"
+version = "0.1.0"
+dependencies = [
+ "hystersis-compaction",
+ "hystersis-compaction-transcript",
+ "hystersis-sampling-types",
+ "hystersis-token-estimation",
+ "indexmap",
+ "serde",
+ "serde_json",
+ "strum 0.27.2",
+ "tokio",
+ "tokio-util",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-circuit-breaker"
+version = "0.1.0"
+dependencies = [
+ "log",
+ "tonic",
+]
+
+[[package]]
+name = "hystersis-codebase-graph"
+version = "0.1.0"
+dependencies = [
+ "ahash",
+ "clap",
+ "crossbeam",
+ "dashmap",
+ "dunce",
+ "git2",
+ "hashbrown 0.15.5",
+ "hystersis-paths",
+ "ignore",
+ "libc",
+ "mimalloc",
+ "nohash-hasher",
+ "num_cpus",
+ "once_cell",
+ "petgraph 0.6.5",
+ "rayon",
+ "rustc-hash 2.1.1",
+ "serde",
+ "serde_json",
+ "smallvec",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "tree-sitter",
+ "tree-sitter-go",
+ "tree-sitter-javascript",
+ "tree-sitter-python",
+ "tree-sitter-rust",
+ "tree-sitter-typescript",
+]
+
+[[package]]
+name = "hystersis-compaction"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-compaction-transcript"
+version = "0.1.0"
+dependencies = [
+ "hystersis-sampling-types",
+ "regex",
+ "serde_json",
+ "strum 0.27.2",
+]
+
+[[package]]
+name = "hystersis-computer-hub-core"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "dashmap",
+ "futures",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "schemars 1.0.4",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-computer-hub-mcp-adapter"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "futures",
+ "hystersis-computer-hub-sdk",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "prometheus",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-computer-hub-sdk"
+version = "0.1.0"
+dependencies = [
+ "arc-swap",
+ "async-trait",
+ "axum",
+ "base64",
+ "chrono",
+ "dashmap",
+ "fastrace",
+ "fastrace-opentelemetry",
+ "futures",
+ "http 1.4.0",
+ "hystersis-computer-hub-core",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "hystersis-tracing",
+ "indexmap",
+ "opentelemetry",
+ "opentelemetry-proto",
+ "opentelemetry_sdk",
+ "parking_lot",
+ "prometheus",
+ "prometheus-parse",
+ "prost",
+ "reqwest 0.12.24",
+ "schemars 1.0.4",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-tungstenite 0.27.0",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+ "url",
+]
+
+[[package]]
+name = "hystersis-config"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "blake3",
+ "core-foundation",
+ "dunce",
+ "hystersis-home",
+ "hystersis-tty-utils",
+ "hystersis-version",
+ "prod-mc-cli-chat-proxy-types",
+ "ring",
+ "semver",
+ "serde",
+ "serde_json",
+ "shellexpand",
+ "tempfile",
+ "thiserror 2.0.18",
+ "toml",
+ "tracing",
+ "urlencoding",
+ "which",
+]
+
+[[package]]
+name = "hystersis-config-types"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "hystersis-announcements",
+ "hystersis-config",
+ "hystersis-mcp",
+ "indexmap",
+ "serde",
+ "serde_json",
+ "strum 0.27.2",
+ "toml",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-crash-handler"
+version = "0.1.0"
+dependencies = [
+ "backtrace",
+ "libc",
+ "tempfile",
+ "tokio",
+ "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "hystersis-diag-server"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "hystersis-version",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-env"
+version = "0.1.0"
+dependencies = [
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "hystersis-extra-ca"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "rcgen",
+ "reqwest 0.12.24",
+ "rustls",
+ "rustls-native-certs",
+ "tempfile",
+ "tracing",
+ "webpki-roots 0.26.11",
+]
+
+[[package]]
+name = "hystersis-fast-worktree"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "clap",
+ "crossbeam",
+ "dashmap",
+ "dunce",
+ "gix",
+ "gix-status",
+ "globset",
+ "hystersis-gix-status",
+ "hystersis-home",
+ "hystersis-sqlite-journal",
+ "hystersis-test-utils",
+ "hystersis-tty-utils",
+ "ignore",
+ "libc",
+ "nix 0.30.1",
+ "num_cpus",
+ "rapidhash",
+ "reflink-copy",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "hystersis-file-utils"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-compression",
+ "aws-config",
+ "aws-sdk-s3",
+ "aws-smithy-http-client",
+ "axum",
+ "base64",
+ "chrono",
+ "dirs 5.0.1",
+ "dunce",
+ "filetime",
+ "futures",
+ "gcloud-storage",
+ "hystersis-auth",
+ "hystersis-circuit-breaker",
+ "hystersis-extra-ca",
+ "hystersis-test-utils",
+ "hystersis-version",
+ "indexmap",
+ "opentelemetry",
+ "opentelemetry_sdk",
+ "prod-mc-cli-chat-proxy-types",
+ "reflink-copy",
+ "reqwest 0.12.24",
+ "reqwest-middleware 0.4.2",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "tempfile",
+ "tokio",
+ "tokio-stream",
+ "tokio-util",
+ "tracing",
+ "tracing-opentelemetry",
+ "tracing-subscriber",
+ "url",
+ "zstd",
+]
+
+[[package]]
+name = "hystersis-foreign-sessions"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "dirs 6.0.0",
+ "dunce",
+ "filetime",
+ "git2",
+ "hystersis-sqlite-journal",
+ "libc",
+ "md5",
+ "rusqlite",
+ "serde_json",
+ "tempfile",
+ "uuid",
+ "zstd",
+]
+
+[[package]]
+name = "hystersis-fsnotify"
+version = "0.1.0"
+dependencies = [
+ "criterion",
+ "dunce",
+ "git2",
+ "globset",
+ "hystersis-tracing-macros",
+ "ignore",
+ "notify",
+ "notify-debouncer-full",
+ "serde",
+ "serial_test",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-util",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-fuzzy-file-search"
+version = "0.1.0"
+dependencies = [
+ "hystersis-tty-utils",
+ "ignore",
+ "libc",
+ "nucleo",
+ "serde",
+ "tempfile",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-gix-status"
+version = "0.1.0"
+dependencies = [
+ "gix",
+ "hystersis-test-utils",
+ "libc",
+ "tempfile",
+]
+
+[[package]]
+name = "hystersis-home"
+version = "0.1.0"
+dependencies = [
+ "dirs 5.0.1",
+ "dunce",
+ "pretty_assertions",
+ "tempfile",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-hooks"
+version = "0.1.0"
+dependencies = [
+ "fastrand",
+ "hystersis-config",
+ "hystersis-extra-ca",
+ "hystersis-tools",
+ "regex",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "shellexpand",
+ "strum 0.27.2",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "toml",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "hystersis-hooks-plugins-types"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "hystersis-http"
+version = "0.1.0"
+dependencies = [
+ "hystersis-auth",
+ "hystersis-extra-ca",
+ "hystersis-sampler",
+ "hystersis-telemetry",
+ "hystersis-version",
+ "hystersis-workspace",
+ "rcgen",
+ "reqwest 0.12.24",
+ "reqwest-middleware 0.4.2",
+ "rustls",
+ "serde_json",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-hunk-tracker"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "dunce",
+ "gix",
+ "hystersis-gix-status",
+ "hystersis-test-utils",
+ "rustc-hash 2.1.1",
+ "serde",
+ "serde_json",
+ "similar",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "hystersis-interjection-core"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "hystersis-markdown"
+version = "0.1.0"
+dependencies = [
+ "anstyle",
+ "anstyle-lossy",
+ "anstyle-syntect",
+ "criterion",
+ "crossterm",
+ "html-escape",
+ "hystersis-markdown-core",
+ "hystersis-ratatui-textarea",
+ "linkify",
+ "pretty_assertions",
+ "pulldown-cmark",
+ "ratatui",
+ "supports-color",
+ "syntect",
+ "textwrap",
+ "two-face",
+ "unicode-segmentation",
+ "unicode-width 0.2.0",
+ "url",
+]
+
+[[package]]
+name = "hystersis-markdown-core"
+version = "0.1.0"
+dependencies = [
+ "pulldown-cmark",
+]
+
+[[package]]
+name = "hystersis-mcp"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "async-trait",
+ "axum",
+ "futures",
+ "http 1.4.0",
+ "hystersis-computer-hub-sdk",
+ "hystersis-config",
+ "hystersis-extra-ca",
+ "hystersis-session-events",
+ "hystersis-telemetry",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "hystersis-tools",
+ "hystersis-version",
+ "hystersis-workspace-types",
+ "libc",
+ "oauth2",
+ "parking_lot",
+ "regex",
+ "reqwest 0.13.4",
+ "rmcp",
+ "serde",
+ "serde_json",
+ "sse-stream",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "url",
+ "webbrowser",
+ "which",
+]
+
+[[package]]
+name = "hystersis-memory"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "arc-swap",
+ "async-trait",
+ "blake3",
+ "chrono",
+ "dunce",
+ "filetime",
+ "flate2",
+ "git2",
+ "hystersis-auth",
+ "hystersis-config-types",
+ "hystersis-http",
+ "hystersis-sqlite-journal",
+ "hystersis-token-estimation",
+ "hystersis-tools",
+ "hystersis-version",
+ "nix 0.30.1",
+ "notify",
+ "reqwest 0.12.24",
+ "reqwest-middleware 0.4.2",
+ "rusqlite",
+ "serde_json",
+ "sqlite-vec",
+ "tar",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "windows 0.61.3",
+]
+
+[[package]]
+name = "hystersis-mermaid"
+version = "0.1.0"
+dependencies = [
+ "fontdb",
+ "hystersis-tty-utils",
+ "image",
+ "libc",
+ "mermaid-to-svg",
+ "resvg",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tiny-skia",
+ "tracing",
+ "wait-timeout",
+ "which",
+]
+
+[[package]]
+name = "hystersis-mixpanel"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "hystersis-secrets",
+ "reqwest 0.12.24",
+ "serde_json",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "hystersis-models"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "hystersis-pager"
+version = "1.0.10"
+dependencies = [
+ "agent-client-protocol",
+ "ansi-to-tui",
+ "anyhow",
+ "backon",
+ "base64",
+ "blake3",
+ "chrono",
+ "clap",
+ "clap_complete",
+ "core-foundation",
+ "criterion",
+ "crossterm",
+ "derive_more 2.1.1",
+ "dirs 5.0.1",
+ "dunce",
+ "enum_delegate",
+ "flate2",
+ "git2",
+ "hystersis-acp-lib",
+ "hystersis-active-sessions",
+ "hystersis-agent",
+ "hystersis-announcements",
+ "hystersis-config",
+ "hystersis-crash-handler",
+ "hystersis-extra-ca",
+ "hystersis-fast-worktree",
+ "hystersis-file-utils",
+ "hystersis-foreign-sessions",
+ "hystersis-hooks-plugins-types",
+ "hystersis-markdown",
+ "hystersis-mermaid",
+ "hystersis-pager-diff",
+ "hystersis-pager-pty-harness",
+ "hystersis-pager-render",
+ "hystersis-plugin-marketplace",
+ "hystersis-prompt-queue",
+ "hystersis-ratatui-inline",
+ "hystersis-ratatui-textarea",
+ "hystersis-sandbox",
+ "hystersis-shell",
+ "hystersis-status-line",
+ "hystersis-telemetry",
+ "hystersis-test-support",
+ "hystersis-token-estimation",
+ "hystersis-tools",
+ "hystersis-tty-utils",
+ "hystersis-update",
+ "hystersis-version",
+ "hystersis-voice",
+ "hystersis-workspace",
+ "image",
+ "indexmap",
+ "insta",
+ "libc",
+ "nix 0.30.1",
+ "nucleo",
+ "obfstr",
+ "parking_lot",
+ "portable-pty",
+ "pretty_assertions",
+ "rand 0.9.5",
+ "ratatui",
+ "regex",
+ "serde",
+ "serde_json",
+ "serial_test",
+ "shellexpand",
+ "shlex",
+ "signal-hook 0.3.18",
+ "similar",
+ "strip-ansi-escapes",
+ "syntect",
+ "tar",
+ "tempfile",
+ "textwrap",
+ "tokio",
+ "tokio-util",
+ "toml",
+ "toml_edit 0.22.27",
+ "tracing",
+ "tracing-subscriber",
+ "unicode-segmentation",
+ "unicode-width 0.2.0",
+ "url",
+ "urlencoding",
+ "uuid",
+ "walkdir",
+ "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "hystersis-pager-bin"
+version = "1.0.10"
+dependencies = [
+ "anyhow",
+ "clap",
+ "cryptify",
+ "dunce",
+ "hystersis-acp-lib",
+ "hystersis-active-sessions",
+ "hystersis-config",
+ "hystersis-crash-handler",
+ "hystersis-extra-ca",
+ "hystersis-pager",
+ "hystersis-pager-minimal",
+ "hystersis-sandbox",
+ "hystersis-shell",
+ "hystersis-telemetry",
+ "hystersis-tty-utils",
+ "hystersis-update",
+ "hystersis-version",
+ "hystersis-workspace",
+ "libc",
+ "obfstr",
+ "semver",
+ "serde_json",
+ "serial_test",
+ "tempfile",
+ "tikv-jemalloc-ctl",
+ "tikv-jemalloc-sys",
+ "tikv-jemallocator",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "hystersis-pager-diff"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "hystersis-tools",
+ "serde_json",
+ "similar",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-pager-minimal"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "crossterm",
+ "hystersis-pager",
+ "hystersis-pager-diff",
+ "hystersis-ratatui-inline",
+ "hystersis-shell",
+ "hystersis-token-estimation",
+ "hystersis-version",
+ "ratatui",
+ "similar",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "hystersis-pager-pty-harness"
+version = "0.1.0"
+dependencies = [
+ "alacritty_terminal",
+ "anyhow",
+ "base64",
+ "clap",
+ "dunce",
+ "hystersis-test-support",
+ "hystersis-tty-utils",
+ "image",
+ "libc",
+ "portable-pty",
+ "ptyctl",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "hystersis-pager-render"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "anstyle",
+ "anyhow",
+ "base64",
+ "crossterm",
+ "dark-light",
+ "dirs 5.0.1",
+ "documented",
+ "dunce",
+ "hystersis-config",
+ "hystersis-markdown",
+ "hystersis-paths",
+ "hystersis-ratatui-inline",
+ "hystersis-ratatui-textarea",
+ "hystersis-shared",
+ "hystersis-telemetry",
+ "hystersis-tools",
+ "hystersis-tty-utils",
+ "hystersis-workspace",
+ "image",
+ "libc",
+ "linkify",
+ "notify",
+ "pretty_assertions",
+ "ratatui",
+ "ratatui-core",
+ "regex",
+ "serde",
+ "serial_test",
+ "shellexpand",
+ "strum 0.27.2",
+ "supports-color",
+ "syntect",
+ "tempfile",
+ "textwrap",
+ "tokio",
+ "toml",
+ "toml_edit 0.22.27",
+ "tracing",
+ "tui-scrollbar",
+ "unicode-bidi",
+ "unicode-bidi-mirroring",
+ "unicode-segmentation",
+ "unicode-width 0.2.0",
+ "url",
+ "uuid",
+ "vte 0.15.0",
+ "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "hystersis-paths"
+version = "0.1.0"
+dependencies = [
+ "camino",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "hystersis-plugin-marketplace"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "dirs 5.0.1",
+ "dunce",
+ "fs2",
+ "hystersis-agent",
+ "hystersis-config",
+ "hystersis-hooks-plugins-types",
+ "hystersis-tty-utils",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.18",
+ "toml",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-prompt-queue"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "hystersis-proto-build"
+version = "0.0.0"
+dependencies = [
+ "anyhow",
+ "pbjson-build",
+ "prost-build",
+ "prost-reflect",
+ "tempfile",
+ "tonic-prost-build",
+]
+
+[[package]]
+name = "hystersis-ratatui-inline"
+version = "0.1.0"
+dependencies = [
+ "ansi-width",
+ "anstyle-parse",
+ "anyhow",
+ "colored_json",
+ "criterion",
+ "crossterm",
+ "lipsum",
+ "ratatui",
+ "serde_json",
+ "termwiz",
+ "unicode-width 0.2.0",
+]
+
+[[package]]
+name = "hystersis-ratatui-textarea"
+version = "0.1.0"
+dependencies = [
+ "arboard",
+ "chrono",
+ "crossterm",
+ "fuzzy-matcher",
+ "ignore",
+ "itertools 0.14.0",
+ "pretty_assertions",
+ "rand 0.9.5",
+ "ratatui",
+ "ratatui-core",
+ "textwrap",
+ "tracing",
+ "tui-scrollbar",
+ "unicode-segmentation",
+ "unicode-width 0.2.0",
+]
+
+[[package]]
+name = "hystersis-sampler"
+version = "0.1.0"
+dependencies = [
+ "async-openai",
+ "async-stream",
+ "axum",
+ "chrono",
+ "eventsource-stream",
+ "futures-util",
+ "hystersis-auth",
+ "hystersis-extra-ca",
+ "hystersis-sampling-types",
+ "hystersis-test-support",
+ "hystersis-version",
+ "indexmap",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "hystersis-sampling-types"
+version = "0.1.0"
+dependencies = [
+ "assert_matches",
+ "async-openai",
+ "chrono",
+ "hystersis-circuit-breaker",
+ "hystersis-compaction",
+ "hystersis-tools",
+ "indexmap",
+ "reqwest 0.12.24",
+ "schemars 1.0.4",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-sandbox"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "dirs 5.0.1",
+ "dunce",
+ "globset",
+ "hystersis-config",
+ "ignore",
+ "libc",
+ "nono",
+ "regex",
+ "serde",
+ "serde_json",
+ "serial_test",
+ "sha2 0.10.9",
+ "thiserror 2.0.18",
+ "toml",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "hystersis-secrets"
+version = "0.1.0"
+dependencies = [
+ "regex",
+ "serde_json",
+ "url",
+]
+
+[[package]]
+name = "hystersis-session-events"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_json",
+ "strum 0.27.2",
+ "tempfile",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-session-search"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "blake3",
+ "chrono",
+ "fs2",
+ "hystersis-config",
+ "hystersis-sqlite-journal",
+ "hystersis-telemetry",
+ "parking_lot",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "hystersis-shared"
+version = "0.0.0"
+dependencies = [
+ "agent-client-protocol",
+ "anyhow",
+ "arboard",
+ "base64",
+ "dirs 6.0.0",
+ "dunce",
+ "hystersis-config-types",
+ "hystersis-models",
+ "hystersis-status-line",
+ "hystersis-tools",
+ "hystersis-tty-utils",
+ "image",
+ "libc",
+ "objc2 0.6.3",
+ "parking_lot",
+ "prod-mc-cli-chat-proxy-types",
+ "regex",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tracing",
+ "urlencoding",
+ "uuid",
+ "wl-clipboard-rs",
+]
+
+[[package]]
+name = "hystersis-shell"
+version = "1.0.10"
+dependencies = [
+ "agent-client-protocol",
+ "anyhow",
+ "arc-swap",
+ "async-openai",
+ "async-trait",
+ "axum",
+ "backon",
+ "base64",
+ "blake3",
+ "bm25",
+ "bytes",
+ "chrono",
+ "clap",
+ "criterion",
+ "ctor",
+ "dashmap",
+ "dhat",
+ "dirs 6.0.0",
+ "dunce",
+ "filetime",
+ "flate2",
+ "fs2",
+ "futures",
+ "futures-util",
+ "gcloud-storage",
+ "gethostname",
+ "git2",
+ "glob",
+ "globset",
+ "hystersis-acp-lib",
+ "hystersis-agent",
+ "hystersis-agent-lifecycle",
+ "hystersis-announcements",
+ "hystersis-auth",
+ "hystersis-bundle",
+ "hystersis-chat-state",
+ "hystersis-codebase-graph",
+ "hystersis-compaction",
+ "hystersis-compaction-transcript",
+ "hystersis-computer-hub-sdk",
+ "hystersis-config",
+ "hystersis-config-types",
+ "hystersis-extra-ca",
+ "hystersis-fast-worktree",
+ "hystersis-file-utils",
+ "hystersis-foreign-sessions",
+ "hystersis-fsnotify",
+ "hystersis-hooks",
+ "hystersis-hooks-plugins-types",
+ "hystersis-http",
+ "hystersis-hunk-tracker",
+ "hystersis-interjection-core",
+ "hystersis-mcp",
+ "hystersis-memory",
+ "hystersis-models",
+ "hystersis-paths",
+ "hystersis-plugin-marketplace",
+ "hystersis-prompt-queue",
+ "hystersis-sampler",
+ "hystersis-sampling-types",
+ "hystersis-sandbox",
+ "hystersis-session-events",
+ "hystersis-session-search",
+ "hystersis-shared",
+ "hystersis-shell-base",
+ "hystersis-shell-session-support",
+ "hystersis-shell-terminal",
+ "hystersis-status-line",
+ "hystersis-subagent-resolution",
+ "hystersis-system-power",
+ "hystersis-telemetry",
+ "hystersis-test-support",
+ "hystersis-test-utils",
+ "hystersis-token-estimation",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "hystersis-tools",
+ "hystersis-tracing-macros",
+ "hystersis-tty-utils",
+ "hystersis-version",
+ "hystersis-workflow",
+ "hystersis-workspace",
+ "ignore",
+ "image",
+ "indexmap",
+ "infer 0.15.0",
+ "jsonschema",
+ "jsonwebtoken",
+ "kanal",
+ "libc",
+ "loom",
+ "moka",
+ "nix 0.30.1",
+ "notify",
+ "notify-debouncer-mini",
+ "nucleo",
+ "obfstr",
+ "parking_lot",
+ "pretty_assertions",
+ "prod-mc-cli-chat-proxy-types",
+ "prost",
+ "rand 0.9.5",
+ "regex",
+ "reqwest 0.12.24",
+ "reqwest-middleware 0.4.2",
+ "ring",
+ "rsa",
+ "rustls",
+ "semver",
+ "serde",
+ "serde_ignored",
+ "serde_json",
+ "serial_test",
+ "sha2 0.10.9",
+ "similar",
+ "siphasher",
+ "strum 0.27.2",
+ "tar",
+ "tdigests",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-retry",
+ "tokio-rustls",
+ "tokio-stream",
+ "tokio-tungstenite 0.27.0",
+ "tokio-util",
+ "toml",
+ "toml_edit 0.22.27",
+ "tonic",
+ "tonic-prost",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+ "url",
+ "urlencoding",
+ "uuid",
+ "walkdir",
+ "webbrowser",
+ "windows 0.61.3",
+ "zstd",
+]
+
+[[package]]
+name = "hystersis-shell-base"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "hystersis-config",
+ "hystersis-env",
+ "hystersis-extra-ca",
+ "hystersis-shared",
+ "hystersis-tty-utils",
+ "hystersis-version",
+ "libc",
+ "nix 0.30.1",
+ "pprof",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+ "url",
+ "windows 0.61.3",
+]
+
+[[package]]
+name = "hystersis-shell-session-support"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "hystersis-file-utils",
+ "hystersis-http",
+ "hystersis-version",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-shell-terminal"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "async-trait",
+ "base64",
+ "chrono",
+ "futures",
+ "hystersis-acp-lib",
+ "hystersis-config",
+ "hystersis-paths",
+ "hystersis-sandbox",
+ "hystersis-tools",
+ "hystersis-tty-utils",
+ "hystersis-workspace",
+ "libc",
+ "portable-pty",
+ "process-wrap",
+ "serde",
+ "serde_json",
+ "shlex",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+ "uuid",
+ "windows 0.61.3",
+]
+
+[[package]]
+name = "hystersis-sqlite-journal"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "rusqlite",
+ "tempfile",
+ "tracing",
+ "windows-sys 0.59.0",
+]
+
+[[package]]
+name = "hystersis-status-line"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "strum 0.27.2",
+ "toml",
+]
+
+[[package]]
+name = "hystersis-subagent-resolution"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "hystersis-agent",
+ "hystersis-sampling-types",
+ "hystersis-tool-types",
+ "hystersis-tools",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "toml",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-system-power"
+version = "0.1.0"
+dependencies = [
+ "windows-sys 0.59.0",
+ "zbus",
+]
+
+[[package]]
+name = "hystersis-telemetry"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "axum",
+ "axum-server",
+ "base64",
+ "bytes",
+ "chrono",
+ "ctor",
+ "dirs 5.0.1",
+ "filetime",
+ "futures-executor",
+ "git2",
+ "http 1.4.0",
+ "hystersis-auth",
+ "hystersis-config",
+ "hystersis-env",
+ "hystersis-extra-ca",
+ "hystersis-file-utils",
+ "hystersis-mixpanel",
+ "hystersis-sampler",
+ "hystersis-secrets",
+ "hystersis-session-events",
+ "hystersis-token-estimation",
+ "hystersis-tty-utils",
+ "hystersis-version",
+ "mid",
+ "obfstr",
+ "opentelemetry",
+ "opentelemetry-http",
+ "opentelemetry-otlp",
+ "opentelemetry-proto",
+ "opentelemetry_sdk",
+ "parking_lot",
+ "prost",
+ "rcgen",
+ "reqwest 0.12.24",
+ "rustls",
+ "sentry",
+ "serde",
+ "serde_json",
+ "strum 0.27.2",
+ "tempfile",
+ "tokio",
+ "tokio-stream",
+ "tonic",
+ "tracing",
+ "tracing-appender",
+ "tracing-chrome",
+ "tracing-opentelemetry",
+ "tracing-subscriber",
+ "url",
+ "uuid",
+ "webpki-roots 0.26.11",
+ "whoami",
+]
+
+[[package]]
+name = "hystersis-test-support"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "anyhow",
+ "async-trait",
+ "axum",
+ "clap",
+ "futures-util",
+ "hystersis-acp-lib",
+ "hystersis-tty-utils",
+ "libc",
+ "portable-pty",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tokio-tungstenite 0.27.0",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+ "url",
+]
+
+[[package]]
+name = "hystersis-test-utils"
+version = "0.1.0"
+dependencies = [
+ "runfiles",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "hystersis-token-estimation"
+version = "0.1.0"
+
+[[package]]
+name = "hystersis-tool-protocol"
+version = "0.1.0"
+dependencies = [
+ "hystersis-tool-types",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "uuid",
+]
+
+[[package]]
+name = "hystersis-tool-runtime"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "futures",
+ "hystersis-tool-protocol",
+ "hystersis-tool-types",
+ "hystersis-tools-api",
+ "schemars 1.0.4",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
+name = "hystersis-tool-types"
+version = "0.1.0"
+dependencies = [
+ "minijinja",
+ "schemars 1.0.4",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "hystersis-tools"
+version = "0.1.220-alpha.4"
+dependencies = [
+ "anyhow",
+ "arc-swap",
+ "async-lsp",
+ "async-openai",
+ "async-stream",
+ "async-trait",
+ "base64",
+ "chrono",
+ "command-fds",
+ "crc32fast",
+ "derive_more 2.1.1",
+ "dhat",
+ "dirs 5.0.1",
+ "dunce",
+ "educe",
+ "encoding_rs",
+ "flate2",
+ "fs2",
+ "futures",
+ "futures-util",
+ "globset",
+ "htmd",
+ "hystersis-auth",
+ "hystersis-computer-hub-core",
+ "hystersis-computer-hub-sdk",
+ "hystersis-config",
+ "hystersis-env",
+ "hystersis-extra-ca",
+ "hystersis-file-utils",
+ "hystersis-interjection-core",
+ "hystersis-sandbox",
+ "hystersis-test-support",
+ "hystersis-test-utils",
+ "hystersis-token-estimation",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "hystersis-tools-api",
+ "hystersis-tty-utils",
+ "hystersis-version",
+ "hystersis-workspace-types",
+ "ignore",
+ "image",
+ "indexmap",
+ "infer 0.19.0",
+ "kamadak-exif",
+ "libc",
+ "minijinja",
+ "nix 0.30.1",
+ "parking_lot",
+ "pdf_oxide",
+ "pretty_assertions",
+ "pulldown-cmark",
+ "quick-xml 0.38.3",
+ "regex",
+ "reqwest 0.12.24",
+ "schemars 1.0.4",
+ "scraper",
+ "serde",
+ "serde_json",
+ "serde_path_to_error",
+ "serde_yaml",
+ "sha2 0.10.9",
+ "shellexpand",
+ "similar",
+ "strip-ansi-escapes",
+ "strum 0.26.3",
+ "tar",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-util",
+ "tonic",
+ "tracing",
+ "tracing-subscriber",
+ "unicode-normalization",
+ "url",
+ "uuid",
+ "which",
+ "wildmatch",
+ "windows 0.61.3",
+ "wiremock",
+ "zip",
+]
+
+[[package]]
+name = "hystersis-tools-api"
+version = "0.1.220-alpha.4"
+dependencies = [
+ "hystersis-proto-build",
+ "hystersis-tool-protocol",
+ "prost",
+ "serde",
+ "serde_json",
+ "tonic",
+ "tonic-prost",
+]
+
+[[package]]
+name = "hystersis-tracing"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "fastrace",
+ "fastrace-opentelemetry",
+ "fastrace-reqwest",
+ "fastrace-tonic",
+ "http 1.4.0",
+ "http-body-util",
+ "log",
+ "opentelemetry",
+ "opentelemetry-http",
+ "opentelemetry-otlp",
+ "opentelemetry_sdk",
+ "reqwest 0.12.24",
+ "reqwest-middleware 0.4.2",
+ "tokio",
+ "tonic",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-opentelemetry",
+ "tracing-subscriber",
+ "uuid",
+ "wiremock",
+]
+
+[[package]]
+name = "hystersis-tracing-macros"
+version = "0.1.0"
+
+[[package]]
+name = "hystersis-tty-utils"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "nix 0.30.1",
+ "tokio",
+ "windows 0.61.3",
+]
+
+[[package]]
+name = "hystersis-update"
+version = "0.1.220-alpha.4"
+dependencies = [
+ "anyhow",
+ "dunce",
+ "futures",
+ "hystersis-extra-ca",
+ "hystersis-shell",
+ "hystersis-telemetry",
+ "hystersis-tools",
+ "hystersis-version",
+ "indicatif",
+ "libc",
+ "reqwest 0.12.24",
+ "semver",
+ "serde",
+ "serde_json",
+ "serial_test",
+ "tempfile",
+ "thiserror 2.0.18",
+ "time",
+ "tokio",
+ "tracing",
+ "url",
+ "wiremock",
+]
+
+[[package]]
+name = "hystersis-version"
+version = "1.0.10"
+dependencies = [
+ "semver",
+]
+
+[[package]]
+name = "hystersis-voice"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "cpal",
+ "futures-util",
+ "hystersis-extra-ca",
+ "hystersis-tty-utils",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-tungstenite 0.27.0",
+ "toml",
+ "tracing",
+ "tracing-subscriber",
+ "url",
+]
+
+[[package]]
+name = "hystersis-workflow"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "rhai",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-util",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-workspace"
+version = "0.1.220-alpha.4"
+dependencies = [
+ "agent-client-protocol",
+ "anyhow",
+ "arc-swap",
+ "async-stream",
+ "async-trait",
+ "axum",
+ "base64",
+ "bstr",
+ "chrono",
+ "clap",
+ "dashmap",
+ "dirs 6.0.0",
+ "dunce",
+ "fastrace",
+ "flate2",
+ "fs2",
+ "futures",
+ "git2",
+ "glob",
+ "hashbrown 0.16.1",
+ "humantime-serde",
+ "hystersis-acp-lib",
+ "hystersis-agent",
+ "hystersis-auth",
+ "hystersis-codebase-graph",
+ "hystersis-computer-hub-mcp-adapter",
+ "hystersis-computer-hub-sdk",
+ "hystersis-config",
+ "hystersis-config-types",
+ "hystersis-diag-server",
+ "hystersis-env",
+ "hystersis-extra-ca",
+ "hystersis-fast-worktree",
+ "hystersis-file-utils",
+ "hystersis-fsnotify",
+ "hystersis-fuzzy-file-search",
+ "hystersis-hooks",
+ "hystersis-hunk-tracker",
+ "hystersis-mcp",
+ "hystersis-paths",
+ "hystersis-sandbox",
+ "hystersis-session-events",
+ "hystersis-telemetry",
+ "hystersis-test-utils",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "hystersis-tools",
+ "hystersis-tools-api",
+ "hystersis-tracing",
+ "hystersis-tty-utils",
+ "hystersis-version",
+ "hystersis-workspace-client",
+ "hystersis-workspace-daemon",
+ "hystersis-workspace-types",
+ "ignore",
+ "indexmap",
+ "infer 0.19.0",
+ "libc",
+ "nix 0.30.1",
+ "nohash-hasher",
+ "parking_lot",
+ "prometheus",
+ "rand 0.9.5",
+ "regex",
+ "reqwest 0.12.24",
+ "rustc-hash 2.1.1",
+ "serde",
+ "serde_json",
+ "sha1",
+ "sha2 0.10.9",
+ "smallvec",
+ "tar",
+ "tempfile",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-tungstenite 0.27.0",
+ "tokio-util",
+ "toml",
+ "tonic",
+ "tracing",
+ "tracing-subscriber",
+ "tree-sitter",
+ "tree-sitter-bash",
+ "url",
+ "urlencoding",
+ "uuid",
+ "wait-timeout",
+ "zip",
+ "zstd",
+]
+
+[[package]]
+name = "hystersis-workspace-client"
+version = "0.1.0"
+dependencies = [
+ "hystersis-computer-hub-sdk",
+ "hystersis-tool-protocol",
+ "hystersis-tool-runtime",
+ "hystersis-tool-types",
+ "hystersis-workspace-types",
+ "schemars 1.0.4",
+ "semver",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "hystersis-workspace-daemon"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "fs2",
+ "hystersis-computer-hub-sdk",
+ "hystersis-tty-utils",
+ "libc",
+ "prometheus",
+ "reqwest 0.12.24",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "windows 0.61.3",
+]
+
+[[package]]
+name = "hystersis-workspace-types"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "chrono",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+]
+
+[[package]]
 name = "iana-time-zone"
 version = "0.1.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -13077,1966 +15037,6 @@ dependencies = [
  "cmpv2",
  "cms",
  "der",
-]
-
-[[package]]
-name = "xai-acp-lib"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "async-trait",
- "derive_more 2.1.1",
- "futures",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "xai-agent-lifecycle"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "xai-chat-state"
-version = "0.1.0"
-dependencies = [
- "indexmap",
- "serde",
- "serde_json",
- "strum 0.27.2",
- "tokio",
- "tokio-util",
- "tracing",
- "xai-compaction-transcript",
- "xai-hystersis-compaction",
- "xai-hystersis-sampling-types",
- "xai-token-estimation",
-]
-
-[[package]]
-name = "xai-circuit-breaker"
-version = "0.1.0"
-dependencies = [
- "log",
- "tonic",
-]
-
-[[package]]
-name = "xai-codebase-graph"
-version = "0.1.0"
-dependencies = [
- "ahash",
- "clap",
- "crossbeam",
- "dashmap",
- "dunce",
- "git2",
- "hashbrown 0.15.5",
- "ignore",
- "libc",
- "mimalloc",
- "nohash-hasher",
- "num_cpus",
- "once_cell",
- "petgraph 0.6.5",
- "rayon",
- "rustc-hash 2.1.1",
- "serde",
- "serde_json",
- "smallvec",
- "tempfile",
- "tokio",
- "tracing",
- "tree-sitter",
- "tree-sitter-go",
- "tree-sitter-javascript",
- "tree-sitter-python",
- "tree-sitter-rust",
- "tree-sitter-typescript",
- "xai-hystersis-paths",
-]
-
-[[package]]
-name = "xai-compaction-transcript"
-version = "0.1.0"
-dependencies = [
- "regex",
- "serde_json",
- "strum 0.27.2",
- "xai-hystersis-sampling-types",
-]
-
-[[package]]
-name = "xai-computer-hub-core"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "chrono",
- "dashmap",
- "futures",
- "schemars 1.0.4",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
-]
-
-[[package]]
-name = "xai-computer-hub-mcp-adapter"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "futures",
- "prometheus",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
- "xai-computer-hub-sdk",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
-]
-
-[[package]]
-name = "xai-computer-hub-sdk"
-version = "0.1.0"
-dependencies = [
- "arc-swap",
- "async-trait",
- "axum",
- "base64",
- "chrono",
- "dashmap",
- "fastrace",
- "fastrace-opentelemetry",
- "futures",
- "http 1.4.0",
- "indexmap",
- "opentelemetry",
- "opentelemetry-proto",
- "opentelemetry_sdk",
- "parking_lot",
- "prometheus",
- "prometheus-parse",
- "prost",
- "reqwest 0.12.24",
- "schemars 1.0.4",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tokio",
- "tokio-tungstenite 0.27.0",
- "tokio-util",
- "tracing",
- "tracing-subscriber",
- "url",
- "xai-computer-hub-core",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
- "xai-tracing",
-]
-
-[[package]]
-name = "xai-crash-handler"
-version = "0.1.0"
-dependencies = [
- "backtrace",
- "libc",
- "tempfile",
- "tokio",
- "windows-sys 0.59.0",
-]
-
-[[package]]
-name = "xai-fast-worktree"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytes",
- "clap",
- "crossbeam",
- "dashmap",
- "dunce",
- "gix",
- "gix-status",
- "globset",
- "ignore",
- "libc",
- "nix 0.30.1",
- "num_cpus",
- "rapidhash",
- "reflink-copy",
- "rusqlite",
- "serde",
- "serde_json",
- "tempfile",
- "tokio-util",
- "tracing",
- "tracing-subscriber",
- "xai-gix-status",
- "xai-hystersis-home",
- "xai-sqlite-journal",
- "xai-test-utils",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-file-utils"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-compression",
- "aws-config",
- "aws-sdk-s3",
- "aws-smithy-http-client",
- "axum",
- "base64",
- "chrono",
- "dirs 5.0.1",
- "dunce",
- "filetime",
- "futures",
- "gcloud-storage",
- "indexmap",
- "opentelemetry",
- "opentelemetry_sdk",
- "prod-mc-cli-chat-proxy-types",
- "reflink-copy",
- "reqwest 0.12.24",
- "reqwest-middleware 0.4.2",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "tempfile",
- "tokio",
- "tokio-stream",
- "tokio-util",
- "tracing",
- "tracing-opentelemetry",
- "tracing-subscriber",
- "url",
- "xai-circuit-breaker",
- "xai-hystersis-auth",
- "xai-hystersis-extra-ca",
- "xai-hystersis-version",
- "xai-test-utils",
- "zstd",
-]
-
-[[package]]
-name = "xai-fsnotify"
-version = "0.1.0"
-dependencies = [
- "criterion",
- "dunce",
- "git2",
- "globset",
- "ignore",
- "notify",
- "notify-debouncer-full",
- "serde",
- "serial_test",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-util",
- "tracing",
- "xai-tracing-macros",
-]
-
-[[package]]
-name = "xai-fuzzy-file-search"
-version = "0.1.0"
-dependencies = [
- "ignore",
- "libc",
- "nucleo",
- "serde",
- "tempfile",
- "tracing",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-gix-status"
-version = "0.1.0"
-dependencies = [
- "gix",
- "libc",
- "tempfile",
- "xai-test-utils",
-]
-
-[[package]]
-name = "xai-hooks-plugins-types"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "xai-hunk-tracker"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dunce",
- "gix",
- "rustc-hash 2.1.1",
- "serde",
- "serde_json",
- "similar",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-util",
- "tracing",
- "uuid",
- "xai-gix-status",
- "xai-test-utils",
-]
-
-[[package]]
-name = "xai-hystersis-active-sessions"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "chrono",
- "fs2",
- "libc",
- "serde",
- "serde_json",
- "tempfile",
- "tracing",
- "windows 0.61.3",
- "xai-hystersis-config",
-]
-
-[[package]]
-name = "xai-hystersis-agent"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dirs 6.0.0",
- "dunce",
- "git2",
- "ignore",
- "minijinja",
- "regex",
- "serde",
- "serde_json",
- "serde_yaml",
- "serial_test",
- "sha2 0.10.9",
- "strum 0.27.2",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
- "xai-hystersis-config",
- "xai-hystersis-hooks",
- "xai-hystersis-sampling-types",
- "xai-hystersis-tools",
- "xai-token-estimation",
- "xai-tool-types",
- "xai-tty-utils",
- "zeroize",
-]
-
-[[package]]
-name = "xai-hystersis-announcements"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "ts-rs",
- "xai-hystersis-tools",
-]
-
-[[package]]
-name = "xai-hystersis-auth"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "http 1.4.0",
- "mockito",
- "reqwest 0.12.24",
- "reqwest-middleware 0.4.2",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "xai-hystersis-bundle"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "flate2",
- "prod-mc-cli-chat-proxy-types",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "tar",
- "tempfile",
- "xai-hystersis-config",
-]
-
-[[package]]
-name = "xai-hystersis-compaction"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "xai-hystersis-config"
-version = "0.1.0"
-dependencies = [
- "base64",
- "blake3",
- "core-foundation",
- "dunce",
- "prod-mc-cli-chat-proxy-types",
- "ring",
- "semver",
- "serde",
- "serde_json",
- "shellexpand",
- "tempfile",
- "thiserror 2.0.18",
- "toml",
- "tracing",
- "urlencoding",
- "which",
- "xai-hystersis-home",
- "xai-hystersis-version",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-config-types"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "indexmap",
- "serde",
- "serde_json",
- "strum 0.27.2",
- "toml",
- "tracing",
- "xai-hystersis-announcements",
- "xai-hystersis-config",
- "xai-hystersis-mcp",
-]
-
-[[package]]
-name = "xai-hystersis-diag-server"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "axum",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "tempfile",
- "tokio",
- "tracing",
- "xai-hystersis-version",
-]
-
-[[package]]
-name = "xai-hystersis-env"
-version = "0.1.0"
-dependencies = [
- "tracing",
- "url",
-]
-
-[[package]]
-name = "xai-hystersis-extra-ca"
-version = "0.1.0"
-dependencies = [
- "base64",
- "rcgen",
- "reqwest 0.12.24",
- "rustls",
- "rustls-native-certs",
- "tempfile",
- "tracing",
- "webpki-roots 0.26.11",
-]
-
-[[package]]
-name = "xai-hystersis-foreign-sessions"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dirs 6.0.0",
- "dunce",
- "filetime",
- "git2",
- "libc",
- "md5",
- "rusqlite",
- "serde_json",
- "tempfile",
- "uuid",
- "xai-sqlite-journal",
- "zstd",
-]
-
-[[package]]
-name = "xai-hystersis-home"
-version = "0.1.0"
-dependencies = [
- "dirs 5.0.1",
- "dunce",
- "pretty_assertions",
- "tempfile",
- "tracing",
-]
-
-[[package]]
-name = "xai-hystersis-hooks"
-version = "0.1.0"
-dependencies = [
- "fastrand",
- "regex",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "shellexpand",
- "strum 0.27.2",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "toml",
- "tracing",
- "url",
- "xai-hystersis-config",
- "xai-hystersis-extra-ca",
- "xai-hystersis-tools",
-]
-
-[[package]]
-name = "xai-hystersis-http"
-version = "0.1.0"
-dependencies = [
- "rcgen",
- "reqwest 0.12.24",
- "reqwest-middleware 0.4.2",
- "rustls",
- "serde_json",
- "tracing",
- "xai-hystersis-auth",
- "xai-hystersis-extra-ca",
- "xai-hystersis-sampler",
- "xai-hystersis-telemetry",
- "xai-hystersis-version",
- "xai-hystersis-workspace",
-]
-
-[[package]]
-name = "xai-hystersis-markdown"
-version = "0.1.0"
-dependencies = [
- "anstyle",
- "anstyle-lossy",
- "anstyle-syntect",
- "criterion",
- "crossterm",
- "html-escape",
- "linkify",
- "pretty_assertions",
- "pulldown-cmark",
- "ratatui",
- "supports-color",
- "syntect",
- "textwrap",
- "two-face",
- "unicode-segmentation",
- "unicode-width 0.2.0",
- "url",
- "xai-hystersis-markdown-core",
- "xai-ratatui-textarea",
-]
-
-[[package]]
-name = "xai-hystersis-markdown-core"
-version = "0.1.0"
-dependencies = [
- "pulldown-cmark",
-]
-
-[[package]]
-name = "xai-hystersis-mcp"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "async-trait",
- "axum",
- "futures",
- "http 1.4.0",
- "libc",
- "oauth2",
- "parking_lot",
- "regex",
- "reqwest 0.13.4",
- "rmcp",
- "serde",
- "serde_json",
- "sse-stream",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-util",
- "tracing",
- "url",
- "webbrowser",
- "which",
- "xai-computer-hub-sdk",
- "xai-hystersis-config",
- "xai-hystersis-extra-ca",
- "xai-hystersis-session-events",
- "xai-hystersis-telemetry",
- "xai-hystersis-tools",
- "xai-hystersis-version",
- "xai-hystersis-workspace-types",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
-]
-
-[[package]]
-name = "xai-hystersis-memory"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "arc-swap",
- "async-trait",
- "blake3",
- "chrono",
- "dunce",
- "filetime",
- "flate2",
- "git2",
- "nix 0.30.1",
- "notify",
- "reqwest 0.12.24",
- "reqwest-middleware 0.4.2",
- "rusqlite",
- "serde_json",
- "sqlite-vec",
- "tar",
- "tempfile",
- "tokio",
- "tracing",
- "windows 0.61.3",
- "xai-hystersis-auth",
- "xai-hystersis-config-types",
- "xai-hystersis-http",
- "xai-hystersis-tools",
- "xai-hystersis-version",
- "xai-sqlite-journal",
- "xai-token-estimation",
-]
-
-[[package]]
-name = "xai-hystersis-mermaid"
-version = "0.1.0"
-dependencies = [
- "fontdb",
- "image",
- "libc",
- "mermaid-to-svg",
- "resvg",
- "tempfile",
- "thiserror 2.0.18",
- "tiny-skia",
- "tracing",
- "wait-timeout",
- "which",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-models"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "xai-hystersis-pager"
-version = "1.0.10"
-dependencies = [
- "agent-client-protocol",
- "ansi-to-tui",
- "anyhow",
- "backon",
- "base64",
- "blake3",
- "chrono",
- "clap",
- "clap_complete",
- "core-foundation",
- "criterion",
- "crossterm",
- "derive_more 2.1.1",
- "dirs 5.0.1",
- "dunce",
- "enum_delegate",
- "flate2",
- "git2",
- "image",
- "indexmap",
- "insta",
- "libc",
- "nix 0.30.1",
- "nucleo",
- "obfstr",
- "parking_lot",
- "portable-pty",
- "pretty_assertions",
- "rand 0.9.5",
- "ratatui",
- "regex",
- "serde",
- "serde_json",
- "serial_test",
- "shellexpand",
- "shlex",
- "signal-hook 0.3.18",
- "similar",
- "strip-ansi-escapes",
- "syntect",
- "tar",
- "tempfile",
- "textwrap",
- "tokio",
- "tokio-util",
- "toml",
- "toml_edit 0.22.27",
- "tracing",
- "tracing-subscriber",
- "unicode-segmentation",
- "unicode-width 0.2.0",
- "url",
- "urlencoding",
- "uuid",
- "walkdir",
- "windows-sys 0.59.0",
- "xai-acp-lib",
- "xai-crash-handler",
- "xai-fast-worktree",
- "xai-file-utils",
- "xai-hooks-plugins-types",
- "xai-hystersis-active-sessions",
- "xai-hystersis-agent",
- "xai-hystersis-announcements",
- "xai-hystersis-config",
- "xai-hystersis-extra-ca",
- "xai-hystersis-foreign-sessions",
- "xai-hystersis-markdown",
- "xai-hystersis-mermaid",
- "xai-hystersis-pager-diff",
- "xai-hystersis-pager-pty-harness",
- "xai-hystersis-pager-render",
- "xai-hystersis-plugin-marketplace",
- "xai-hystersis-sandbox",
- "xai-hystersis-shell",
- "xai-hystersis-status-line",
- "xai-hystersis-telemetry",
- "xai-hystersis-test-support",
- "xai-hystersis-tools",
- "xai-hystersis-update",
- "xai-hystersis-version",
- "xai-hystersis-voice",
- "xai-hystersis-workspace",
- "xai-prompt-queue",
- "xai-ratatui-inline",
- "xai-ratatui-textarea",
- "xai-token-estimation",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-pager-bin"
-version = "1.0.10"
-dependencies = [
- "anyhow",
- "clap",
- "cryptify",
- "dunce",
- "libc",
- "obfstr",
- "semver",
- "serde_json",
- "serial_test",
- "tempfile",
- "tikv-jemalloc-ctl",
- "tikv-jemalloc-sys",
- "tikv-jemallocator",
- "tokio",
- "tokio-util",
- "tracing",
- "tracing-subscriber",
- "xai-acp-lib",
- "xai-crash-handler",
- "xai-hystersis-active-sessions",
- "xai-hystersis-config",
- "xai-hystersis-extra-ca",
- "xai-hystersis-pager",
- "xai-hystersis-pager-minimal",
- "xai-hystersis-sandbox",
- "xai-hystersis-shell",
- "xai-hystersis-telemetry",
- "xai-hystersis-update",
- "xai-hystersis-version",
- "xai-hystersis-workspace",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-pager-diff"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "serde_json",
- "similar",
- "tracing",
- "xai-hystersis-tools",
-]
-
-[[package]]
-name = "xai-hystersis-pager-minimal"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "crossterm",
- "ratatui",
- "similar",
- "tracing",
- "uuid",
- "xai-hystersis-pager",
- "xai-hystersis-pager-diff",
- "xai-hystersis-shell",
- "xai-hystersis-version",
- "xai-ratatui-inline",
- "xai-token-estimation",
-]
-
-[[package]]
-name = "xai-hystersis-pager-pty-harness"
-version = "0.1.0"
-dependencies = [
- "alacritty_terminal",
- "anyhow",
- "base64",
- "clap",
- "dunce",
- "image",
- "libc",
- "portable-pty",
- "ptyctl",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "serde_yaml",
- "tempfile",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "xai-hystersis-test-support",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-pager-render"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "anstyle",
- "anyhow",
- "base64",
- "crossterm",
- "dark-light",
- "dirs 5.0.1",
- "documented",
- "dunce",
- "image",
- "libc",
- "linkify",
- "notify",
- "pretty_assertions",
- "ratatui",
- "ratatui-core",
- "regex",
- "serde",
- "serial_test",
- "shellexpand",
- "strum 0.27.2",
- "supports-color",
- "syntect",
- "tempfile",
- "textwrap",
- "tokio",
- "toml",
- "toml_edit 0.22.27",
- "tracing",
- "tui-scrollbar",
- "unicode-bidi",
- "unicode-bidi-mirroring",
- "unicode-segmentation",
- "unicode-width 0.2.0",
- "url",
- "uuid",
- "vte 0.15.0",
- "windows-sys 0.59.0",
- "xai-hystersis-config",
- "xai-hystersis-markdown",
- "xai-hystersis-paths",
- "xai-hystersis-shared",
- "xai-hystersis-telemetry",
- "xai-hystersis-tools",
- "xai-hystersis-workspace",
- "xai-ratatui-inline",
- "xai-ratatui-textarea",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-paths"
-version = "0.1.0"
-dependencies = [
- "camino",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
-]
-
-[[package]]
-name = "xai-hystersis-plugin-marketplace"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dirs 5.0.1",
- "dunce",
- "fs2",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror 2.0.18",
- "toml",
- "tracing",
- "xai-hooks-plugins-types",
- "xai-hystersis-agent",
- "xai-hystersis-config",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-sampler"
-version = "0.1.0"
-dependencies = [
- "async-openai",
- "async-stream",
- "axum",
- "chrono",
- "eventsource-stream",
- "futures-util",
- "indexmap",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "tokio",
- "tokio-util",
- "tracing",
- "uuid",
- "xai-hystersis-auth",
- "xai-hystersis-extra-ca",
- "xai-hystersis-sampling-types",
- "xai-hystersis-test-support",
- "xai-hystersis-version",
-]
-
-[[package]]
-name = "xai-hystersis-sampling-types"
-version = "0.1.0"
-dependencies = [
- "assert_matches",
- "async-openai",
- "chrono",
- "indexmap",
- "reqwest 0.12.24",
- "schemars 1.0.4",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tracing",
- "xai-circuit-breaker",
- "xai-hystersis-compaction",
- "xai-hystersis-tools",
-]
-
-[[package]]
-name = "xai-hystersis-sandbox"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "dirs 5.0.1",
- "dunce",
- "globset",
- "ignore",
- "libc",
- "nono",
- "regex",
- "serde",
- "serde_json",
- "serial_test",
- "sha2 0.10.9",
- "thiserror 2.0.18",
- "toml",
- "tracing",
- "url",
- "xai-hystersis-config",
-]
-
-[[package]]
-name = "xai-hystersis-secrets"
-version = "0.1.0"
-dependencies = [
- "regex",
- "serde_json",
- "url",
-]
-
-[[package]]
-name = "xai-hystersis-session-events"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "serde",
- "serde_json",
- "strum 0.27.2",
- "tempfile",
- "tracing",
-]
-
-[[package]]
-name = "xai-hystersis-session-search"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "blake3",
- "chrono",
- "fs2",
- "parking_lot",
- "rusqlite",
- "serde",
- "serde_json",
- "tempfile",
- "tokio",
- "tracing",
- "uuid",
- "xai-hystersis-config",
- "xai-hystersis-telemetry",
- "xai-sqlite-journal",
-]
-
-[[package]]
-name = "xai-hystersis-shared"
-version = "0.0.0"
-dependencies = [
- "agent-client-protocol",
- "anyhow",
- "arboard",
- "base64",
- "dirs 6.0.0",
- "dunce",
- "image",
- "libc",
- "objc2 0.6.3",
- "parking_lot",
- "prod-mc-cli-chat-proxy-types",
- "regex",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror 2.0.18",
- "tracing",
- "urlencoding",
- "uuid",
- "wl-clipboard-rs",
- "xai-hystersis-config-types",
- "xai-hystersis-models",
- "xai-hystersis-status-line",
- "xai-hystersis-tools",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-shell"
-version = "1.0.10"
-dependencies = [
- "agent-client-protocol",
- "anyhow",
- "arc-swap",
- "async-openai",
- "async-trait",
- "axum",
- "backon",
- "base64",
- "blake3",
- "bm25",
- "bytes",
- "chrono",
- "clap",
- "criterion",
- "ctor",
- "dashmap",
- "dhat",
- "dirs 6.0.0",
- "dunce",
- "filetime",
- "flate2",
- "fs2",
- "futures",
- "futures-util",
- "gcloud-storage",
- "gethostname",
- "git2",
- "glob",
- "globset",
- "ignore",
- "image",
- "indexmap",
- "infer 0.15.0",
- "jsonschema",
- "jsonwebtoken",
- "kanal",
- "libc",
- "loom",
- "moka",
- "nix 0.30.1",
- "notify",
- "notify-debouncer-mini",
- "nucleo",
- "obfstr",
- "parking_lot",
- "pretty_assertions",
- "prod-mc-cli-chat-proxy-types",
- "prost",
- "rand 0.9.5",
- "regex",
- "reqwest 0.12.24",
- "reqwest-middleware 0.4.2",
- "ring",
- "rsa",
- "rustls",
- "semver",
- "serde",
- "serde_ignored",
- "serde_json",
- "serial_test",
- "sha2 0.10.9",
- "similar",
- "siphasher",
- "strum 0.27.2",
- "tar",
- "tdigests",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-retry",
- "tokio-rustls",
- "tokio-stream",
- "tokio-tungstenite 0.27.0",
- "tokio-util",
- "toml",
- "toml_edit 0.22.27",
- "tonic",
- "tonic-prost",
- "tower-http",
- "tracing",
- "tracing-subscriber",
- "url",
- "urlencoding",
- "uuid",
- "walkdir",
- "webbrowser",
- "windows 0.61.3",
- "xai-acp-lib",
- "xai-agent-lifecycle",
- "xai-chat-state",
- "xai-codebase-graph",
- "xai-compaction-transcript",
- "xai-computer-hub-sdk",
- "xai-fast-worktree",
- "xai-file-utils",
- "xai-fsnotify",
- "xai-hooks-plugins-types",
- "xai-hunk-tracker",
- "xai-hystersis-agent",
- "xai-hystersis-announcements",
- "xai-hystersis-auth",
- "xai-hystersis-bundle",
- "xai-hystersis-compaction",
- "xai-hystersis-config",
- "xai-hystersis-config-types",
- "xai-hystersis-extra-ca",
- "xai-hystersis-foreign-sessions",
- "xai-hystersis-hooks",
- "xai-hystersis-http",
- "xai-hystersis-mcp",
- "xai-hystersis-memory",
- "xai-hystersis-models",
- "xai-hystersis-paths",
- "xai-hystersis-plugin-marketplace",
- "xai-hystersis-sampler",
- "xai-hystersis-sampling-types",
- "xai-hystersis-sandbox",
- "xai-hystersis-session-events",
- "xai-hystersis-session-search",
- "xai-hystersis-shared",
- "xai-hystersis-shell-base",
- "xai-hystersis-shell-session-support",
- "xai-hystersis-shell-terminal",
- "xai-hystersis-status-line",
- "xai-hystersis-subagent-resolution",
- "xai-hystersis-telemetry",
- "xai-hystersis-test-support",
- "xai-hystersis-tools",
- "xai-hystersis-version",
- "xai-hystersis-workspace",
- "xai-interjection-core",
- "xai-prompt-queue",
- "xai-system-power",
- "xai-test-utils",
- "xai-token-estimation",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
- "xai-tracing-macros",
- "xai-tty-utils",
- "xai-workflow",
- "zstd",
-]
-
-[[package]]
-name = "xai-hystersis-shell-base"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "libc",
- "nix 0.30.1",
- "pprof",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
- "url",
- "windows 0.61.3",
- "xai-hystersis-config",
- "xai-hystersis-env",
- "xai-hystersis-extra-ca",
- "xai-hystersis-shared",
- "xai-hystersis-version",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-shell-session-support"
-version = "0.1.0"
-dependencies = [
- "axum",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
- "xai-file-utils",
- "xai-hystersis-http",
- "xai-hystersis-version",
-]
-
-[[package]]
-name = "xai-hystersis-shell-terminal"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "async-trait",
- "base64",
- "chrono",
- "futures",
- "libc",
- "portable-pty",
- "process-wrap",
- "serde",
- "serde_json",
- "shlex",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
- "uuid",
- "windows 0.61.3",
- "xai-acp-lib",
- "xai-hystersis-config",
- "xai-hystersis-paths",
- "xai-hystersis-sandbox",
- "xai-hystersis-tools",
- "xai-hystersis-workspace",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-status-line"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "strum 0.27.2",
- "toml",
-]
-
-[[package]]
-name = "xai-hystersis-subagent-resolution"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "toml",
- "tracing",
- "xai-hystersis-agent",
- "xai-hystersis-sampling-types",
- "xai-hystersis-tools",
- "xai-tool-types",
-]
-
-[[package]]
-name = "xai-hystersis-telemetry"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "axum",
- "axum-server",
- "base64",
- "bytes",
- "chrono",
- "ctor",
- "dirs 5.0.1",
- "filetime",
- "futures-executor",
- "git2",
- "http 1.4.0",
- "mid",
- "obfstr",
- "opentelemetry",
- "opentelemetry-http",
- "opentelemetry-otlp",
- "opentelemetry-proto",
- "opentelemetry_sdk",
- "parking_lot",
- "prost",
- "rcgen",
- "reqwest 0.12.24",
- "rustls",
- "sentry",
- "serde",
- "serde_json",
- "strum 0.27.2",
- "tempfile",
- "tokio",
- "tokio-stream",
- "tonic",
- "tracing",
- "tracing-appender",
- "tracing-chrome",
- "tracing-opentelemetry",
- "tracing-subscriber",
- "url",
- "uuid",
- "webpki-roots 0.26.11",
- "whoami",
- "xai-file-utils",
- "xai-hystersis-auth",
- "xai-hystersis-config",
- "xai-hystersis-env",
- "xai-hystersis-extra-ca",
- "xai-hystersis-sampler",
- "xai-hystersis-secrets",
- "xai-hystersis-session-events",
- "xai-hystersis-version",
- "xai-mixpanel",
- "xai-token-estimation",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-test-support"
-version = "0.1.0"
-dependencies = [
- "agent-client-protocol",
- "anyhow",
- "async-trait",
- "axum",
- "clap",
- "futures-util",
- "libc",
- "portable-pty",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "tempfile",
- "tokio",
- "tokio-tungstenite 0.27.0",
- "tokio-util",
- "tracing",
- "tracing-subscriber",
- "url",
- "xai-acp-lib",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-tools"
-version = "0.1.220-alpha.4"
-dependencies = [
- "anyhow",
- "arc-swap",
- "async-lsp",
- "async-openai",
- "async-stream",
- "async-trait",
- "base64",
- "chrono",
- "command-fds",
- "crc32fast",
- "derive_more 2.1.1",
- "dhat",
- "dirs 5.0.1",
- "dunce",
- "educe",
- "encoding_rs",
- "flate2",
- "fs2",
- "futures",
- "futures-util",
- "globset",
- "htmd",
- "ignore",
- "image",
- "indexmap",
- "infer 0.19.0",
- "kamadak-exif",
- "libc",
- "minijinja",
- "nix 0.30.1",
- "parking_lot",
- "pdf_oxide",
- "pretty_assertions",
- "pulldown-cmark",
- "quick-xml 0.38.3",
- "regex",
- "reqwest 0.12.24",
- "schemars 1.0.4",
- "scraper",
- "serde",
- "serde_json",
- "serde_path_to_error",
- "serde_yaml",
- "sha2 0.10.9",
- "shellexpand",
- "similar",
- "strip-ansi-escapes",
- "strum 0.26.3",
- "tar",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-util",
- "tonic",
- "tracing",
- "tracing-subscriber",
- "unicode-normalization",
- "url",
- "uuid",
- "which",
- "wildmatch",
- "windows 0.61.3",
- "wiremock",
- "xai-computer-hub-core",
- "xai-computer-hub-sdk",
- "xai-file-utils",
- "xai-hystersis-auth",
- "xai-hystersis-config",
- "xai-hystersis-env",
- "xai-hystersis-extra-ca",
- "xai-hystersis-sandbox",
- "xai-hystersis-test-support",
- "xai-hystersis-tools-api",
- "xai-hystersis-version",
- "xai-hystersis-workspace-types",
- "xai-interjection-core",
- "xai-test-utils",
- "xai-token-estimation",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
- "xai-tty-utils",
- "zip",
-]
-
-[[package]]
-name = "xai-hystersis-tools-api"
-version = "0.1.220-alpha.4"
-dependencies = [
- "prost",
- "serde",
- "serde_json",
- "tonic",
- "tonic-prost",
- "xai-proto-build",
- "xai-tool-protocol",
-]
-
-[[package]]
-name = "xai-hystersis-update"
-version = "0.1.220-alpha.4"
-dependencies = [
- "anyhow",
- "dunce",
- "futures",
- "indicatif",
- "libc",
- "reqwest 0.12.24",
- "semver",
- "serde",
- "serde_json",
- "serial_test",
- "tempfile",
- "thiserror 2.0.18",
- "time",
- "tokio",
- "tracing",
- "url",
- "wiremock",
- "xai-hystersis-extra-ca",
- "xai-hystersis-shell",
- "xai-hystersis-telemetry",
- "xai-hystersis-tools",
- "xai-hystersis-version",
-]
-
-[[package]]
-name = "xai-hystersis-version"
-version = "1.0.10"
-dependencies = [
- "semver",
-]
-
-[[package]]
-name = "xai-hystersis-voice"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "cpal",
- "futures-util",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tokio",
- "tokio-tungstenite 0.27.0",
- "toml",
- "tracing",
- "tracing-subscriber",
- "url",
- "xai-hystersis-extra-ca",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-workspace"
-version = "0.1.220-alpha.4"
-dependencies = [
- "agent-client-protocol",
- "anyhow",
- "arc-swap",
- "async-stream",
- "async-trait",
- "axum",
- "base64",
- "bstr",
- "chrono",
- "clap",
- "dashmap",
- "dirs 6.0.0",
- "dunce",
- "fastrace",
- "flate2",
- "fs2",
- "futures",
- "git2",
- "glob",
- "hashbrown 0.16.1",
- "humantime-serde",
- "ignore",
- "indexmap",
- "infer 0.19.0",
- "libc",
- "nix 0.30.1",
- "nohash-hasher",
- "parking_lot",
- "prometheus",
- "rand 0.9.5",
- "regex",
- "reqwest 0.12.24",
- "rustc-hash 2.1.1",
- "serde",
- "serde_json",
- "sha1",
- "sha2 0.10.9",
- "smallvec",
- "tar",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-tungstenite 0.27.0",
- "tokio-util",
- "toml",
- "tonic",
- "tracing",
- "tracing-subscriber",
- "tree-sitter",
- "tree-sitter-bash",
- "url",
- "urlencoding",
- "uuid",
- "wait-timeout",
- "xai-acp-lib",
- "xai-codebase-graph",
- "xai-computer-hub-mcp-adapter",
- "xai-computer-hub-sdk",
- "xai-fast-worktree",
- "xai-file-utils",
- "xai-fsnotify",
- "xai-fuzzy-file-search",
- "xai-hunk-tracker",
- "xai-hystersis-agent",
- "xai-hystersis-auth",
- "xai-hystersis-config",
- "xai-hystersis-config-types",
- "xai-hystersis-diag-server",
- "xai-hystersis-env",
- "xai-hystersis-extra-ca",
- "xai-hystersis-hooks",
- "xai-hystersis-mcp",
- "xai-hystersis-paths",
- "xai-hystersis-sandbox",
- "xai-hystersis-session-events",
- "xai-hystersis-telemetry",
- "xai-hystersis-tools",
- "xai-hystersis-tools-api",
- "xai-hystersis-version",
- "xai-hystersis-workspace-client",
- "xai-hystersis-workspace-daemon",
- "xai-hystersis-workspace-types",
- "xai-test-utils",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
- "xai-tracing",
- "xai-tty-utils",
- "zip",
- "zstd",
-]
-
-[[package]]
-name = "xai-hystersis-workspace-client"
-version = "0.1.0"
-dependencies = [
- "schemars 1.0.4",
- "semver",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "tokio",
- "tracing",
- "xai-computer-hub-sdk",
- "xai-hystersis-workspace-types",
- "xai-tool-protocol",
- "xai-tool-runtime",
- "xai-tool-types",
-]
-
-[[package]]
-name = "xai-hystersis-workspace-daemon"
-version = "0.1.0"
-dependencies = [
- "clap",
- "fs2",
- "libc",
- "prometheus",
- "reqwest 0.12.24",
- "serde",
- "serde_json",
- "tempfile",
- "tokio",
- "tracing",
- "windows 0.61.3",
- "xai-computer-hub-sdk",
- "xai-tty-utils",
-]
-
-[[package]]
-name = "xai-hystersis-workspace-types"
-version = "0.1.0"
-dependencies = [
- "base64",
- "chrono",
- "serde",
- "serde_json",
- "thiserror 2.0.18",
-]
-
-[[package]]
-name = "xai-interjection-core"
-version = "0.1.0"
-dependencies = [
- "serde",
-]
-
-[[package]]
-name = "xai-mixpanel"
-version = "0.1.0"
-dependencies = [
- "base64",
- "reqwest 0.12.24",
- "serde_json",
- "thiserror 2.0.18",
- "xai-hystersis-secrets",
-]
-
-[[package]]
-name = "xai-prompt-queue"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "xai-proto-build"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "pbjson-build",
- "prost-build",
- "prost-reflect",
- "tempfile",
- "tonic-prost-build",
-]
-
-[[package]]
-name = "xai-ratatui-inline"
-version = "0.1.0"
-dependencies = [
- "ansi-width",
- "anstyle-parse",
- "anyhow",
- "colored_json",
- "criterion",
- "crossterm",
- "lipsum",
- "ratatui",
- "serde_json",
- "termwiz",
- "unicode-width 0.2.0",
-]
-
-[[package]]
-name = "xai-ratatui-textarea"
-version = "0.1.0"
-dependencies = [
- "arboard",
- "chrono",
- "crossterm",
- "fuzzy-matcher",
- "ignore",
- "itertools 0.14.0",
- "pretty_assertions",
- "rand 0.9.5",
- "ratatui",
- "ratatui-core",
- "textwrap",
- "tracing",
- "tui-scrollbar",
- "unicode-segmentation",
- "unicode-width 0.2.0",
-]
-
-[[package]]
-name = "xai-sqlite-journal"
-version = "0.1.0"
-dependencies = [
- "libc",
- "rusqlite",
- "tempfile",
- "tracing",
- "windows-sys 0.59.0",
-]
-
-[[package]]
-name = "xai-system-power"
-version = "0.1.0"
-dependencies = [
- "windows-sys 0.59.0",
- "zbus",
-]
-
-[[package]]
-name = "xai-test-utils"
-version = "0.1.0"
-dependencies = [
- "runfiles",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "xai-token-estimation"
-version = "0.1.0"
-
-[[package]]
-name = "xai-tool-protocol"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "uuid",
- "xai-tool-types",
-]
-
-[[package]]
-name = "xai-tool-runtime"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "futures",
- "schemars 1.0.4",
- "serde",
- "serde_json",
- "tokio",
- "tokio-util",
- "xai-hystersis-tools-api",
- "xai-tool-protocol",
- "xai-tool-types",
-]
-
-[[package]]
-name = "xai-tool-types"
-version = "0.1.0"
-dependencies = [
- "minijinja",
- "schemars 1.0.4",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "xai-tracing"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bytes",
- "fastrace",
- "fastrace-opentelemetry",
- "fastrace-reqwest",
- "fastrace-tonic",
- "http 1.4.0",
- "http-body-util",
- "log",
- "opentelemetry",
- "opentelemetry-http",
- "opentelemetry-otlp",
- "opentelemetry_sdk",
- "reqwest 0.12.24",
- "reqwest-middleware 0.4.2",
- "tokio",
- "tonic",
- "tower",
- "tower-http",
- "tracing",
- "tracing-opentelemetry",
- "tracing-subscriber",
- "uuid",
- "wiremock",
-]
-
-[[package]]
-name = "xai-tracing-macros"
-version = "0.1.0"
-
-[[package]]
-name = "xai-tty-utils"
-version = "0.1.0"
-dependencies = [
- "libc",
- "nix 0.30.1",
- "tokio",
- "windows 0.61.3",
-]
-
-[[package]]
-name = "xai-workflow"
-version = "0.1.0"
-dependencies = [
- "libc",
- "rhai",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "tempfile",
- "thiserror 2.0.18",
- "tokio",
- "tokio-util",
- "tracing",
 ]
 
 [[package]]

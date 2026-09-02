@@ -1,0 +1,18 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+description = "Build protobuf"
+edition.workspace = true
+name = "hystersis-proto-build"
+version = "0.0.0"
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = { workspace = true }
+pbjson-build = { workspace = true }
+prost-build = { workspace = true }
+prost-reflect = { workspace = true }
+tempfile = { workspace = true }
+tonic-prost-build = { workspace = true }

@@ -1,0 +1,15 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+edition.workspace = true
+name = "hystersis-secrets"
+version = "0.1.0"
+description = "Regex sanitizer for Hystersis outbound data (Sentry / Mixpanel / product-event scrubbing)"
+
+[dependencies]
+regex = { workspace = true }
+serde_json = { workspace = true }
+url = { workspace = true }
+
+[lints]
+workspace = true

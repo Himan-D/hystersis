@@ -1,0 +1,17 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+name = "hystersis-tool-protocol"
+version = "0.1.0"
+edition.workspace = true
+description = "Wire-protocol types for the Hystersis Computer Hub"
+
+[dependencies]
+hystersis-tool-types = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true, features = ["v7"] }
+
+[lints]
+workspace = true

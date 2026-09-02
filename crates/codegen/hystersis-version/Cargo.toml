@@ -1,0 +1,13 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+name = "hystersis-version"
+version = "1.0.10"
+edition.workspace = true
+description = "Lockstepped hystersis CLI version."
+
+[dependencies]
+semver = { workspace = true }
+
+[lints]
+workspace = true

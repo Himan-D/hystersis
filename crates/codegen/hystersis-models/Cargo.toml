@@ -1,0 +1,14 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+name = "hystersis-models"
+version = "0.1.0"
+edition.workspace = true
+description = "Default model IDs for the hystersis CLI, loaded from the embedded default_models.json."
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

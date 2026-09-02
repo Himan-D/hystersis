@@ -1,0 +1,19 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+edition.workspace = true
+name = "hystersis-home"
+version = "0.1.0"
+description = "Single source of truth for resolving the hystersis home directory ($HYSTERSIS_HOME or <home>/.hystersis)"
+
+[dependencies]
+dirs = { workspace = true }
+dunce = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+tempfile = { workspace = true }
+
+[lints]
+workspace = true

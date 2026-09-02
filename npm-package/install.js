@@ -34,12 +34,14 @@ fs.mkdirSync(path.join(__dirname, 'bin'), { recursive: true });
 console.log(`Downloading Hystersis for ${buildKey} from ${releaseUrl}...`);
 
 // For this project phase, we will just use a stub file if the URL doesn't exist,
-// or we can copy the local target/debug/xai-hystersis-pager binary if we are doing local dev.
+// or we can copy the local target/debug/hystersis-pager binary if we are doing local dev.
 try {
-  const localBinary = path.join(__dirname, '../target/debug/xai-hystersis-pager');
-  if (fs.existsSync(localBinary)) {
+  const localBinary = path.join(__dirname, '../target/debug/hystersis');
+  const fallbackBinary = path.join(__dirname, '../target/debug/xai-hystersis-pager'); // compat one release
+  const srcBin = fs.existsSync(localBinary) ? localBinary : (fs.existsSync(fallbackBinary) ? fallbackBinary : null);
+  if (srcBin) {
     console.log('Found local binary, using it instead of downloading...');
-    fs.copyFileSync(localBinary, binPath);
+    fs.copyFileSync(srcBin, binPath);
     fs.chmodSync(binPath, 0o755);
     console.log('Successfully installed Hystersis CLI!');
     process.exit(0);

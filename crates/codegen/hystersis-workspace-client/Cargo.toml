@@ -1,0 +1,30 @@
+[package]
+license = "MIT"
+authors = ["Hystersis AI"]
+name = "hystersis-workspace-client"
+version = "0.1.0"
+edition.workspace = true
+description = "Lightweight typed client for hub-proxied workspace.* RPCs (shared by hystersis-shell proxy mode and other consumers)"
+
+[dependencies]
+semver = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["time"] }
+tracing = { workspace = true }
+hystersis-computer-hub-sdk = { workspace = true }
+hystersis-workspace-types = { workspace = true }
+hystersis-tool-protocol = { workspace = true }
+hystersis-tool-runtime = { workspace = true }
+
+[features]
+default = []
+default-bazel = []
+[dev-dependencies]
+schemars = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt", "test-util"] }
+hystersis-tool-types = { workspace = true }
+
+[lints]
+workspace = true
