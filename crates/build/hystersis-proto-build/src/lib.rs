@@ -151,7 +151,8 @@ impl XaiProtoBuilder {
             
             command
                 .arg(format!("--dependency_out={}", dep_file.display()))
-                .arg(format!("--descriptor_set_out={}", desc_file.display()));
+                .arg(format!("--descriptor_set_out={}", desc_file.display()))
+                .arg("--experimental_allow_proto3_optional");
 
             // Add protoc's well-known types include directory first (if found).
             // This is needed for Bazel sandboxed builds where protoc and its
