@@ -74,11 +74,6 @@ jobs:
             sudo apt-get install -y protobuf-compiler
           fi
 
-      - name: Install dotslash
-        if: matrix.os != 'windows-latest'
-        uses: taiki-e/install-action@v2
-        with:
-          tool: dotslash@0.1.20
 
       - name: Build release binary
         shell: bash
