@@ -178,29 +178,4 @@ jobs:
           prerelease: false
           fail_on_unmatched_files: true
 
-  # ─── Deploy landing page + install.sh to Cloudflare Pages ───────────────
-  deploy:
-    name: Deploy code.hystersis.com
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Build site
-        run: |
-          cd landing
-          npm install
-          npm run build
-          cd ..
-          mkdir -p site
-          cp landing/public/install.sh site/install.sh
-          cp -r landing/dist/* site/
-          ls -lh site/
-          ls -lh site/
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy site --project-name=hystersis-code --branch=main --commit-dirty=true
